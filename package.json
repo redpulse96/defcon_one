@@ -4,19 +4,28 @@
   "private": true,
   "scripts": {
     "debug": "DEBUG=defcon-one:* npm start",
-    "start": "nodemon ./bin/www | bunyan -o short"
+    "start": "nodemon ./config/boot/boot.js | bunyan -o short",
+    "staging": "NODE_ENV=staging PORT=8000 nodemon ./config/boot/boot.js | bunyan -o short"
   },
   "dependencies": {
+    "async": "^3.1.0",
+    "btoa": "^1.2.1",
+    "bunyan": "^1.8.12",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "morgan": "~1.9.1",
+    "mysql2": "^1.7.0",
+    "request": "^2.88.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/redpulse96/defcon_one"
   },
-  "author": "Syed Redhan"
+  "author": "Syed Redhan",
+  "license": "Unlicensed"
 }
