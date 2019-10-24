@@ -1,0 +1,22 @@
+{
+  "name": "defcon-one",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "debug": "DEBUG=defcon-one:* npm start",
+    "start": "nodemon ./bin/www | bunyan -o short"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "demo"
+  },
+  "author": "Syed Redhan"
+}
