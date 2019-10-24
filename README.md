@@ -1,2 +1,2 @@
 # defcon_one
-This is the backend repo.
+This is the backend application
