@@ -49,6 +49,8 @@
   "author": "Syed Redhan",
   "license": "Unlicensed",
   "devDependencies": {
-    "nodemon": "^1.19.4"
+    "lint-staged": "^9.4.2",
+    "nodemon": "^1.19.4",
+    "pre-commit": "^1.2.2"
   }
 }
