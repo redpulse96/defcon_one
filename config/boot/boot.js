@@ -3,17 +3,17 @@
 /**
  * Module dependencies.
  */
-const package_helper = require('../package-helper');
-global.package_helper = package_helper;
+const packageHelper = require('../package-helper');
+global.packageHelper = packageHelper;
 
 let app = require('../server/server');
-let debug = package_helper.debug('defcon-one:server');
-let http = package_helper.http;
+let debug = packageHelper.debug('defcon-one:server');
+let http = packageHelper.http;
 
 /**
  * Normalize a port into a number, string, or false.
  */
-normalizePort = val => {
+const normalizePort = val => {
   let port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -32,7 +32,7 @@ normalizePort = val => {
 /**
  * Event listener for HTTP server "error" event.
  */
-onError = error => {
+const onError = error => {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -59,7 +59,7 @@ onError = error => {
 /**
  * Event listener for HTTP server "listening" event.
  */
-onListening = () => {
+const onListening = () => {
   let addr = server.address();
   let bind = typeof addr === 'string' ?
     'pipe ' + addr :
@@ -71,7 +71,7 @@ onListening = () => {
  * Get port from environment and store in Express.
  */
 
-let port = normalizePort(package_helper.PORT || '5000');
+let port = normalizePort(packageHelper.PORT || '5000');
 app.set('port', port);
 
 /**

@@ -12,16 +12,6 @@
     "staging": "NODE_ENV=staging PORT=8000 nodemon ./config/boot/boot.js | bunyan -o short",
     "production": "NODE_ENV=production PORT=8000 pm2 start ./config/boot/boot.js | bunyan -o short"
   },
-  "lint-staged": {
-    "*.js": [
-      "npm run lint:fix",
-      "git add --force"
-    ],
-    "*.json": [
-      "git add --force"
-    ]
-  },
-  "pre-commit": "lint:staged",
   "dependencies": {
     "async": "^3.1.0",
     "body-parser": "^1.19.0",
@@ -50,7 +40,6 @@
   "license": "Unlicensed",
   "devDependencies": {
     "lint-staged": "^9.4.2",
-    "nodemon": "^1.19.4",
-    "pre-commit": "^1.2.2"
+    "nodemon": "^1.19.4"
   }
 }

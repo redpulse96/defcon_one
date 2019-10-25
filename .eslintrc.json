@@ -1,0 +1,11 @@
+{
+  "root": true,
+  "extends": "standard",
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "standard/no-callback-literal": "off",
+    "eqeqeq": "off"
+  }
+}

@@ -1,33 +1,33 @@
-const index_router = require('../../routes/index');
-const api_routes = require('../../routes/api-routes');
+const indexRouter = require('../../routes/index');
+const apiRoutes = require('../../routes/api-routes');
 
-let app = package_helper.express();
+let app = packageHelper.express();
 
 // view engine setup
-app.set('views', package_helper.path.join(__dirname, '../../views'));
+app.set('views', packageHelper.path.join(packageHelper.DIRNAME, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(package_helper.logger('dev'));
-app.use(package_helper.express.json());
-app.use(package_helper.express.urlencoded({
+app.use(packageHelper.logger(packageHelper.NODE_ENV));
+app.use(packageHelper.express.json());
+app.use(packageHelper.express.urlencoded({
   extended: false
 }));
-app.use(package_helper.bodyParser.json());
-app.use(package_helper.bodyParser.urlencoded({
+app.use(packageHelper.bodyParser.json());
+app.use(packageHelper.bodyParser.urlencoded({
   extended: true
 }));
-app.use(package_helper.cookieParser());
-app.use(package_helper.express.static(package_helper.path.join(__dirname, 'public')));
+app.use(packageHelper.cookieParser());
+app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNAME, 'public')));
 
 //DB Connections
 require('../connections');
 
-app.use('/', index_router);
-app.use('/api', api_routes);
+app.use('/', indexRouter);
+app.use('/api', apiRoutes);
 
 // catch 404 and forward to error handler 
 app.use((req, res, next) => {
-  next(package_helper.createError(404));
+  next(packageHelper.createError(404));
 });
 
 // error handler

@@ -1,10 +1,10 @@
 const datasources = require('./datasources');
 
-let db_config = {};
+let dbConfig = {};
 
-switch (package_helper.NODE_ENV) {
+switch (packageHelper.NODE_ENV) {
   case 'dev':
-    db_config = {
+    dbConfig = {
       db_name: datasources['dev'].mysql.database,
       user: datasources['dev'].mysql.user,
       password: datasources['dev'].mysql.password,
@@ -16,7 +16,7 @@ switch (package_helper.NODE_ENV) {
     };
     break;
   case 'uat':
-    db_config = {
+    dbConfig = {
       db_name: datasources['uat'].mysql.database,
       user: datasources['uat'].mysql.user,
       password: datasources['uat'].mysql.password,
@@ -28,7 +28,7 @@ switch (package_helper.NODE_ENV) {
     };
     break;
   case 'production':
-    db_config = {
+    dbConfig = {
       db_name: datasources['production'].mysql.database,
       user: datasources['production'].mysql.user,
       password: datasources['production'].mysql.password,
@@ -40,7 +40,7 @@ switch (package_helper.NODE_ENV) {
     };
     break;
   default:
-    db_config = {
+    dbConfig = {
       db_name: datasources['dev'].mysql.database,
       user: datasources['dev'].mysql.user,
       password: datasources['dev'].mysql.password,
@@ -59,7 +59,7 @@ switch (package_helper.NODE_ENV) {
     break;
 }
 
-const Sequelize = new package_helper.sequelize(db_config.db_name, db_config.user, db_config.password, db_config.options);
+const Sequelize = new packageHelper.sequelize(dbConfig.db_name, dbConfig.user, dbConfig.password, dbConfig.options);
 
 Sequelize.authenticate()
   .then(() => {

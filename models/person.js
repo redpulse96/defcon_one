@@ -1,16 +1,17 @@
-class person extends sequelize.Model {}
-person.init({
+class Person extends sequelize.Model {}
+
+Person.init({
   id: {
-    type: Sequelize.STRING,
+    type: sequelize.STRING,
     primaryKey: true,
     allowNull: false
   },
   name: {
-    type: Sequelize.STRING,
+    type: sequelize.STRING,
     allowNull: true
   },
   age: {
-    type: Sequelize.BIGINT,
+    type: sequelize.BIGINT,
     allowNull: false
   }
 }, {

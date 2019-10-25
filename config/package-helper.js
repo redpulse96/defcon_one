@@ -1,5 +1,4 @@
 /* jshint node: true */
-'use strict'
 
 const DIRNAME = __dirname;
 const NODE_ENV = process.env.NODE_ENV;
