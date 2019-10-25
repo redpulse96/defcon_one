@@ -6,12 +6,19 @@ module.exports = {
       password: 'Daressalam',
       database: 'test_db',
       connector: "mysql",
+      multipleStatements: true,
       connectTimeout: 100000,
       acquireTimeout: 100000,
       port: 3306
-    }
+    },
+    mongo: {}
+  },
+  uat: {
+    mysql: {},
+    mongo: {}
   },
   production: {
-    mysql: {}
-  },
+    mysql: {},
+    mongo: {}
+  }
 }

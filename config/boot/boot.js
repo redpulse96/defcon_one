@@ -7,7 +7,7 @@ const package_helper = require('../package-helper');
 global.package_helper = package_helper;
 
 let app = require('../server/server');
-let debug = require('debug')('defcon-one:server');
+let debug = package_helper.debug('defcon-one:server');
 let http = package_helper.http;
 
 /**

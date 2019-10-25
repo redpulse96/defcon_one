@@ -1,5 +1,5 @@
-const indexRouter = require('./../../routes/index');
-const usersRouter = require('./../../routes/users');
+const index_router = require('../../routes/index');
+const api_routes = require('../../routes/api-routes');
 
 let app = package_helper.express();
 
@@ -12,15 +12,22 @@ app.use(package_helper.express.json());
 app.use(package_helper.express.urlencoded({
   extended: false
 }));
+app.use(package_helper.bodyParser.json());
+app.use(package_helper.bodyParser.urlencoded({
+  extended: true
+}));
 app.use(package_helper.cookieParser());
 app.use(package_helper.express.static(package_helper.path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//DB Connections
+require('../connections');
+
+app.use('/', index_router);
+app.use('/api', api_routes);
 
 // catch 404 and forward to error handler 
 app.use((req, res, next) => {
-  next(package_helper.createError(404)); 
+  next(package_helper.createError(404));
 });
 
 // error handler
