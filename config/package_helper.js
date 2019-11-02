@@ -17,7 +17,7 @@ const _ = require('lodash');
 const async = require('async');
 const createError = require('http-errors');
 const path = require('path');
-const logger = require('morgan');
+const winston = require('winston');
 const request = require('request');
 const debug = require('debug');
 
@@ -39,5 +39,5 @@ exports.mysql2 = mysql2;
 exports.sequelize = sequelize;
 exports.path = path;
 exports.cookieParser = cookieParser;
-exports.logger = logger;
+exports.winston = winston;
 exports.debug = debug;

@@ -4,10 +4,9 @@ const apiRoutes = require('../../routes/api-routes');
 let app = packageHelper.express();
 
 // view engine setup
-app.set('views', packageHelper.path.join(packageHelper.DIRNAME, 'views'));
+app.set('views', packageHelper.path.join(packageHelper.DIRNAME, '../views'));
 app.set('view engine', 'ejs');
 
-app.use(packageHelper.logger(packageHelper.NODE_ENV));
 app.use(packageHelper.express.json());
 app.use(packageHelper.express.urlencoded({
   extended: false
@@ -17,7 +16,12 @@ app.use(packageHelper.bodyParser.urlencoded({
   extended: true
 }));
 app.use(packageHelper.cookieParser());
-app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNAME, 'public')));
+app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNAME, '../public')));
+
+//LOGGER config
+let demo_log = require('../log_config').logger('defcon_one_server');
+
+demo_log.info('THIS_IS_A_DEMO_LOG', app);
 
 //DB Connections
 require('../connections');

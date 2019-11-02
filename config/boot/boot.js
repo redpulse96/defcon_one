@@ -3,12 +3,11 @@
 /**
  * Module dependencies.
  */
-const packageHelper = require('../package-helper');
+const packageHelper = require('../package_helper');
 global.packageHelper = packageHelper;
 
 let app = require('../server/server');
 let debug = packageHelper.debug('defcon-one:server');
-let http = packageHelper.http;
 
 /**
  * Normalize a port into a number, string, or false.
@@ -78,12 +77,12 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-let server = http.createServer(app);
+// let server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+app.listen(port);
+app.on('error', onError);
+app.on('listening', onListening);

@@ -1,4 +1,5 @@
 const datasources = require('./datasources');
+const log = require('./log_config').logger('connections');
 
 let dbConfig = {};
 
@@ -35,7 +36,13 @@ switch (packageHelper.NODE_ENV) {
       options: {
         dialect: datasources['production'].mysql.connector,
         host: datasources['production'].mysql.host,
-        port: datasources['production'].mysql.port
+        port: datasources['production'].mysql.port,
+        pool: {
+          max: 30,
+          min: 0,
+          acquire: 30000,
+          idle: 10000
+        }
       }
     };
     break;
@@ -63,7 +70,7 @@ const Sequelize = new packageHelper.sequelize(dbConfig.db_name, dbConfig.user, d
 
 Sequelize.authenticate()
   .then(() => {
-    console.log('Connection has been established successfully.');
+    log.info('Connection has been established successfully.');
     global.sequelize = Sequelize;
   })
   .catch(err => {

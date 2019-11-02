@@ -1,26 +1,17 @@
-class Roles extends sequelize.Model {}
+class DiagnosisRoleMapping extends sequelize.Model {}
 
-Roles.init({
-  role_id: {
+DiagnosisRoleMapping.init({
+  diagnosis_role_mapping_id: {
     type: sequelize.BIGINT(11),
     primaryKey: true,
     allowNull: false
   },
-  role: {
-    type: sequelize.ENUM,
-    values: ['r_dentist','r_ortho'],
+  diagnosis_id: {
+    type: sequelize.BIGINT(1),
     allowNull: true
   },
-  role_name: {
-    type: sequelize.STRING(50),
-    allowNull: true
-  },
-  role_code: {
-    type: sequelize.STRING(50),
-    allowNull: true
-  },
-  role_description: {
-    type: sequelize.STRING(100),
+  role_id: {
+    type: sequelize.BIGINT(1),
     allowNull: true
   },
   is_active: {
@@ -46,8 +37,8 @@ Roles.init({
   }
 }, {
   sequelize,
-  modelName: 'roles',
+  modelName: 'diagnosis_role_mapping',
   freezeTableName: true
 });
 
-module.exports = Roles;
+module.exports = DiagnosisRoleMapping;
