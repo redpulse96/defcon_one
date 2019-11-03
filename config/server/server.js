@@ -2,6 +2,7 @@
 const packageHelper = require('../package_helper');
 const indexRouter = require('../../routes/index');
 const apiRoutes = require('../../routes/api-routes');
+
 global.packageHelper = packageHelper;
 
 const app = packageHelper.express();
@@ -70,6 +71,8 @@ app.set('port', port);
  * Event listener for HTTP server "error" event.
  */
 const onError = error => {
+  log.error('there was an error while connecting to the server');
+  log.error(error);
   if (error.syscall !== 'listen') {
     throw error;
   }

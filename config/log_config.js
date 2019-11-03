@@ -37,7 +37,7 @@ generateLogger = (serviceName, level) => {
             )
           }),
           new transports.File({
-            filename: '/var/log/defcon_one_logs/defcon_one_info.log',
+            filename: packageHelper.LOGS_DIR + 'defcon_one_info.log',
             level: 'info'
           })
         ]
@@ -61,7 +61,7 @@ generateLogger = (serviceName, level) => {
         ),
         transports: [
           new transports.File({
-            filename: '/var/log/defcon_one_logs/defcon_one_error.log',
+            filename: packageHelper.LOGS_DIR + 'defcon_one_error.log',
             level: 'error'
           })
         ]
@@ -97,7 +97,7 @@ generateLogger = (serviceName, level) => {
             )
           }),
           new transports.File({
-            filename: '/var/log/defcon_one_logs/defcon_one_debug.log',
+            filename: packageHelper.LOGS_DIR + 'defcon_one_debug.log',
             level: 'debug'
           })
         ]
@@ -133,7 +133,7 @@ generateLogger = (serviceName, level) => {
             )
           }),
           new transports.File({
-            filename: '/var/log/defcon_one_logs/defcon_one_warn.log',
+            filename: packageHelper.LOGS_DIR + 'defcon_one_warn.log',
             level: 'warn'
           })
         ]
@@ -169,7 +169,7 @@ generateLogger = (serviceName, level) => {
             )
           }),
           new transports.File({
-            filename: '/var/log/defcon_one_logs/defcon_one_trace.log',
+            filename: packageHelper.LOGS_DIR + 'defcon_one_trace.log',
             level: 'trace'
           })
         ]
@@ -193,7 +193,7 @@ generateLogger = (serviceName, level) => {
         ),
         transports: [
           new transports.File({
-            filename: '/var/log/defcon_one_logs/defcon_one_crit.log',
+            filename: packageHelper.LOGS_DIR + 'defcon_one_crit.log',
             level: 'crit'
           })
         ]
@@ -217,7 +217,7 @@ generateLogger = (serviceName, level) => {
         ),
         transports: [
           new transports.File({
-            filename: '/var/log/defcon_one_logs/defcon_one_fatal.log',
+            filename: packageHelper.LOGS_DIR + 'defcon_one_fatal.log',
             level: 'fatal'
           })
         ]

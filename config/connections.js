@@ -6,7 +6,7 @@ let dbConfig = {};
 switch (packageHelper.NODE_ENV) {
   case 'dev':
     dbConfig = {
-      db_name: datasources['dev'].mysql.database,
+      name: datasources['dev'].mysql.database,
       user: datasources['dev'].mysql.user,
       password: datasources['dev'].mysql.password,
       options: {
@@ -18,7 +18,7 @@ switch (packageHelper.NODE_ENV) {
     break;
   case 'uat':
     dbConfig = {
-      db_name: datasources['uat'].mysql.database,
+      name: datasources['uat'].mysql.database,
       user: datasources['uat'].mysql.user,
       password: datasources['uat'].mysql.password,
       options: {
@@ -30,7 +30,7 @@ switch (packageHelper.NODE_ENV) {
     break;
   case 'production':
     dbConfig = {
-      db_name: datasources['production'].mysql.database,
+      name: datasources['production'].mysql.database,
       user: datasources['production'].mysql.user,
       password: datasources['production'].mysql.password,
       options: {
@@ -48,7 +48,7 @@ switch (packageHelper.NODE_ENV) {
     break;
   default:
     dbConfig = {
-      db_name: datasources['dev'].mysql.database,
+      name: datasources['dev'].mysql.database,
       user: datasources['dev'].mysql.user,
       password: datasources['dev'].mysql.password,
       options: {
@@ -66,7 +66,7 @@ switch (packageHelper.NODE_ENV) {
     break;
 }
 
-const Sequelize = new packageHelper.sequelize(dbConfig.db_name, dbConfig.user, dbConfig.password, dbConfig.options);
+const Sequelize = new packageHelper.sequelize(dbConfig);
 
 Sequelize.authenticate()
   .then(() => {
@@ -74,8 +74,8 @@ Sequelize.authenticate()
     global.sequelize = Sequelize;
   })
   .catch(err => {
-    console.error('Unable to connect to the mysql database:');
-    console.dir(err);
+    log.fatal('Connection could not be established with the database.');
+    log.fatal(err);
   });
 
 module.exports = Sequelize;
