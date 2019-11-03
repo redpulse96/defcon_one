@@ -8,9 +8,9 @@
     "lint:fix": "npm run lint -- --fix",
     "lint:staged": "lint-staged",
     "debug": "DEBUG=defcon-one:* npm start",
-    "start": "NODE_ENV=dev nodemon ./config/boot/boot.js | bunyan -o short",
-    "staging": "NODE_ENV=staging PORT=8000 nodemon ./config/boot/boot.js | bunyan -o short",
-    "production": "NODE_ENV=production PORT=8000 pm2 start ./config/boot/boot.js | bunyan -o short"
+    "start": "NODE_ENV=dev nodemon ./config/server/server.js | bunyan -o short",
+    "staging": "NODE_ENV=staging PORT=8000 nodemon ./config/server/server.js | bunyan -o short",
+    "production": "NODE_ENV=production PORT=8000 pm2 start ./config/server/server.js | bunyan -o short"
   },
   "dependencies": {
     "async": "^3.1.0",

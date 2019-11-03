@@ -1,7 +1,11 @@
+
+const packageHelper = require('../package_helper');
 const indexRouter = require('../../routes/index');
 const apiRoutes = require('../../routes/api-routes');
+global.packageHelper = packageHelper;
 
-let app = packageHelper.express();
+const app = packageHelper.express();
+const log = require('../log_config').logger('defcon_one_server');
 
 // view engine setup
 app.set('views', packageHelper.path.join(packageHelper.DIRNAME, '../views'));
@@ -17,14 +21,6 @@ app.use(packageHelper.bodyParser.urlencoded({
 }));
 app.use(packageHelper.cookieParser());
 app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNAME, '../public')));
-
-//LOGGER config
-let demo_log = require('../log_config').logger('defcon_one_server');
-
-demo_log.info('THIS_IS_A_DEMO_LOG', app);
-
-//DB Connections
-require('../connections');
 
 app.use('/', indexRouter);
 app.use('/api', apiRoutes);
@@ -44,5 +40,79 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.render('error');
 });
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+const normalizePort = val => {
+  let port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Get port from environment and store in Express.
+ */
+const port = normalizePort(packageHelper.PORT || '5000');
+app.set('port', port);
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+const onError = error => {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  let bind = typeof port === 'string' ?
+    'Pipe ' + port :
+    'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+const onListening = () => {
+  let addr = server.address();
+  let bind = typeof addr === 'string' ?
+    'pipe ' + addr :
+    'port ' + addr.port;
+  packageHelper.debug('Listening on ' + bind);
+  log.info('server is listening on ', bind);
+}
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+app.listen(port);
+app.on('error', onError);
+app.on('listening', onListening);
+
+//DB Connections
+require('../connections');
 
 module.exports = app;
