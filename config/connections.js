@@ -66,7 +66,7 @@ switch (packageHelper.NODE_ENV) {
     break;
 }
 
-const Sequelize = new packageHelper.sequelize(dbConfig);
+const Sequelize = new packageHelper.sequelize(dbConfig.db_name, dbConfig.user, dbConfig.password, dbConfig.options);
 
 Sequelize.authenticate()
   .then(() => {
