@@ -1,43 +1,26 @@
 /* jshint node: true */
 
-const DIRNAME = __dirname;
-const NODE_ENV = process.env.NODE_ENV;
-const PORT = process.env.PORT;
+const packageHelper = {
+  DIRNAME: __dirname,
+  NODE_ENV: process.env.NODE_ENV,
+  PORT: process.env.PORT,
 
-const http = require('http');
-const express = require('express');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const mysql2 = require('mysql2');
-const sequelize = require('sequelize');
-const bunyan = require('bunyan');
-const btoa = require('btoa');
-const moment = require('moment');
-const _ = require('lodash');
-const async = require('async');
-const createError = require('http-errors');
-const path = require('path');
-const winston = require('winston');
-const request = require('request');
-const debug = require('debug');
+  http: require('http'),
+  express: require('express'),
+  bodyParser: require('body-parser'),
+  cookieParser: require('cookie-parser'),
+  mysql2: require('mysql2'),
+  sequelize: require('sequelize'),
+  bunyan: require('bunyan'),
+  btoa: require('btoa'),
+  moment: require('moment'),
+  lodash: require('lodash'),
+  async: require('async'),
+  createError: require('http-errors'),
+  path: require('path'),
+  winston: require('winston'),
+  request: require('request'),
+  debug: require('debug')
+};
 
-exports.DIRNAME = DIRNAME;
-exports.NODE_ENV = NODE_ENV;
-exports.PORT = PORT;
-
-exports.http = http;
-exports.bunyan = bunyan;
-exports.btoa = btoa;
-exports.moment = moment;
-exports._ = _;
-exports.async = async;
-exports.request = request;
-exports.createError = createError;
-exports.express = express;
-exports.bodyParser = bodyParser;
-exports.mysql2 = mysql2;
-exports.sequelize = sequelize;
-exports.path = path;
-exports.cookieParser = cookieParser;
-exports.winston = winston;
-exports.debug = debug;
+module.exports = packageHelper;

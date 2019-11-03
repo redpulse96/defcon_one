@@ -1,4 +1,4 @@
-const _ = packageHelper._;
+const _ = packageHelper.lodash;
 const {
   createLogger,
   format,
