@@ -70,7 +70,7 @@ const Sequelize = new packageHelper.sequelize(dbConfig.db_name, dbConfig.user, d
 
 Sequelize.authenticate()
   .then(() => {
-    log.info('Connection has been established successfully.', 'fdsfgdsfds');
+    log.info('Connection has been established successfully.');
     global.sequelize = Sequelize;
   })
   .catch(err => {
