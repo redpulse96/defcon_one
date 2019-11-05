@@ -1,14 +1,15 @@
+const packageHelper = require('../package_helper');
 const datasources = require('./datasources');
-const log = require('./log_config').logger('connections');
 
-let dbConfig = {};
+let mysql_config = {};
 
 switch (packageHelper.NODE_ENV) {
   case 'dev':
-    dbConfig = {
-      name: datasources['dev'].mysql.database,
-      user: datasources['dev'].mysql.user,
+    mysql_config = {
+      database: datasources['dev'].mysql.database,
+      username: datasources['dev'].mysql.username,
       password: datasources['dev'].mysql.password,
+      host: datasources['dev'].mysql.host,
       options: {
         dialect: datasources['dev'].mysql.connector,
         host: datasources['dev'].mysql.host,
@@ -17,10 +18,11 @@ switch (packageHelper.NODE_ENV) {
     };
     break;
   case 'uat':
-    dbConfig = {
-      name: datasources['uat'].mysql.database,
-      user: datasources['uat'].mysql.user,
+    mysql_config = {
+      database: datasources['uat'].mysql.database,
+      username: datasources['uat'].mysql.username,
       password: datasources['uat'].mysql.password,
+      host: datasources['uat'].mysql.host,
       options: {
         dialect: datasources['uat'].mysql.connector,
         host: datasources['uat'].mysql.host,
@@ -29,10 +31,11 @@ switch (packageHelper.NODE_ENV) {
     };
     break;
   case 'production':
-    dbConfig = {
-      name: datasources['production'].mysql.database,
-      user: datasources['production'].mysql.user,
+    mysql_config = {
+      database: datasources['production'].mysql.database,
+      username: datasources['production'].mysql.username,
       password: datasources['production'].mysql.password,
+      host: datasources['production'].mysql.host,
       options: {
         dialect: datasources['production'].mysql.connector,
         host: datasources['production'].mysql.host,
@@ -47,10 +50,11 @@ switch (packageHelper.NODE_ENV) {
     };
     break;
   default:
-    dbConfig = {
-      name: datasources['dev'].mysql.database,
-      user: datasources['dev'].mysql.user,
+    mysql_config = {
+      database: datasources['dev'].mysql.database,
+      username: datasources['dev'].mysql.username,
       password: datasources['dev'].mysql.password,
+      host: datasources['dev'].mysql.host,
       options: {
         dialect: datasources['dev'].mysql.connector,
         host: datasources['dev'].mysql.host,
@@ -66,16 +70,6 @@ switch (packageHelper.NODE_ENV) {
     break;
 }
 
-const Sequelize = new packageHelper.sequelize(dbConfig.db_name, dbConfig.user, dbConfig.password, dbConfig.options);
-
-Sequelize.authenticate()
-  .then(() => {
-    log.info('Connection has been established successfully.');
-    global.sequelize = Sequelize;
-  })
-  .catch(err => {
-    log.fatal('Connection could not be established with the database.');
-    log.fatal(err);
-  });
-
-module.exports = Sequelize;
+module.exports = {
+  mysql: mysql_config
+};

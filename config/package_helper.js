@@ -4,8 +4,9 @@ const packageHelper = {
   DIRNAME: __dirname,
   NODE_ENV: process.env.NODE_ENV,
   PORT: process.env.PORT,
-  LOGS_DIR: '/var/log/defcon_one_logs/',
+  LOGS_DIR: process.env.LOGS_DIR,
 
+  fs: require('fs'),
   http: require('http'),
   express: require('express'),
   bodyParser: require('body-parser'),

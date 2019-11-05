@@ -1,4 +1,6 @@
+const packageHelper = require('../package_helper');
 const _ = packageHelper.lodash;
+
 const {
   createLogger,
   format,
@@ -103,10 +105,10 @@ generateLogger = (serviceName, level) => {
         ]
       };
       break;
-    case 'warn':
+    case 'warning':
       generateLogObj = {
         defaultMeta: {
-          level: 'warn',
+          level: 'warning',
           service: serviceName || 'defcon_one'
         },
         format: format.combine(
@@ -134,7 +136,7 @@ generateLogger = (serviceName, level) => {
           }),
           new transports.File({
             filename: packageHelper.LOGS_DIR + 'defcon_one_warn.log',
-            level: 'warn'
+            level: 'warning'
           })
         ]
       };
@@ -232,10 +234,7 @@ const logger = (serviceName) => {
     info: generateLogger(serviceName, 'info'),
     error: generateLogger(serviceName, 'error'),
     debug: generateLogger(serviceName, 'debug'),
-    warn: generateLogger(serviceName, 'warn'),
-    trace: generateLogger(serviceName, 'trace'),
-    crit: generateLogger(serviceName, 'crit'),
-    fatal: generateLogger(serviceName, 'fatal')
+    warning: generateLogger(serviceName, 'warning')
   };
 
   let constructLog = (level) => {
@@ -277,9 +276,7 @@ const logger = (serviceName) => {
     error: constructLog('error'),
     trace: constructLog('trace'),
     debug: constructLog('debug'),
-    warn: constructLog('warn'),
-    fatal: constructLog('fatal'),
-    crit: constructLog('crit'),
+    warning: constructLog('warning')
   }
   return logObj;
 }
