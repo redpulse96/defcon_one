@@ -1,4 +1,4 @@
-# Defcon_one
+# defcon_one
 This is the backend application for project_emr
 Steps to run the application:
 
