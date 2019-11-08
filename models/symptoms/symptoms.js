@@ -41,11 +41,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     }
   }, {
-    sequelize,
-    modelName: 'symptoms',
-    freezeTableName: true,
-    timestamps: false
-  }, {
     defaultScope: {
       where: {
         is_active: 1,
@@ -55,7 +50,11 @@ module.exports = (sequelize, DataTypes) => {
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
-    }
+    },
+    sequelize,
+    modelName: 'symptoms',
+    freezeTableName: true,
+    timestamps: false
   });
   Symptoms.associate = models => {
     // associations can be defined here

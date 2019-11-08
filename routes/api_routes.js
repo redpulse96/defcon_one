@@ -4,10 +4,6 @@ const router = express.Router();
 
 const models = require('../config/components/index');
 
-// const {
-//   getPatients
-// } = require('../controlers/patients_controller');
-
 /* GET users listing. */
 router.get('/Roles/getRoles', (req, res, next) => {
   models.Roles.findAll({

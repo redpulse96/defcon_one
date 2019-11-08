@@ -46,11 +46,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     }
   }, {
-    sequelize,
-    modelName: 'examinations_role_mapping',
-    freezeTableName: true,
-    timestamps: false
-  }, {
     defaultScope: {
       where: {
         is_active: 1,
@@ -60,7 +55,11 @@ module.exports = (sequelize, DataTypes) => {
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
-    }
+    },
+    sequelize,
+    modelName: 'examinations_role_mapping',
+    freezeTableName: true,
+    timestamps: false
   });
   ExaminationsRoleMapping.associate = models => {
     // associations can be defined here

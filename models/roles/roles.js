@@ -46,22 +46,21 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     }
   }, {
-    underscored: true,
-    sequelize,
-    modelName: 'roles',
-    freezeTableName: true,
-    timestamps: false
-  }, {
     defaultScope: {
       where: {
-        is_active: 1,
-        is_archived: 0
+        is_active: true,
+        is_archived: false
       },
       order: [
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
-    }
+    },
+    underscored: true,
+    sequelize,
+    modelName: 'roles',
+    freezeTableName: true,
+    timestamps: false
   });
   Roles.associate = models => {
     // associations can be defined here

@@ -3,7 +3,7 @@
 global.packageHelper = require('./config/package_helper');
 
 const app = require('./config/server');
-const models = require('./config/components/');
+const models = require('./config/components/index');
 
 /**
  * Normalize a port into a number, string, or false.

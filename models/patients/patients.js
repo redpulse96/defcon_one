@@ -70,11 +70,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     }
   }, {
-    sequelize,
-    modelName: 'patients',
-    freezeTableName: true,
-    timestamps: false
-  }, {
     defaultScope: {
       where: {
         is_active: 1,
@@ -84,7 +79,12 @@ module.exports = (sequelize, DataTypes) => {
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
-    }
+    },
+    underscored: true,
+    sequelize,
+    modelName: 'patients',
+    freezeTableName: true,
+    timestamps: false
   });
   patients.associate = models => {
     // associations can be defined here

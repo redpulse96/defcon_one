@@ -47,11 +47,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     }
   }, {
-    sequelize,
-    modelName: 'symptoms_role_mapping',
-    freezeTableName: true,
-    timestamps: false
-  }, {
     defaultScope: {
       where: {
         is_active: 1,
@@ -61,7 +56,11 @@ module.exports = (sequelize, DataTypes) => {
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
-    }
+    },
+    sequelize,
+    modelName: 'symptoms_role_mapping',
+    freezeTableName: true,
+    timestamps: false
   });
   SymptomsRoleMapping.associate = models => {
     // associations can be defined here
