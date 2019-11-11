@@ -1,53 +1,29 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Patients = sequelize.define('patients', {
-    patient_id: {
+  const PatientSymptomsRoleMapping = sequelize.define('patient_symptoms_role_mapping', {
+    patient_symptom_role_mapping_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
       autoIncreament: true,
       allowNull: false
     },
-    patient_name: {
-      type: DataTypes.STRING(50),
-      allowNull: true
+    patient_id: {
+      type: DataTypes.BIGINT(11),
+      allowNull: true,
+      onDelete: "CASCADE",
+      references: {
+        model: 'Patients',
+        key: 'patient_id'
+      }
     },
-    mobile_no: {
-      type: DataTypes.INTEGER(10),
-      allowNull: true
-    },
-    phone_code: {
-      type: DataTypes.INTEGER(5),
-      allowNull: true
-    },
-    age: {
-      type: DataTypes.INTEGER(10),
-      allowNull: true
-    },
-    gender: {
-      type: DataTypes.ENUM,
-      values: ['Male', 'Female', 'Others'],
-      allowNull: true
-    },
-    height: {
-      type: DataTypes.INTEGER(100),
-      allowNull: true
-    },
-    weight: {
-      type: DataTypes.INTEGER(100),
-      allowNull: true
-    },
-    blood_type: {
-      type: DataTypes.STRING(5),
-      allowNull: true
-    },
-    date_of_birth: {
-      type: DataTypes.DATE,
-      defaultValue: null,
-      allowNull: true
-    },
-    email: {
-      type: DataTypes.STRING(50),
-      allowNull: true
+    symptom_role_mapping_id: {
+      type: DataTypes.BIGINT(11),
+      allowNull: false,
+      onDelete: "CASCADE",
+      references: {
+        model: 'symptoms_role_mapping',
+        key: 'symptom_role_mapping_id'
+      }
     },
     is_active: {
       type: DataTypes.BOOLEAN,
@@ -82,13 +58,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     underscored: true,
     sequelize,
-    modelName: 'patients',
+    modelName: 'patient_symptoms_role_mapping',
     freezeTableName: true,
     timestamps: false
   });
-  Patients.associate = models => {
+  PatientSymptomsRoleMapping.associate = models => {
     // associations can be defined here
   };
 
-  return Patients;
+  return PatientSymptomsRoleMapping;
 };

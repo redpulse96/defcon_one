@@ -243,10 +243,11 @@ const logger = (serviceName) => {
     return (...args) => {
       try {
         newLog[levelName].log({
+          ip_address: '',
           service: serviceName,
-          'level': levelName,
-          'message': _.concat(...args),
-          'timestamp': new Date()
+          level: levelName,
+          message: _.concat(...args),
+          timestamp: new Date()
         });
 
         if (packageHelper.NODE_ENV !== 'production') {
