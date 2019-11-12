@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     updated_date: {
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
       allowNull: true
     }
   }, {
@@ -64,6 +64,14 @@ module.exports = (sequelize, DataTypes) => {
   });
   DiagnosisRoleMapping.associate = models => {
     // associations can be defined here
+    DiagnosisRoleMapping.belongsTo(models.Diagnosis, {
+      as: 'diagnosis',
+      foreignKey: 'diagnosis_id'
+    });
+    DiagnosisRoleMapping.belongsTo(models.Roles, {
+      as: 'role',
+      foreignKey: 'role_id'
+    });
   };
 
   return DiagnosisRoleMapping;

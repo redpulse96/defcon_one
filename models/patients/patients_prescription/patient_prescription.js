@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       onDelete: "CASCADE",
       references: {
-        model: 'PatientExaminationssRoleMapping',
+        model: 'PatientExaminationsRoleMapping',
         key: 'patient_examination_role_mapping_id'
       }
     },
@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       onDelete: "CASCADE",
       references: {
-        model: 'PatientDiagnosissRoleMapping',
+        model: 'PatientDiagnosisRoleMapping',
         key: 'patient_diagnosis_role_mapping_id'
       }
     },
@@ -69,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     updated_date: {
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
       allowNull: true
     }
   }, {
@@ -91,6 +91,22 @@ module.exports = (sequelize, DataTypes) => {
   });
   PatientPrescription.associate = models => {
     // associations can be defined here
+    PatientPrescription.belongsTo(models.PatientSymptomsRoleMapping, {
+      as: 'patient_symptoms_role_mapping',
+      foreignKey: 'patient_symptom_role_mapping_id'
+    });
+    PatientPrescription.belongsTo(models.PatientInvestigationsRoleMapping, {
+      as: 'patient_investigations_role_mapping',
+      foreignKey: 'patient_investigation_role_mapping_id'
+    });
+    PatientPrescription.belongsTo(models.PatientExaminationsRoleMapping, {
+      as: 'patient_examinations_role_mapping',
+      foreignKey: 'patient_examination_role_mapping_id'
+    });
+    PatientPrescription.belongsTo(models.PatientDiagnosisRoleMapping, {
+      as: 'patient_diagnosis_role_mapping',
+      foreignKey: 'patient_diagnosis_role_mapping_id'
+    });
   };
 
   return PatientPrescription;

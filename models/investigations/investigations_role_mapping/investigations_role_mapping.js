@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       onDelete: "CASCADE",
       references: {
-        model: 'roles',
+        model: 'Roles',
         key: 'role_id'
       }
     },
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     updated_date: {
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
       allowNull: true
     }
   }, {
@@ -63,6 +63,14 @@ module.exports = (sequelize, DataTypes) => {
   });
   InvestigationsRoleMapping.associate = models => {
     // associations can be defined here
+    InvestigationsRoleMapping.belongsTo(models.Investigations, {
+      as: 'investigation',
+      foreignKey: 'investigation_id'
+    });
+    InvestigationsRoleMapping.belongsTo(models.Roles, {
+      as: 'role',
+      foreignKey: 'role_id'
+    });
   };
 
   return InvestigationsRoleMapping;

@@ -9,7 +9,7 @@
     "lint:staged": "lint-staged",
     "debug": "DEBUG=defcon-one:* npm start",
     "start": "NODE_ENV=dev LOGS_DIR=../logs/defcon_one_logs/ nodemon app.js | bunyan -o short",
-    "staging": "NODE_ENV=staging PORT=8000 LOGS_DIR=/var/log/defcon_one_logs/ nodemon app.js | bunyan -o short",
+    "staging": "NODE_ENV=staging SERVER_HOST_IP=172.31.15.14 PORT=8000 LOGS_DIR=/var/log/defcon_one_logs/ nodemon app.js | bunyan -o short",
     "production": "NODE_ENV=production PORT=8000 LOGS_DIR=/var/log/defcon_one_logs/ pm2 start app.js | bunyan -o short"
   },
   "dependencies": {

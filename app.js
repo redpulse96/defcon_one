@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 global.packageHelper = require('./config/package_helper');
+global.models = require('./config/components/index');
 
 const app = require('./config/server');
-const models = require('./config/components/index');
 const debug = packageHelper.debug('defcon-one:server');
 const log = require('./config/components/log_config').logger('defcon_one:app');
+
 
 /**
  * Normalize a port into a number, string, or false.
@@ -29,7 +30,7 @@ const normalizePort = val => {
  */
 const port = normalizePort(process.env.PORT || '5000');
 app.set('port', port);
-
+app.set('ip', packageHelper.SERVER_HOST_IP);
 /**
  * Event listener for HTTP server "error" event.
  */
@@ -67,11 +68,10 @@ const onError = error => {
  * Event listener for HTTP server "listening" event.
  */
 const onListening = () => {
-  let addr = app.address();
+  let addr = app.get('ip');
   let bind = typeof addr === 'string' ?
     'pipe ' + addr :
     'port ' + addr.port;
-  packageHelper.IP_ADDRESS = bind;
   debug('Listening on ' + bind);
 
   console.log('Listening on ' + bind);
@@ -81,12 +81,13 @@ const onListening = () => {
   log.info('server is listening on ', bind);
 }
 
-models.sequelize.sync()
+models.sequelize.authenticate()
   .then(() => {
     /**
      * Listen on provided port, on all network interfaces.
      */
-    app.listen(port);
-    app.on('error', onError);
-    app.on('listening', onListening);
+    app.listen(port, err => {
+      if (err) throw onError(err);
+      onListening();
+    });
   });

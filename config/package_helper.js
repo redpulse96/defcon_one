@@ -5,7 +5,10 @@ const packageHelper = {
   NODE_ENV: process.env.NODE_ENV,
   PORT: process.env.PORT,
   LOGS_DIR: process.env.LOGS_DIR,
+  MODEL_CONFIG_DIR: __dirname + '/components/index',
+  SERVER_HOST_IP: process.env.SERVER_HOST_IP || '0.0.0.0',
 
+  publicIp: require('public-ip'),
   fs: require('fs'),
   http: require('http'),
   express: require('express'),

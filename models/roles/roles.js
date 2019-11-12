@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     role: {
       type: DataTypes.ENUM,
-      values: ['r_dentist', 'r_ortho'],//more will be added based on the new roles
+      values: ['r_dentist', 'r_ortho'], //more will be added based on the new roles
       allowNull: true
     },
     role_name: {
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     updated_date: {
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
       allowNull: true
     }
   }, {

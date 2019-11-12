@@ -243,7 +243,6 @@ const logger = (serviceName) => {
     return (...args) => {
       try {
         newLog[levelName].log({
-          ip_address: '',
           service: serviceName,
           level: levelName,
           message: _.concat(...args),
