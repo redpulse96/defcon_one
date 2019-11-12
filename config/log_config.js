@@ -1,4 +1,4 @@
-const packageHelper = require('../package_helper');
+const packageHelper = require('./package_helper');
 const _ = packageHelper.lodash;
 
 const {

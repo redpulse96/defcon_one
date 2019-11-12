@@ -1,4 +1,4 @@
-const log = require('../../../config/components/log_config').logger('diagnosis_role_mapping_controller');
+const log = require('../../../config/log_config').logger('diagnosis_role_mapping_controller');
 const DiagnosisRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['DiagnosisRoleMapping'];
 
 DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
@@ -14,7 +14,7 @@ DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
   });
   models.DiagnosisRoleMapping.findOne(whereObj)
     .then(fetch_res => {
-      log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
+      log.info('---DiagnosisRoleMapping_FETCH_SUCCESS---');
       log.info(fetch_res);
       return res.send({
         success: true,
@@ -25,7 +25,7 @@ DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
       });
     })
     .catch(fetch_err => {
-      log.info('---PATIENT_PRESCRIPTION_FETCH_FAILURE---');
+      log.info('---DiagnosisRoleMapping_FETCH_FAILURE---');
       log.info(fetch_err);
       return res.send({
         success: false,
@@ -42,7 +42,7 @@ DiagnosisRoleMapping.createDiagnosisRoleMapping = (req, res) => {
   let createObj = Object.assign({}, req.body);
   models.DiagnosisRoleMapping.create(createObj)
     .then(create_res => {
-      log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
+      log.info('---DiagnosisRoleMapping_CREATION_SUCCESS---');
       log.info(create_res);
       return res.send({
         success: true,
@@ -53,7 +53,7 @@ DiagnosisRoleMapping.createDiagnosisRoleMapping = (req, res) => {
       });
     })
     .catch(create_err => {
-      log.info('---PATIENT_PRESCRIPTION_CREATION_FAILURE---');
+      log.info('---DiagnosisRoleMapping_CREATION_FAILURE---');
       log.info(create_err);
       return res.send({
         success: false,

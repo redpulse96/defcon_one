@@ -1,4 +1,4 @@
-const log = require('../../../config/components/log_config').logger('patient_examinations_role_mappings_controller');
+const log = require('../../../config/log_config').logger('patient_examinations_role_mappings_controller');
 const PatientExaminationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['PatientExaminationsRoleMapping'];
 
 PatientExaminationsRoleMapping.fetchPatientExaminationsRoleMapping = (req, res) => {

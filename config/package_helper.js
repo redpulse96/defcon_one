@@ -8,6 +8,7 @@ const packageHelper = {
   MODEL_CONFIG_DIR: __dirname + '/components/index',
   SERVER_HOST_IP: process.env.SERVER_HOST_IP || '0.0.0.0',
 
+  passport: require('passport'),
   publicIp: require('public-ip'),
   fs: require('fs'),
   http: require('http'),

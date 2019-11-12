@@ -1,6 +1,7 @@
 const indexRoutes = require('../routes/index');
 const apiRoutes = require('../routes/api');
 
+const passport = packageHelper.passport;
 const app = packageHelper.express();
 
 // view engine setup
@@ -17,6 +18,12 @@ app.use(packageHelper.bodyParser.urlencoded({
 }));
 app.use(packageHelper.cookieParser());
 app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNAME, '../public')));
+
+app.post('/login',
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+  }));
 
 app.use('/', indexRoutes);
 app.use('/api', apiRoutes);

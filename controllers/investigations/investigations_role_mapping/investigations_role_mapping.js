@@ -1,4 +1,4 @@
-const log = require('../../../config/components/log_config').logger('investigations_role_mapping_controller');
+const log = require('../../../config/log_config').logger('investigations_role_mapping_controller');
 const InvestigationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['InvestigationsRoleMapping'];
 
 InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
@@ -14,7 +14,7 @@ InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
   });
   models.InvestigationsRoleMapping.findOne(whereObj)
     .then(fetch_res => {
-      log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
+      log.info('---InvestigationsRoleMapping_FETCH_SUCCESS---');
       log.info(fetch_res);
       return res.send({
         success: true,
@@ -25,7 +25,7 @@ InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
       });
     })
     .catch(fetch_err => {
-      log.info('---PATIENT_PRESCRIPTION_FETCH_FAILURE---');
+      log.info('---InvestigationsRoleMapping_FETCH_FAILURE---');
       log.info(fetch_err);
       return res.send({
         success: false,
@@ -42,7 +42,7 @@ InvestigationsRoleMapping.createInvestigationsRoleMapping = (req, res) => {
   let createObj = Object.assign({}, req.body);
   models.InvestigationsRoleMapping.create(createObj)
     .then(create_res => {
-      log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
+      log.info('---InvestigationsRoleMapping_CREATION_SUCCESS---');
       log.info(create_res);
       return res.send({
         success: true,
@@ -53,7 +53,7 @@ InvestigationsRoleMapping.createInvestigationsRoleMapping = (req, res) => {
       });
     })
     .catch(create_err => {
-      log.info('---PATIENT_PRESCRIPTION_CREATION_FAILURE---');
+      log.info('---InvestigationsRoleMapping_CREATION_FAILURE---');
       log.info(create_err);
       return res.send({
         success: false,

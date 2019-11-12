@@ -1,4 +1,4 @@
-const log = require('../../config/components/log_config').logger('roles_controller');
+const log = require('../../config/log_config').logger('roles_controller');
 const Roles = require(packageHelper.MODEL_CONFIG_DIR)['Roles'];
 
 Roles.getRoles = (req, res) => {

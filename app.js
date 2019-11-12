@@ -5,7 +5,7 @@ global.models = require('./config/components/index');
 
 const app = require('./config/server');
 const debug = packageHelper.debug('defcon-one:server');
-const log = require('./config/components/log_config').logger('defcon_one:app');
+const log = require('./config/log_config').logger('defcon_one:app');
 
 
 /**
@@ -28,9 +28,9 @@ const normalizePort = val => {
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || '5000');
-app.set('port', port);
+app.set('port', normalizePort(packageHelper.PORT || '5000'));
 app.set('ip', packageHelper.SERVER_HOST_IP);
+
 /**
  * Event listener for HTTP server "error" event.
  */
