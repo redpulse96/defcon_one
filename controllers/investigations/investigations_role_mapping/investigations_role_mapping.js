@@ -1,5 +1,5 @@
 const log = require('../../../config/components/log_config').logger('investigations_role_mapping_controller');
-const InvestigationsRoleMapping = require('../../models/investigations_role_mapping/investigations_role_mapping');
+const InvestigationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['InvestigationsRoleMapping'];
 
 InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
 
