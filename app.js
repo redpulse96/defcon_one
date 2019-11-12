@@ -28,7 +28,8 @@ const normalizePort = val => {
 /**
  * Get port from environment and store in Express.
  */
-app.set('port', normalizePort(packageHelper.PORT || '5000'));
+const port = normalizePort(packageHelper.PORT || '5000');
+app.set('port', port);
 app.set('ip', packageHelper.SERVER_HOST_IP);
 
 /**
