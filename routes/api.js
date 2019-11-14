@@ -1,6 +1,9 @@
 const express = packageHelper.express;
 const router = express.Router();
 
+const Appointments = require('../controllers/appointments/appointments');
+const AppointmentsLog = require('../controllers/appointments/appointments_log/appointments_log')
+
 const DiagnosisRoleMapping = require('../controllers/diagnosis/diagnosis_role_mapping/diagnosis_role_mapping');
 const ExaminationsRoleMapping = require('../controllers/examinations/examinations_role_mapping/examinations_role_mapping');
 const InvestigationsRoleMapping = require('../controllers/investigations/investigations_role_mapping/investigations_role_mapping');
@@ -10,6 +13,12 @@ const PatientDiagnosisRoleMapping = require('../controllers/patients/patient_dia
 const PatientExaminationsRoleMapping = require('../controllers/patients/patient_examinations_role_mapping/patient_examinations_role_mapping');
 const PatientInvestigationsRoleMapping = require('../controllers/patients/patient_investigations_role_mapping/patient_investigations_role_mapping');
 const PatientSymptomsRoleMapping = require('../controllers/patients/patient_symptoms_role_mapping/patient_symptoms_role_mapping');
+
+router.get('/AppointmentsLog/fetchAppointmentsLog', AppointmentsLog.fetchAppointmentsLog);
+router.post('/AppointmentsLog/createAppointmentsLog', AppointmentsLog.createAppointmentsLog);
+
+router.get('/Appointments/fetchAppointments', Appointments.fetchAppointments);
+router.post('/Appointments/createAppointments', Appointments.createAppointments);
 
 router.get('/DiagnosisRoleMapping/fetchDiagnosisRoleMapping', DiagnosisRoleMapping.fetchDiagnosisRoleMapping);
 router.post('/DiagnosisRoleMapping/createDiagnosisRoleMapping', DiagnosisRoleMapping.createDiagnosisRoleMapping);

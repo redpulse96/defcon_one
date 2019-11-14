@@ -1,5 +1,6 @@
 const log = require('../../../config/log_config').logger('patient_prescriptions_controller');
 const PatientPrescriptions = require(packageHelper.MODEL_CONFIG_DIR)['PatientPrescriptions'];
+const utils = require('../../utility/utils');
 
 PatientPrescriptions.fetchPatientPrescriptions = (req, res) => {
 
@@ -49,6 +50,7 @@ PatientPrescriptions.fetchPatientPrescriptions = (req, res) => {
 PatientPrescriptions.createPatientPrescriptions = (req, res) => {
 
   let createObj = Object.assign({}, req.body);
+  createObj.reference_id = utils.GenerateUniqueID(10, 'A#ab');
   models.PatientPrescriptions.create(createObj)
     .then(create_res => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');

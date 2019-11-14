@@ -52,6 +52,14 @@ module.exports = (sequelize, DataTypes) => {
         key: 'patient_diagnosis_role_mapping_id'
       }
     },
+    reference_id: {
+      type: DataTypes.STRING(10),
+      allowNull: true
+    },
+    medicine_id: {
+      type: DataTypes.BIGINT(11),
+      allowNull: true
+    },
     is_active: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,

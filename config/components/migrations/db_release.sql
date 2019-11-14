@@ -160,6 +160,8 @@ CREATE TABLE IF NOT EXISTS `patient_prescription` (
   `patient_examination_role_mapping_id` bigInt(11) NOT NULL,
   `patient_investigation_role_mapping_id` bigInt(11) NOT NULL,
   `patient_diagnosis_role_mapping_id` bigInt(11) NOT NULL,
+  `reference_id` varchar(10) DEFAULT NULL,
+  `medicine_id` bigint(11) DEFAULT NULL,
   `doctor_remarks` varchar(100) DEFAULT NULL,
   `is_active` tinyint(4) NOT NULL DEFAULT '1',
   `is_archived` tinyint(4) NOT NULL DEFAULT '0',
