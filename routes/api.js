@@ -6,6 +6,11 @@ const ExaminationsRoleMapping = require('../controllers/examinations/examination
 const InvestigationsRoleMapping = require('../controllers/investigations/investigations_role_mapping/investigations_role_mapping');
 const SymptomsRoleMapping = require('../controllers/symptoms/symptoms_role_mapping/symptoms_role_mapping');
 
+const PatientDiagnosisRoleMapping = require('../controllers/patients/patient_diagnosis_role_mapping/patient_diagnosis_role_mapping');
+const PatientExaminationsRoleMapping = require('../controllers/patients/patient_examinations_role_mapping/patient_examinations_role_mapping');
+const PatientInvestigationsRoleMapping = require('../controllers/patients/patient_investigations_role_mapping/patient_investigations_role_mapping');
+const PatientSymptomsRoleMapping = require('../controllers/patients/patient_symptoms_role_mapping/patient_symptoms_role_mapping');
+
 router.get('/DiagnosisRoleMapping/fetchDiagnosisRoleMapping', DiagnosisRoleMapping.fetchDiagnosisRoleMapping);
 router.post('/DiagnosisRoleMapping/createDiagnosisRoleMapping', DiagnosisRoleMapping.createDiagnosisRoleMapping);
 
@@ -17,5 +22,17 @@ router.post('/InvestigationsRoleMapping/createInvestigationsRoleMapping', Invest
 
 router.get('/SymptomsRoleMapping/fetchSymptomsRoleMapping', SymptomsRoleMapping.fetchSymptomsRoleMapping);
 router.post('/SymptomsRoleMapping/createSymptomsRoleMapping', SymptomsRoleMapping.createSymptomsRoleMapping);
+
+router.get('/PatientDiagnosisRoleMapping/fetchPatientDiagnosisRoleMapping', PatientDiagnosisRoleMapping.fetchPatientDiagnosisRoleMapping);
+router.post('/PatientDiagnosisRoleMapping/createPatientDiagnosisRoleMapping', PatientDiagnosisRoleMapping.createPatientDiagnosisRoleMapping);
+
+router.get('/PatientExaminationsRoleMapping/fetchPatientExaminationsRoleMapping', PatientExaminationsRoleMapping.fetchPatientExaminationsRoleMapping);
+router.post('/PatientExaminationsRoleMapping/createPatientExaminationsRoleMapping', PatientExaminationsRoleMapping.createPatientExaminationsRoleMapping);
+
+router.get('/PatientInvestigationsRoleMapping/fetchPatientInvestigationsRoleMapping', PatientInvestigationsRoleMapping.fetchPatientInvestigationsRoleMapping);
+router.post('/PatientInvestigationsRoleMapping/createPatientInvestigationsRoleMapping', PatientInvestigationsRoleMapping.createPatientInvestigationsRoleMapping);
+
+router.get('/PatientSymptomsRoleMapping/fetchPatientSymptomsRoleMapping', PatientSymptomsRoleMapping.fetchPatientSymptomsRoleMapping);
+router.post('/PatientSymptomsRoleMapping/createPatientSymptomsRoleMapping', PatientSymptomsRoleMapping.createPatientSymptomsRoleMapping);
 
 module.exports = router;
