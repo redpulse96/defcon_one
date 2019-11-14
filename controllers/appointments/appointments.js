@@ -1,4 +1,4 @@
-const log = require('../../../config/components/log_config').logger('appointments_controller');
+const log = require('../../config/log_config').logger('appointments_controller');
 const Appointments = require(packageHelper.MODEL_CONFIG_DIR)['Appointments'];
 
 Appointments.fetchAppointment = (req, res) => {

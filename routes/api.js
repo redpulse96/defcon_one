@@ -14,11 +14,11 @@ const PatientExaminationsRoleMapping = require('../controllers/patients/patient_
 const PatientInvestigationsRoleMapping = require('../controllers/patients/patient_investigations_role_mapping/patient_investigations_role_mapping');
 const PatientSymptomsRoleMapping = require('../controllers/patients/patient_symptoms_role_mapping/patient_symptoms_role_mapping');
 
+router.get('/Appointments/fetchAppointments', Appointments.fetchAppointment);
+router.post('/Appointments/createAppointments', Appointments.createAppointment);
+
 router.get('/AppointmentsLog/fetchAppointmentsLog', AppointmentsLog.fetchAppointmentsLog);
 router.post('/AppointmentsLog/createAppointmentsLog', AppointmentsLog.createAppointmentsLog);
-
-router.get('/Appointments/fetchAppointments', Appointments.fetchAppointments);
-router.post('/Appointments/createAppointments', Appointments.createAppointments);
 
 router.get('/DiagnosisRoleMapping/fetchDiagnosisRoleMapping', DiagnosisRoleMapping.fetchDiagnosisRoleMapping);
 router.post('/DiagnosisRoleMapping/createDiagnosisRoleMapping', DiagnosisRoleMapping.createDiagnosisRoleMapping);
