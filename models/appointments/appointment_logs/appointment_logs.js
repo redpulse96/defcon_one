@@ -1,12 +1,12 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  const AppointmentsLog = sequelize.define('appointments_log', {
+  const AppointmentLogs = sequelize.define('appointment_logs', {
     appointment_log_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
-      autoIncreament: true,
-      allowNull: false
+      autoIncrement: true,
+      defaultValue: null
     },
     appointment_id: {
       type: DataTypes.BIGINT(11),
@@ -27,39 +27,41 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     created_date: {
-      type: DataTypes.DATE,
-      defaultValue: 'CURRENT_TIMESTAMP',
+      type: DataTypes.NOW,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     },
     updated_date: {
-      type: DataTypes.DATE,
-      defaultValue: 'CURRENT_TIMESTAMP',
+      type: DataTypes.TIME,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     }
   }, {
     defaultScope: {
-      where: {
-        is_active: true,
-        is_archived: false
-      },
       order: [
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
     },
+    activeScope: {
+      where: {
+        is_active: true,
+        is_archived: false
+      }
+    },
     underscored: true,
     sequelize,
-    modelName: 'appointments_log',
+    modelName: 'appointment_logs',
     freezeTableName: true,
     timestamps: false
   });
-  AppointmentsLog.associate = models => {
+  AppointmentLogs.associate = models => {
     // associations can be defined here
-    AppointmentsLog.belongsTo(models.Appointments, {
+    AppointmentLogs.belongsTo(models['Appointments'], {
       as: 'appointment',
       foreignKey: 'appointment_id'
     });
   };
 
-  return AppointmentsLog;
+  return AppointmentLogs;
 };

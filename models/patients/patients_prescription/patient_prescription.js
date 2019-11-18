@@ -4,8 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     patient_prescription_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
-      autoIncreament: true,
-      allowNull: false
+      autoIncrement: true,
+      defaultValue: null
     },
     patient_id: {
       type: DataTypes.BIGINT(11),
@@ -71,25 +71,27 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     created_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      type: DataTypes.NOW,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     },
     updated_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      type: DataTypes.TIME,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     }
   }, {
     defaultScope: {
-      where: {
-        is_active: 1,
-        is_archived: 0
-      },
       order: [
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
+    },
+    activeScope: {
+      where: {
+        is_active: true,
+        is_archived: false
+      }
     },
     underscored: true,
     sequelize,
@@ -99,19 +101,19 @@ module.exports = (sequelize, DataTypes) => {
   });
   PatientPrescription.associate = models => {
     // associations can be defined here
-    PatientPrescription.belongsTo(models.PatientSymptomsRoleMapping, {
+    PatientPrescription.belongsTo(models['PatientSymptomsRoleMapping'], {
       as: 'patient_symptoms_role_mapping',
       foreignKey: 'patient_symptom_role_mapping_id'
     });
-    PatientPrescription.belongsTo(models.PatientInvestigationsRoleMapping, {
+    PatientPrescription.belongsTo(models['PatientInvestigationsRoleMapping'], {
       as: 'patient_investigations_role_mapping',
       foreignKey: 'patient_investigation_role_mapping_id'
     });
-    PatientPrescription.belongsTo(models.PatientExaminationsRoleMapping, {
+    PatientPrescription.belongsTo(models['PatientExaminationsRoleMapping'], {
       as: 'patient_examinations_role_mapping',
       foreignKey: 'patient_examination_role_mapping_id'
     });
-    PatientPrescription.belongsTo(models.PatientDiagnosisRoleMapping, {
+    PatientPrescription.belongsTo(models['PatientDiagnosisRoleMapping'], {
       as: 'patient_diagnosis_role_mapping',
       foreignKey: 'patient_diagnosis_role_mapping_id'
     });

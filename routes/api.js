@@ -2,23 +2,25 @@ const express = packageHelper.express;
 const router = express.Router();
 
 const Appointments = require('../controllers/appointments/appointments');
-const AppointmentsLog = require('../controllers/appointments/appointments_log/appointments_log')
+const AppointmentLogs = require('../controllers/appointments/appointment_logs/appointment_logs')
 
 const DiagnosisRoleMapping = require('../controllers/diagnosis/diagnosis_role_mapping/diagnosis_role_mapping');
 const ExaminationsRoleMapping = require('../controllers/examinations/examinations_role_mapping/examinations_role_mapping');
 const InvestigationsRoleMapping = require('../controllers/investigations/investigations_role_mapping/investigations_role_mapping');
 const SymptomsRoleMapping = require('../controllers/symptoms/symptoms_role_mapping/symptoms_role_mapping');
 
+const Patients = require('../controllers/patients/patients');
 const PatientDiagnosisRoleMapping = require('../controllers/patients/patient_diagnosis_role_mapping/patient_diagnosis_role_mapping');
 const PatientExaminationsRoleMapping = require('../controllers/patients/patient_examinations_role_mapping/patient_examinations_role_mapping');
 const PatientInvestigationsRoleMapping = require('../controllers/patients/patient_investigations_role_mapping/patient_investigations_role_mapping');
 const PatientSymptomsRoleMapping = require('../controllers/patients/patient_symptoms_role_mapping/patient_symptoms_role_mapping');
 
 router.get('/Appointments/fetchAppointments', Appointments.fetchAppointment);
+router.get('/Appointments/statusBasedAppointments/:user_id', Appointments.statusBasedAppointments);
 router.post('/Appointments/createAppointments', Appointments.createAppointment);
 
-router.get('/AppointmentsLog/fetchAppointmentsLog', AppointmentsLog.fetchAppointmentsLog);
-router.post('/AppointmentsLog/createAppointmentsLog', AppointmentsLog.createAppointmentsLog);
+router.get('/AppointmentLogs/fetchAppointmentLogs', AppointmentLogs.fetchAppointmentLogs);
+router.post('/AppointmentLogs/createAppointmentLogs', AppointmentLogs.createAppointmentLogs);
 
 router.get('/DiagnosisRoleMapping/fetchDiagnosisRoleMapping', DiagnosisRoleMapping.fetchDiagnosisRoleMapping);
 router.post('/DiagnosisRoleMapping/createDiagnosisRoleMapping', DiagnosisRoleMapping.createDiagnosisRoleMapping);
@@ -31,6 +33,9 @@ router.post('/InvestigationsRoleMapping/createInvestigationsRoleMapping', Invest
 
 router.get('/SymptomsRoleMapping/fetchSymptomsRoleMapping', SymptomsRoleMapping.fetchSymptomsRoleMapping);
 router.post('/SymptomsRoleMapping/createSymptomsRoleMapping', SymptomsRoleMapping.createSymptomsRoleMapping);
+
+router.get('/Patients/patientDetails/:patient_id', Patients.patientDetails);
+router.post('/Patients/createPatients', Patients.createPatients);
 
 router.get('/PatientDiagnosisRoleMapping/fetchPatientDiagnosisRoleMapping', PatientDiagnosisRoleMapping.fetchPatientDiagnosisRoleMapping);
 router.post('/PatientDiagnosisRoleMapping/createPatientDiagnosisRoleMapping', PatientDiagnosisRoleMapping.createPatientDiagnosisRoleMapping);

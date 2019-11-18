@@ -4,8 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     examination_role_mapping_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
-      autoIncreament: true,
-      allowNull: false
+      autoIncrement: true,
+      defaultValue: null
     },
     examination_id: {
       type: DataTypes.BIGINT(1),
@@ -36,25 +36,27 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     created_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      type: DataTypes.NOW,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     },
     updated_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      type: DataTypes.TIME,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     }
   }, {
     defaultScope: {
-      where: {
-        is_active: 1,
-        is_archived: 0
-      },
       order: [
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
+    },
+    activeScope: {
+      where: {
+        is_active: true,
+        is_archived: false
+      }
     },
     sequelize,
     modelName: 'examinations_role_mapping',
@@ -63,11 +65,11 @@ module.exports = (sequelize, DataTypes) => {
   });
   ExaminationsRoleMapping.associate = models => {
     // associations can be defined here
-    ExaminationsRoleMapping.belongsTo(models.Examinations, {
+    ExaminationsRoleMapping.belongsTo(models['Examinations'], {
       as: 'examination',
       foreignKey: 'examination_id'
     });
-    ExaminationsRoleMapping.belongsTo(models.Roles, {
+    ExaminationsRoleMapping.belongsTo(models['Roles'], {
       as: 'role',
       foreignKey: 'role_id'
     });

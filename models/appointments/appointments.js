@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     appointment_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
-      autoIncreament: true,
-      allowNull: false
+      autoIncrement: true,
+      defaultValue: null
     },
     appointment_name: {
       type: DataTypes.STRING(50),
@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       defaultValue: 'CURRENT_TIMESTAMP',
       allowNull: true
+    },
+    patient_id: {
+      type: DataTypes.BIGINT(11),
+      allowNull: false
     },
     status: {
       type: DataTypes.ENUM,
@@ -30,11 +34,15 @@ module.exports = (sequelize, DataTypes) => {
     from_time: {
       type: DataTypes.DATE,
       defaultValue: null,
-      allowNull: false
+      allowNull: true
     },
     to_time: {
       type: DataTypes.DATE,
       defaultValue: null,
+      allowNull: true
+    },
+    created_by: {
+      type: DataTypes.BIGINT(11),
       allowNull: false
     },
     doctor_remarks: {
@@ -53,25 +61,27 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     created_date: {
-      type: DataTypes.DATE,
-      defaultValue: 'CURRENT_TIMESTAMP',
+      type: DataTypes.NOW,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     },
     updated_date: {
-      type: DataTypes.DATE,
-      defaultValue: 'CURRENT_TIMESTAMP',
+      type: DataTypes.TIME,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     }
   }, {
     defaultScope: {
-      where: {
-        is_active: true,
-        is_archived: false
-      },
       order: [
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
+    },
+    activeScope: {
+      where: {
+        is_active: true,
+        is_archived: false
+      }
     },
     underscored: true,
     sequelize,
@@ -81,8 +91,8 @@ module.exports = (sequelize, DataTypes) => {
   });
   Appointments.associate = models => {
     // associations can be defined here
-    Appointments.hasMany(models.AppointmentsLog, {
-      as: 'appointments_log',
+    Appointments.hasMany(models['AppointmentLogs'], {
+      as: 'appointment_logs',
       onDelete: "CASCADE",
       foreignKey: 'appointment_id'
     });

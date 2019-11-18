@@ -50,7 +50,7 @@ PatientPrescriptions.fetchPatientPrescriptions = (req, res) => {
 PatientPrescriptions.createPatientPrescriptions = (req, res) => {
 
   let createObj = Object.assign({}, req.body);
-  createObj.reference_id = utils.GenerateUniqueID(10, 'A#ab');
+  createObj.reference_id = utils.GenerateUniqueID(10, 'A#vb');
   models.PatientPrescriptions.create(createObj)
     .then(create_res => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');

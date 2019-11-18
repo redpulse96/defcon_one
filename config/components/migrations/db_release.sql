@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `patients` (
   `patient_id` bigInt(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `patient_name` varchar(50) DEFAULT NULL,
   `phone_code` int(5) DEFAULT 91,
-  `mobile_no` int(15) NOT NULL,
+  `mobile_no` bigint(10) NOT NULL,
   `age` int(10) DEFAULT NULL,
   `gender` ENUM('Male', 'Female', 'Others') NOT NULL,
   `height` int(100) DEFAULT NULL COMMENT 'in cms',

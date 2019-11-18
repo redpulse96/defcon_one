@@ -1,4 +1,4 @@
-const log = require('../../../config/components/log_config').logger('symptoms_controller');
+const log = require('../../../config/log_config').logger('symptoms_controller');
 const Symptoms = require(packageHelper.MODEL_CONFIG_DIR)['Symptoms'];
 
 Symptoms.fetchSymptom = (req, res) => {

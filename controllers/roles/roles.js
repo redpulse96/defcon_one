@@ -12,7 +12,7 @@ Roles.getRoles = (req, res) => {
       as: 'symptoms_role_mapping'
     }]
   }
-  models.Roles.findAll(whereObj)
+  models['Roles'].findAll(whereObj)
     .then(model_res => {
       log.info('---ROLES_RES---');
       log.info(model_res);

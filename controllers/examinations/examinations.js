@@ -1,4 +1,4 @@
-const log = require('../../../config/components/log_config').logger('examinations_controller');
+const log = require('../../../config/log_config').logger('examinations_controller');
 const Examinations = require(packageHelper.MODEL_CONFIG_DIR)['Examinations'];
 
 Examinations.fetchExamination = (req, res) => {

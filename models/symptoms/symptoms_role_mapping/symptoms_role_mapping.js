@@ -4,9 +4,9 @@ module.exports = (sequelize, DataTypes) => {
   const SymptomsRoleMapping = sequelize.define('symptoms_role_mapping', {
     symptom_role_mapping_id: {
       type: DataTypes.BIGINT(11),
-      autoIncrement: true,
       primaryKey: true,
-      allowNull: false
+      autoIncrement: true,
+      defaultValue: null
     },
     symptom_id: {
       type: DataTypes.BIGINT(1),
@@ -36,25 +36,27 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     created_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      type: DataTypes.NOW,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     },
     updated_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      type: DataTypes.TIME,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     }
   }, {
     defaultScope: {
-      where: {
-        is_active: 1,
-        is_archived: 0
-      },
       order: [
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
+    },
+    activeScope: {
+      where: {
+        is_active: true,
+        is_archived: false
+      }
     },
     sequelize,
     modelName: 'symptoms_role_mapping',
@@ -63,11 +65,11 @@ module.exports = (sequelize, DataTypes) => {
   });
   SymptomsRoleMapping.associate = models => {
     // associations can be defined here
-    SymptomsRoleMapping.belongsTo(models.Symptoms, {
+    SymptomsRoleMapping.belongsTo(models['Symptoms'], {
       as: 'symptom',
       foreignKey: 'symptom_id'
     });
-    SymptomsRoleMapping.belongsTo(models.Roles, {
+    SymptomsRoleMapping.belongsTo(models['Roles'], {
       as: 'role',
       foreignKey: 'role_id'
     });

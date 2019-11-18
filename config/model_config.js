@@ -1,6 +1,6 @@
 module.exports = {
   Appointments: '../models/appointments/appointments.js',
-  AppointmentsLog: '../models/appointments/appointments_log/appointments_log.js',
+  AppointmentLogs: '../models/appointments/appointment_logs/appointment_logs.js',
   DiagnosisRoleMapping: '../models/diagnosis/diagnosis_role_mapping/diagnosis_role_mapping.js',
   Diagnosis: '../models/diagnosis/diagnosis.js',
   ExaminationsRoleMapping: '../models/examinations/examinations_role_mapping/examinations_role_mapping.js',

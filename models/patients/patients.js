@@ -4,15 +4,15 @@ module.exports = (sequelize, DataTypes) => {
     patient_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
-      autoIncreament: true,
-      allowNull: false
+      autoIncrement: true,
+      defaultValue: null
     },
     patient_name: {
       type: DataTypes.STRING(50),
       allowNull: true
     },
     mobile_no: {
-      type: DataTypes.INTEGER(10),
+      type: DataTypes.BIGINT(10),
       allowNull: true
     },
     phone_code: {
@@ -49,6 +49,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(50),
       allowNull: true
     },
+    created_by: {
+      type: DataTypes.BIGINT(11),
+      defaultValue: null
+    },
     is_active: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
@@ -60,25 +64,27 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     created_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      type: DataTypes.NOW,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     },
     updated_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      type: DataTypes.TIME,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     }
   }, {
     defaultScope: {
-      where: {
-        is_active: 1,
-        is_archived: 0
-      },
       order: [
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
+    },
+    activeScope: {
+      where: {
+        is_active: true,
+        is_archived: false
+      }
     },
     underscored: true,
     sequelize,
@@ -88,6 +94,16 @@ module.exports = (sequelize, DataTypes) => {
   });
   Patients.associate = models => {
     // associations can be defined here
+    Patients.hasMany(models['PatientPrescription'], {
+      as: 'patient_prescription',
+      onDelete: "CASCADE",
+      foreignKey: 'patient_id'
+    });
+    Patients.hasMany(models['Appointments'], {
+      as: 'appointments',
+      onDelete: "CASCADE",
+      foreignKey: 'patient_id'
+    });
   };
 
   return Patients;
