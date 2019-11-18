@@ -32,12 +32,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     from_time: {
-      type: DataTypes.DATE,
+      type: DataTypes.TIME,
       defaultValue: null,
       allowNull: true
     },
     to_time: {
-      type: DataTypes.DATE,
+      type: DataTypes.TIME,
       defaultValue: null,
       allowNull: true
     },

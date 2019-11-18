@@ -1,5 +1,6 @@
 const log = require('../../config/log_config').logger('appointments_controller');
 const Appointments = require(packageHelper.MODEL_CONFIG_DIR)['Appointments'];
+const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs'];
 const utils = require('../utility/utils');
 
 const _ = packageHelper.lodash;
@@ -86,27 +87,9 @@ Appointments.createAppointment = (req, res) => {
       appointment_id: createAppointment.data.appointment.appointment_id,
       status: createAppointment.data.appointment.status
     }, validateData.data);
-    models['AppointmentLogs'].create(logObj)
-      .then(create_res => {
-        log.info('---APPOINTMENT_LOG_CREATION_SUCCESS---');
-        log.info(create_res);
-        return callback(null, {
-          success: true,
-          message: 'Appointment log creation success',
-          data: {
-            appointment_log: create_res
-          }
-        });
-      })
-      .catch(create_err => {
-        log.info('---appointment_logs_CREATION_FAILURE---');
-        log.info(create_err);
-        return callback({
-          success: false,
-          message: 'Appointment log creation failure',
-          data: {}
-        });
-      });
+    AppointmentLogs.createAppointmentLogs(logObj)
+      .then(log_res => callback(null, log_res))
+      .catch(log_err => callback(log_err));
   }
 
   async.auto({

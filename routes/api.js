@@ -20,7 +20,6 @@ router.get('/Appointments/statusBasedAppointments/:user_id/:custom_date', Appoin
 router.post('/Appointments/createAppointments', Appointments.createAppointment);
 
 router.get('/AppointmentLogs/fetchAppointmentLogs', AppointmentLogs.fetchAppointmentLogs);
-router.post('/AppointmentLogs/createAppointmentLogs', AppointmentLogs.createAppointmentLogs);
 
 router.get('/DiagnosisRoleMapping/fetchDiagnosisRoleMapping', DiagnosisRoleMapping.fetchDiagnosisRoleMapping);
 router.post('/DiagnosisRoleMapping/createDiagnosisRoleMapping', DiagnosisRoleMapping.createDiagnosisRoleMapping);
