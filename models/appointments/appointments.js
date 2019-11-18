@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     appointment_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       defaultValue: 'CURRENT_TIMESTAMP',
       allowNull: true
     },
@@ -26,8 +26,8 @@ module.exports = (sequelize, DataTypes) => {
       values: ['closed', 'pending', 'rescheduled', 'operating'],
       allowNull: false
     },
-    appointment_date: {
-      type: DataTypes.DATE,
+    rescheduled_date: {
+      type: DataTypes.DATEONLY,
       defaultValue: 'CURRENT_TIMESTAMP',
       allowNull: true
     },

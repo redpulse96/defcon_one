@@ -142,20 +142,26 @@ Appointments.statusBasedAppointments = (req, res) => {
       data: {}
     });
   }
+  let currentDate = moment().format('YYYY-MM-DD');
   let filter = Object.assign({}, {
     where: {
-      created_by: req.params.user_id
-    }
+      created_by: req.params.user_id,
+      appointment_date: req.params.custom_date ? req.params.custom_date : currentDate
+    },
+    order: [
+      ['appointment_date', 'ASC']
+    ]
   });
   models['Appointments'].findAll(filter)
     .then(appointments_res => {
       log.info('---APPOINTMENT_LIST---');
       log.info(appointments_res);
+      let response = Object.keys(_.groupBy(appointments_res, 'status')).length ? _.groupBy(appointments_res, 'status') : [];
       res.send({
         success: true,
         message: 'Appointments list fetch success',
         data: {
-          appointments_list: _.groupBy(appointments_res, 'status')
+          appointments_list: response
         }
       });
     })

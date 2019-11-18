@@ -16,7 +16,7 @@ const PatientInvestigationsRoleMapping = require('../controllers/patients/patien
 const PatientSymptomsRoleMapping = require('../controllers/patients/patient_symptoms_role_mapping/patient_symptoms_role_mapping');
 
 router.get('/Appointments/fetchAppointments', Appointments.fetchAppointment);
-router.get('/Appointments/statusBasedAppointments/:user_id', Appointments.statusBasedAppointments);
+router.get('/Appointments/statusBasedAppointments/:user_id/:custom_date', Appointments.statusBasedAppointments);
 router.post('/Appointments/createAppointments', Appointments.createAppointment);
 
 router.get('/AppointmentLogs/fetchAppointmentLogs', AppointmentLogs.fetchAppointmentLogs);
