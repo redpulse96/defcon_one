@@ -29,7 +29,7 @@ const packageHelper = {
   debug: require('debug'),
   jsonwebtoken: require('jsonwebtoken'),
   mongoose: require('mongoose'),
-  bcrypt: require('bcrypt')
+  bcrypt: require('bcryptjs')
 };
 
 module.exports = packageHelper;
