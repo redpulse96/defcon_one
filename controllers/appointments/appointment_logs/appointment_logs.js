@@ -19,7 +19,7 @@ AppointmentLogs.fetchAppointmentLogs = (req, res) => {
     .catch(fetch_err => {
       log.info('---appointment_logs_FETCH_FAILURE---');
       log.info(fetch_err);
-      return res.send({
+      return res.status(500).send({
         success: false,
         message: 'AppointmentLogs fetching failure',
         data: {}
@@ -48,6 +48,7 @@ AppointmentLogs.createAppointmentLogs = data => {
         log.info(create_err);
         return reject({
           success: false,
+          error_code: 500,
           message: 'AppointmentLogs creation failure',
           data: {}
         });

@@ -26,7 +26,10 @@ const packageHelper = {
   path: require('path'),
   winston: require('winston'),
   request: require('request'),
-  debug: require('debug')
+  debug: require('debug'),
+  jsonwebtoken: require('jsonwebtoken'),
+  mongoose: require('mongoose'),
+  bcrypt: require('bcrypt')
 };
 
 module.exports = packageHelper;

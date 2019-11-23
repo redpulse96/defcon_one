@@ -39,6 +39,7 @@ module.exports = {
           log.error(_.difference(paramObj.mandatoryParams, reqParams));
           return reject({
             success: false,
+            error_code: 400,
             message: 'Insufficient parameters',
             data: _.difference(paramObj.mandatoryParams, reqParams)
           });
@@ -51,6 +52,7 @@ module.exports = {
               if (!_.isArray(paramObj.data[val.key])) {
                 return reject({
                   success: false,
+                  error_code: 400,
                   message: 'Value type does not match',
                   data: val
                 });
@@ -60,6 +62,7 @@ module.exports = {
               if (!_.isString(paramObj.data[val.key])) {
                 return reject({
                   success: false,
+                  error_code: 400,
                   message: 'Value type does not match',
                   data: val
                 });
@@ -69,6 +72,7 @@ module.exports = {
               if (!_.isNumber(paramObj.data[val.key])) {
                 return reject({
                   success: false,
+                  error_code: 400,
                   message: 'Value type does not match',
                   data: val
                 });
@@ -78,6 +82,7 @@ module.exports = {
               if (!_.isBoolean(paramObj.data[val.key])) {
                 return reject({
                   success: false,
+                  error_code: 400,
                   message: 'Value type does not match',
                   data: val
                 });
@@ -86,6 +91,7 @@ module.exports = {
             default:
               return resolve({
                 success: true,
+                error_code: 400,
                 message: 'Value type matches successfully',
                 data: val
               });

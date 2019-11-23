@@ -5,7 +5,7 @@ Roles.getRoles = (req, res) => {
   log.info('----Roles.getRoles---');
   let whereObj = {
     where: {
-      role: 'r_dentist'
+      role_type: 'r_dentist'
     },
     include: [{
       model: models.SymptomsRoleMapping,

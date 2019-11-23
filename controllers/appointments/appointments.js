@@ -72,6 +72,7 @@ Appointments.createAppointment = (req, res) => {
         log.error(create_err);
         return callback({
           success: false,
+          error_code: 500,
           message: 'Appointment creation failure',
           data: {}
         });
@@ -112,7 +113,7 @@ Appointments.createAppointment = (req, res) => {
     .catch(err => {
       log.error('---ERROR---');
       log.error(err);
-      res.send(err);
+      res.status(err.error_code).send(err);
     });
 }
 
@@ -125,11 +126,11 @@ Appointments.statusBasedAppointments = (req, res) => {
       data: {}
     });
   }
-  let currentDate = moment().format('YYYY-MM-DD');
+  let currentDate = req.params.custom_date ? moment(req.params.custom_date).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
   let filter = Object.assign({}, {
     where: {
       created_by: req.params.user_id,
-      appointment_date: req.params.custom_date ? req.params.custom_date : currentDate
+      appointment_date: currentDate
     },
     order: [
       ['appointment_date', 'ASC']

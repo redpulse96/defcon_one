@@ -2,9 +2,13 @@ const packageHelper = require('../package_helper');
 const datasources = require('./datasources');
 
 let mysql_config = {};
+let mongo_config = {};
 
 switch (packageHelper.NODE_ENV) {
   case 'dev':
+    mongo_config = {
+      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/test?retryWrites=true&w=majority'
+    }
     mysql_config = {
       database: datasources['dev'].mysql.database,
       username: datasources['dev'].mysql.username,
@@ -18,6 +22,9 @@ switch (packageHelper.NODE_ENV) {
     };
     break;
   case 'uat':
+    mongo_config = {
+      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/test?retryWrites=true&w=majority'
+    }
     mysql_config = {
       database: datasources['uat'].mysql.database,
       username: datasources['uat'].mysql.username,
@@ -31,6 +38,9 @@ switch (packageHelper.NODE_ENV) {
     };
     break;
   case 'production':
+    mongo_config = {
+      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/test?retryWrites=true&w=majority'
+    }
     mysql_config = {
       database: datasources['production'].mysql.database,
       username: datasources['production'].mysql.username,
@@ -50,6 +60,9 @@ switch (packageHelper.NODE_ENV) {
     };
     break;
   default:
+    mongo_config = {
+      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/test?retryWrites=true&w=majority'
+    }
     mysql_config = {
       database: datasources['dev'].mysql.database,
       username: datasources['dev'].mysql.username,
@@ -71,5 +84,6 @@ switch (packageHelper.NODE_ENV) {
 }
 
 module.exports = {
-  mysql: mysql_config
+  mysql: mysql_config,
+  mongo: mongo_config
 };

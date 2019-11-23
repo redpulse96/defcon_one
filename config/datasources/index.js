@@ -2,12 +2,24 @@
 
 const path = packageHelper.path;
 const Sequelize = packageHelper.sequelize;
+const mongoose = packageHelper.mongoose;
 
 const modelConfig = require('../model_config');
-const mysqlConfig = require('./datasources_env_config')['mysql'];
+const mysql_config = require('./datasources_env_config')['mysql'];
+const mongo_config = require('./datasources_env_config')['mongo'];
+
 const db = {};
 
-let sequelize = new Sequelize(mysqlConfig.database, mysqlConfig.username, mysqlConfig.password, mysqlConfig.options);
+const sequelize = new Sequelize(mysql_config.database, mysql_config.username, mysql_config.password, mysql_config.options);
+mongoose.connect(mongo_config.url, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
+  })
+  .then((res) => {
+    console.log('Mongodb connection established')
+    db['Users'] = '';
+  })
+  .catch(err => console.error(err));
 
 for (let model_index = 0; model_index < Object.keys(modelConfig).length; model_index++) {
   const elem = Object.keys(modelConfig)[model_index];

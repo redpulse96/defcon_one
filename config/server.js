@@ -1,7 +1,13 @@
 const indexRoutes = require('../routes/index');
+const userRoutes = require('../routes/users');
 const apiRoutes = require('../routes/api');
 
-const passport = packageHelper.passport;
+const {
+  validateUser,
+  generateToken,
+  verifyToken
+} = require('./middleware/auth_middleware');
+
 const app = packageHelper.express();
 
 // view engine setup
@@ -19,14 +25,10 @@ app.use(packageHelper.bodyParser.urlencoded({
 app.use(packageHelper.cookieParser());
 app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNAME, '../public')));
 
-app.post('/login',
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login'
-  }));
-
+app.post('/login', validateUser, generateToken);
+app.use('/users', userRoutes);
 app.use('/', indexRoutes);
-app.use('/api', apiRoutes);
+app.use('/api', verifyToken, apiRoutes);
 
 // catch 404 and forward to error handler 
 app.use((req, res, next) => {

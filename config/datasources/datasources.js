@@ -11,7 +11,9 @@ module.exports = {
       acquireTimeout: 100000,
       port: 3306
     },
-    mongo: {}
+    mongo: {
+      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/test?retryWrites=true&w=majority'
+    }
   },
   uat: {
     mysql: {

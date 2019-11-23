@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       defaultValue: null
     },
-    role: {
+    role_type: {
       type: DataTypes.ENUM,
       values: ['r_dentist', 'r_ortho'], //more will be added based on the new roles
       allowNull: true
