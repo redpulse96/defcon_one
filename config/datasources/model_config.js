@@ -1,4 +1,5 @@
 module.exports = {
+  AccessToken: '../models/access_token.js',
   Appointments: '../models/appointments/appointments.js',
   AppointmentLogs: '../models/appointments/appointment_logs/appointment_logs.js',
   DiagnosisRoleMapping: '../models/diagnosis/diagnosis_role_mapping/diagnosis_role_mapping.js',

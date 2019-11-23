@@ -1,14 +1,14 @@
 const log = require('../config/log_config').logger('users_controller');
-const DEFAULT_USERNAME = require('../public/javascripts/constants');
+const { DEFAULT_SALT, DEFAULT_USERNAME } = require('../public/javascripts/constants');
 const FEAURE_RIGHTS = require('../public/javascripts/role_mapping');
 const Users = require('../models/users');
 const utils = require('./utility/utils');
 
 const bcrypt = packageHelper.bcrypt;
 
-Users.generateSalt = password => {
+Users.generateSalt = () => {
   return new Promise((resolve, reject) => {
-    bcrypt.genSalt(password, (err, salt) => {
+    bcrypt.genSalt(DEFAULT_SALT, (err, salt) => {
       if (err) {
         log.error('---ERROR_WHILE_GENERATING_SALT---');
         log.error(err);
@@ -34,7 +34,7 @@ Users.generateSalt = password => {
 
 Users.generateHash = (password, salt) => {
   return new Promise((resolve, reject) => {
-    bcrypt(password, salt, (err, hash) => {
+    bcrypt.hash(password, salt, (err, hash) => {
       if (err) {
         log.error('---ERROR_WHILE_GENERATING_HASH---');
         log.error(err);
@@ -81,8 +81,8 @@ const registerUser = (req, res) => {
           is_archived: false
         })
         .then(existingUser => {
-          if (existingUser.username) {
-            log.einfo('---USER_ALREADY_EXISTS---');
+          if (existingUser) {
+            log.info('---USER_ALREADY_EXISTS---');
             log.info(existingUser);
             res.status(400).send({
               success: false,
@@ -90,8 +90,8 @@ const registerUser = (req, res) => {
               data: {}
             });
           } else {
-            let newUser = new User(Object.assign({}, req.body, {
-              feature_rights: FEAURE_RIGHTS[req.body['role_type']],
+            let newUser = new Users(Object.assign({}, req.body, {
+              feature_rights: FEAURE_RIGHTS[req.body['role_type']].FEATURE_RIGHTS,
               is_active: true,
               is_archived: false
             }));
@@ -105,7 +105,7 @@ const registerUser = (req, res) => {
                       .then(createdUserResult => {
                         log.info('---CREATED_USER_SUCCESS---');
                         log.info(createdUserResult);
-                        res.send({
+                        res.status(200).send({
                           success: true,
                           message: 'User created successfully',
                           data: {
@@ -144,11 +144,15 @@ const registerUser = (req, res) => {
               });
           }
         })
-        .catch(() => res.status(500).send({
-          success: false,
-          message: 'Internal server error',
-          data: {}
-        }));
+        .catch((catchErr) => {
+          log.error('---catchErr---');
+          log.error(catchErr);
+          res.status(500).send({
+            success: false,
+            message: 'Internal server error',
+            data: {}
+          })
+        });
     })
     .catch(paramError => {
       log.error('---INSUFFICIENT_PARAMETERS---');

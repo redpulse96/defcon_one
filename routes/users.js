@@ -1,16 +1,25 @@
 const { registerUser } = require('../controllers/users');
+const { validateUser, generateToken, destroyToken } = require('../config/middleware/auth_middleware');
+
+const passport = packageHelper.passport;
 const express = require('express');
 const router = express.Router();
 
-/* GET users listing. */
-router.get('/login', (req, res, next) => {
-  res.send('respond with a resource');
-});
-
-router.get('/register', (req, res, next) => {
-  res.send('respond with a resource');
-});
-
 router.post('/register', registerUser);
+
+router.post('/login', validateUser, generateToken, (req, res, next) => {
+  passport.authenticate('local', {
+    failureRedirect: '/login'
+  })(req, res, next)
+});
+
+router.post('/logout', destroyToken, (req, res) => {
+  req.logout();
+  res.status(200).send({
+    success: true,
+    message: 'Logout successfull',
+    data: {}
+  });
+});
 
 module.exports = router;

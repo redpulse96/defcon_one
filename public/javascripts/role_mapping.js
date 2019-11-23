@@ -1,10 +1,8 @@
 module.exports = {
-  FEAURE_RIGHTS: {
-    'r_dentist': {
-      FEATURE_RIGHTS: []
-    },
-    'r_reception': {
-      FEATURE_RIGHTS: []
-    }
+  'r_dentist': {
+    FEATURE_RIGHTS: [1, 2, 3]
+  },
+  'r_reception': {
+    FEATURE_RIGHTS: [2, 3]
   }
 };

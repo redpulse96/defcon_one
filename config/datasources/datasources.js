@@ -12,7 +12,7 @@ module.exports = {
       port: 3306
     },
     mongo: {
-      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/test?retryWrites=true&w=majority'
+      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/Defcon_One_Auth?retryWrites=true&w=majority'
     }
   },
   uat: {

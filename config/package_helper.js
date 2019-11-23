@@ -9,10 +9,12 @@ const packageHelper = {
   SERVER_HOST_IP: process.env.SERVER_HOST_IP || '0.0.0.0',
 
   passport: require('passport'),
+  passport_local: require('passport-local'),
   publicIp: require('public-ip'),
   fs: require('fs'),
   http: require('http'),
   express: require('express'),
+  express_session: require('express-session'),
   bodyParser: require('body-parser'),
   cookieParser: require('cookie-parser'),
   mysql2: require('mysql2'),
