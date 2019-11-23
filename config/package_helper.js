@@ -5,7 +5,7 @@ const packageHelper = {
   NODE_ENV: process.env.NODE_ENV,
   PORT: process.env.PORT,
   LOGS_DIR: process.env.LOGS_DIR,
-  MODEL_CONFIG_DIR: __dirname + '/components/index',
+  MODEL_CONFIG_DIR: __dirname + '/datasources/index',
   SERVER_HOST_IP: process.env.SERVER_HOST_IP || '0.0.0.0',
 
   passport: require('passport'),

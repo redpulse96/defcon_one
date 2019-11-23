@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 global.packageHelper = require('./config/package_helper');
-global.models = require('./config/components/index');
+global.models = require('./config/datasources/index');
 
 const app = require('./config/server');
 const debug = packageHelper.debug('defcon-one:server');

@@ -4,7 +4,7 @@ const path = packageHelper.path;
 const Sequelize = packageHelper.sequelize;
 const mongoose = packageHelper.mongoose;
 
-const modelConfig = require('../model_config');
+const modelConfig = require('./model_config');
 const mysql_config = require('./datasources_env_config')['mysql'];
 const mongo_config = require('./datasources_env_config')['mongo'];
 
