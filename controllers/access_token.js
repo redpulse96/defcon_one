@@ -37,20 +37,28 @@ AccessToken.getAccessToken = req => {
         access_token: req.authorization
       }
     };
-    models['AccessToken'].scope('activeScope').find(whereObj)
+    models['AccessToken'].scope('activeScope').findOne(whereObj)
       .then(model_res => {
-        log.info('---ROLES_RES---');
+        log.info('---GET_ACCESS_TOKEN_RES---');
         log.info(model_res);
-        return resolve({
-          success: true,
-          message: 'AccessToken fetch success',
-          data: {
-            access_token: model_res
-          }
-        });
+        if (model_res) {
+          return resolve({
+            success: true,
+            message: 'AccessToken fetch success',
+            data: {
+              access_token: model_res
+            }
+          });
+        } else {
+          return reject({
+            success: false,
+            message: 'Bad request',
+            data: {}
+          });
+        }
       })
       .catch(err => {
-        log.error('---ROLES_ERR---');
+        log.error('---GET_ACCESS_TOKEN_ERR---');
         log.error(err);
         return reject({
           success: false,

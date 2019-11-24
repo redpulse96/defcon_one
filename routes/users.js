@@ -7,11 +7,11 @@ const router = express.Router();
 
 router.post('/register', registerUser);
 
-router.post('/login', validateUser, generateToken, (req, res, next) => {
+router.post('/login', validateUser, (req, res, next) => {
   passport.authenticate('local', {
     failureRedirect: '/login'
   })(req, res, next)
-});
+}, generateToken);
 
 router.post('/logout', destroyToken, (req, res) => {
   req.logout();

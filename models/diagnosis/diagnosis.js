@@ -46,10 +46,12 @@ module.exports = (sequelize, DataTypes) => {
         ['updated_date', 'DESC']
       ]
     },
-    activeScope: {
-      where: {
-        is_active: true,
-        is_archived: false
+    scopes: {
+      activeScope: {
+        where: {
+          is_active: true,
+          is_archived: false
+        }
       }
     },
     sequelize,

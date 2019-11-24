@@ -1,10 +1,12 @@
 const log = require('../log_config').logger('auth_middleware');
-const { DEFAULT_USERNAME } = require('../../public/javascripts/constants');
 const Users = require('../../models/users');
 const AccessToken = require('../../controllers/access_token');
 
 const bcrypt = packageHelper.bcrypt;
 const jwt = packageHelper.jsonwebtoken;
+
+const { DEFAULT_USERNAME } = require('../../public/javascripts/constants');
+const { SECRET_KEY } = require('../../public/javascripts/constants');
 
 const validateUser = (req, res, next) => {
   //find the user from users model
@@ -49,10 +51,10 @@ const validateUser = (req, res, next) => {
 }
 
 const generateToken = (req, res) => {
-  if (req.user && req.headers.key) {
+  if (req.user) {
     jwt.sign({
       username: req.user.username
-    }, req.body['password'], (err, token) => {
+    }, SECRET_KEY, (err, token) => {
       if (err) {
         log.error('---GENERATETOKEN_ERROR---');
         log.error(err);
@@ -96,7 +98,7 @@ const verifyToken = (req, res, next) => {
   const bearer_token = req.headers['bearer_token'];
   if (bearer_token) {
     req.token = bearer_token;
-    jwt.verify(req.token, req.body['password'], (err, authData) => {
+    jwt.verify(req.token, SECRET_KEY, (err, authData) => {
       if (err) {
         return res.status(403).send({
           success: false,
@@ -107,12 +109,12 @@ const verifyToken = (req, res, next) => {
         log.info('---TOKEN_VERIFIED---');
         log.info(authData);
         let reqObj = {
-          authorization: releaseEvents.headers.authorization
+          authorization: req.token
         };
         AccessToken.getAccessToken(reqObj)
-        .then(toekn_res => {
-          log.info('---toekn_res---');
-          log.info(toekn_res);
+        .then(token_res => {
+          log.info('---token_res---');
+          log.info(token_res);
           next();
         })
         .catch(token_err => {
@@ -137,10 +139,11 @@ const verifyToken = (req, res, next) => {
 }
 
 const ensureAuth = (req, res, next) => {
+  console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
     return next();
   } else {
-    res.redirect('/users/login').send({
+    res.status(500).send({
       success: false,
       message: 'Permission denied',
       data: {}

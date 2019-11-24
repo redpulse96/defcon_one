@@ -52,12 +52,13 @@ module.exports = (sequelize, DataTypes) => {
         ['updated_date', 'DESC']
       ]
     },
-    activeScope: {
+    scopes: {
+  activeScope: {
       where: {
         is_active: true,
         is_archived: false
       }
-    },
+    }},
     underscored: true,
     sequelize,
     modelName: 'patient_examinations_role_mapping',
