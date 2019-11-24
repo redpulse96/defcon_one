@@ -41,7 +41,8 @@ app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNA
 
 app.use('/', indexRoutes);
 app.use('/users', userRoutes);
-app.use('/api', ensureAuth, verifyToken, apiRoutes);
+app.use('/api', apiRoutes);
+// app.use('/api', ensureAuth, verifyToken, apiRoutes);
 
 // catch 404 and forward to error handler 
 app.use((req, res, next) => {
