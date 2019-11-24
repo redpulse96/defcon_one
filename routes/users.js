@@ -2,7 +2,7 @@ const { registerUser } = require('../controllers/users');
 const { validateUser, generateToken, destroyToken } = require('../config/middleware/auth_middleware');
 
 const passport = packageHelper.passport;
-const express = require('express');
+const express = packageHelper.express;
 const router = express.Router();
 
 router.post('/register', registerUser);

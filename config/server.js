@@ -2,11 +2,11 @@ const indexRoutes = require('../routes/index');
 const userRoutes = require('../routes/users');
 const apiRoutes = require('../routes/api');
 
-const { verifyToken, ensureAuth } = require('./middleware/auth_middleware');
-
 const passport = packageHelper.passport;
 const session = packageHelper.express_session;
 const app = packageHelper.express();
+
+const { verifyToken, ensureAuth } = require('./middleware/auth_middleware');
 
 // view engine setup
 app.set('views', packageHelper.path.join(packageHelper.DIRNAME, '../views'));
@@ -17,13 +17,13 @@ app.use(packageHelper.express.urlencoded({
   extended: false
 }));
 
-//Body parser
+// Body parser
 app.use(packageHelper.bodyParser.json());
 app.use(packageHelper.bodyParser.urlencoded({
   extended: true
 }));
 
-//Passport session
+// Passport session
 require('./passport')(passport);
 app.use(session({
   secret: 's%3Af-LcbnMAtrDwm87ExePnNxrakQBApz2F.fkY%2FiA4%2FekLHtzJ3bLswxLKeHz2iE7gYHcR6s8idtH4',
@@ -31,7 +31,7 @@ app.use(session({
   saveUninitialized: true
 }))
  
-//Passport middleware
+// Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 

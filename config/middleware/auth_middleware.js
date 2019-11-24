@@ -52,7 +52,7 @@ const generateToken = (req, res) => {
   if (req.user && req.headers.key) {
     jwt.sign({
       username: req.user.username
-    }, req.headers['key'], (err, token) => {
+    }, req.body['password'], (err, token) => {
       if (err) {
         log.error('---GENERATETOKEN_ERROR---');
         log.error(err);
@@ -93,10 +93,10 @@ const generateToken = (req, res) => {
 
 const verifyToken = (req, res, next) => {
   //GET AUTH HEADER VALUE
-  const bearer_token = req.headers['authorization'];
+  const bearer_token = req.headers['bearer_token'];
   if (bearer_token) {
     req.token = bearer_token;
-    jwt.verify(req.token, req.headers['key'], (err, authData) => {
+    jwt.verify(req.token, req.body['password'], (err, authData) => {
       if (err) {
         return res.status(403).send({
           success: false,

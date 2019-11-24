@@ -6,13 +6,13 @@ const bcrypt = packageHelper.bcrypt;
 module.exports = passport => {
   passport.use(
     new localStrategy({ usernameField: 'username' }, (username, password, done) => {
-      //Match user
+      // Match user
       Users.findOne({
         username
       })
       .then(userResult => {
         if(userResult.username) {
-          //Match password
+          // Match password
           bcrypt.compare(password, userResult.password, (matchErr, isMatched) => {
             if(matchErr) throw matchErr;
              if(isMatched) {
@@ -26,8 +26,9 @@ module.exports = passport => {
         }
       })
       .catch(userErr => {
-
-      })
+        log.error(userErr);
+        return done(null, false, 'Invalid username');
+      });
     })
   );
 
