@@ -3,10 +3,9 @@
 global.packageHelper = require('./config/package_helper');
 global.models = require('./config/datasources/index');
 
+const log = require('./config/log_config').logger('defcon_one:app');
 const app = require('./config/server');
 const debug = packageHelper.debug('defcon-one:server');
-const log = require('./config/log_config').logger('defcon_one:app');
-
 
 /**
  * Normalize a port into a number, string, or false.
