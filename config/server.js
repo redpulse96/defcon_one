@@ -7,6 +7,7 @@ const session = packageHelper.express_session;
 const app = packageHelper.express();
 
 const { verifyToken, ensureAuth } = require('./middleware/auth_middleware');
+const { SECRET_KEY } = require('../public/javascripts/constants');
 
 // view engine setup
 app.set('views', packageHelper.path.join(packageHelper.DIRNAME, '../views'));
@@ -26,10 +27,10 @@ app.use(packageHelper.bodyParser.urlencoded({
 // Passport session
 require('./passport')(passport);
 app.use(session({
-  secret: 's%3Af-LcbnMAtrDwm87ExePnNxrakQBApz2F.fkY%2FiA4%2FekLHtzJ3bLswxLKeHz2iE7gYHcR6s8idtH4',
+  secret: SECRET_KEY,
   resave: true,
   saveUninitialized: true
-}))
+}));
  
 // Passport middleware
 app.use(passport.initialize());

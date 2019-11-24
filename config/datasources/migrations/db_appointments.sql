@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `appointments` (
   `rescheduled_date` DATE NULL DEFAULT NULL,
   `from_time` time DEFAULT NULL,
   `to_time` time DEFAULT NULL,
-  `created_by` BIGINT(11) NOT NULL,
+  `created_by` varchar(50) NOT NULL DEFAULT '',
   `doctor_remarks` VARCHAR(100) DEFAULT NULL,
   `is_active` TINYINT(4) NOT NULL DEFAULT '1',
   `is_archived` TINYINT(4) NOT NULL DEFAULT '0',

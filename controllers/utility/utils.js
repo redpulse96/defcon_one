@@ -105,7 +105,6 @@ module.exports = {
    * @param {Function} fn - function to run within try/catch for safe exception handling
    * @param {any} defaultVal - default value to return in case of exception
    * @param {Callback} cb  - callback to invoke with error-first as argument in case of exception
-   * isOptional will by default false and an error alert will be sent to slack. If passed as true, the functionality remains same but no alert will be sent to slack
    */
   validateKeys: (fn, defaultVal, cb) => {
     if (!cb) {

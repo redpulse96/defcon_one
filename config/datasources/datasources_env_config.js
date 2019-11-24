@@ -7,7 +7,7 @@ let mongo_config = {};
 switch (packageHelper.NODE_ENV) {
   case 'dev':
     mongo_config = {
-      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/test?retryWrites=true&w=majority'
+      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/Defcon_One_Auth?retryWrites=true&w=majority'
     }
     mysql_config = {
       database: datasources['dev'].mysql.database,
@@ -23,7 +23,7 @@ switch (packageHelper.NODE_ENV) {
     break;
   case 'uat':
     mongo_config = {
-      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/test?retryWrites=true&w=majority'
+      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/Defcon_One_Auth?retryWrites=true&w=majority'
     }
     mysql_config = {
       database: datasources['uat'].mysql.database,
@@ -39,7 +39,7 @@ switch (packageHelper.NODE_ENV) {
     break;
   case 'production':
     mongo_config = {
-      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/test?retryWrites=true&w=majority'
+      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/Defcon_One_Auth?retryWrites=true&w=majority'
     }
     mysql_config = {
       database: datasources['production'].mysql.database,
@@ -61,7 +61,7 @@ switch (packageHelper.NODE_ENV) {
     break;
   default:
     mongo_config = {
-      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/test?retryWrites=true&w=majority'
+      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/Defcon_One_Auth?retryWrites=true&w=majority'
     }
     mysql_config = {
       database: datasources['dev'].mysql.database,

@@ -1,10 +1,10 @@
 const log = require('../config/log_config').logger('users_controller');
-const { DEFAULT_SALT, DEFAULT_USERNAME } = require('../public/javascripts/constants');
-const FEAURE_RIGHTS = require('../public/javascripts/role_mapping');
 const Users = require('../models/users');
 const utils = require('./utility/utils');
 
 const bcrypt = packageHelper.bcrypt;
+const { DEFAULT_SALT, DEFAULT_USERNAME } = require('../public/javascripts/constants');
+const FEAURE_RIGHTS = require('../public/javascripts/role_mapping');
 
 Users.generateSalt = () => {
   return new Promise((resolve, reject) => {
