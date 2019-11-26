@@ -8,6 +8,7 @@ const packageHelper = {
   MODEL_CONFIG_DIR: __dirname + '/datasources/index',
   SERVER_HOST_IP: process.env.SERVER_HOST_IP || '0.0.0.0',
 
+  cors: require('cors'),
   passport: require('passport'),
   passport_local: require('passport-local'),
   publicIp: require('public-ip'),

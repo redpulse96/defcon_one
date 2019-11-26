@@ -14,10 +14,10 @@ Patients.patientsList = (req, res) => {
   }
   let filterObj = Object.assign({}, {
     where: {
-      created_by: req.params.user_id
+      created_by: req.user.username
     }
   });
-  models['Patients'].findAll(filterObj)
+  models['Patients'].scope('activeScope').findAll(filterObj)
     .then(patients_res => {
       log.info('---LIST_OF_PATIENTS_OF_THE_USER---');
       log.info(patients_res);
@@ -74,13 +74,15 @@ Patients.patientDetails = (req, res) => {
     .then(fetch_res => {
       log.info('---PATIENTS_FETCH_SUCCESS---');
       log.info(fetch_res);
-      return res.send({
-        success: true,
-        message: 'Patients Role Mapping fetching success',
-        data: {
-          patient_details: fetch_res
-        }
-      });
+      if (fetch_res) {
+        return res.send({
+          success: true,
+          message: 'Patients Role Mapping fetching success',
+          data: {
+            patient_details: fetch_res
+          }
+        });
+      }
     })
     .catch(fetch_err => {
       log.error('---PATIENTS_FETCH_FAILURE---');

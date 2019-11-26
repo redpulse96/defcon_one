@@ -3,11 +3,19 @@ const userRoutes = require('../routes/users');
 const apiRoutes = require('../routes/api');
 
 const passport = packageHelper.passport;
+const cors = packageHelper.cors;
 const session = packageHelper.express_session;
 const app = packageHelper.express();
 
 const { verifyToken, ensureAuth } = require('./middleware/auth_middleware');
 const { SECRET_KEY } = require('../public/javascripts/constants');
+
+const corsOptions = {
+  "origin": /localhost:3000$/,
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": true,
+  "optionsSuccessStatus": 204
+};
 
 // view engine setup
 app.set('views', packageHelper.path.join(packageHelper.DIRNAME, '../views'));
@@ -41,7 +49,7 @@ app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNA
 
 app.use('/', indexRoutes);
 app.use('/users', userRoutes);
-app.use('/api', apiRoutes);
+app.use('/api', cors(corsOptions), apiRoutes);
 // app.use('/api', ensureAuth, verifyToken, apiRoutes);
 
 // catch 404 and forward to error handler 
