@@ -79,7 +79,9 @@ AccessToken.clearToken = data => {
     };
     let whereObj = {
       where: {
-        id: data.id
+        access_token: data.access_token,
+        is_active: true,
+        is_archived: false
       }
     };
     models['AccessToken'].update(updateObj, whereObj)
