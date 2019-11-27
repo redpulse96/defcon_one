@@ -1,8 +1,9 @@
 const log = require('../../config/log_config').logger('patients_controller');
 const Patients = require('../../models/patients/patients');
 
+const async = packageHelper.async;
 /**
- * @param {Number} user_id - user id of the user that is logged in
+ * @param {String} username - username of the user that is logged in
  */
 Patients.patientsList = (req, res) => {
   if (!req.params) {
@@ -14,7 +15,9 @@ Patients.patientsList = (req, res) => {
   }
   let filterObj = Object.assign({}, {
     where: {
-      created_by: req.user.username
+      created_by: {
+        [OP.in]: [req.user.username, req.user.parent.username]
+      }
     }
   });
   models['Patients'].scope('activeScope').findAll(filterObj)
@@ -97,28 +100,67 @@ Patients.patientDetails = (req, res) => {
 
 Patients.createPatients = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
-  models['Patients'].create(createObj)
-    .then(create_res => {
+  validateData = callback => {
+    let paramsCheck = {
+      data: req.body,
+      mandatoryParams: ['patient_name', 'mobile_no', 'date_of_birth']
+    }
+    utils.hasMandatoryParams(paramsCheck)
+      .then(res => { return callback(null, res) })
+      .catch(err => { return callback(err) });
+  }
+
+  createPatientFunction = callback => {
+  let createObj = Object.assign({}, req.body, { created_by: req.user.username });
+  models['Patients'].scope('activeScope').findOrCreate({
+    where: {
+      mobile_no: createObj.mobile_no,
+      is_active: true,
+      is_archived: false
+    },
+    defaults: createObj
+  })
+    .then(([create_res, is_new]) => {
       log.info('---PATIENTS_CREATION_SUCCESS---');
-      log.info(create_res);
-      return res.send({
-        success: true,
-        message: 'Patients Role Mapping creation success',
-        data: {
-          patients_role_mapping: create_res.toJSON()
-        }
-      });
+      log.info(create_res, is_new);
+      if (is_new) {
+        return callback({
+          success: true,
+          message: 'Patients creation success',
+          data: {
+            patient: create_res.toJSON()
+          }
+        });
+      } else {
+        return callback(null, {
+          success: false,
+          message: 'Mobile number already exists,\nkindly priovide a different mobile number',
+          data: {}
+        });
+      }
     })
     .catch(create_err => {
       log.error('---PATIENTS_CREATION_FAILURE---');
       log.error(create_err);
-      return res.send({
+      return callback({
         success: false,
-        message: 'Patients Role Mapping creation failure',
+        error_code: 500,
+        message: 'Patients creation failure',
         data: {}
       });
     });
+  }
+
+  async.auto({
+    validateData: validateData,
+    createPatient: ['validateData', createPatientFunction]
+  }, (async_auto_error, async_auto_result) => {
+    if (async_auto_error) {
+      return res.status(async_auto_error.error_code).send(async_auto_error);
+    } else {
+      return res.send(async_auto_result.createPatient);
+    }
+  });
 }
 
 module.exports = Patients;

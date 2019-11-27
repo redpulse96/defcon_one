@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `appointments` (
   `from_time` time DEFAULT NULL,
   `to_time` time DEFAULT NULL,
   `created_by` varchar(50) NOT NULL DEFAULT '',
+  `assigned_to` varchar(50) DEFAULT NULL,
   `doctor_remarks` VARCHAR(100) DEFAULT NULL,
   `is_active` TINYINT(4) NOT NULL DEFAULT '1',
   `is_archived` TINYINT(4) NOT NULL DEFAULT '0',

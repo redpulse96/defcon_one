@@ -80,10 +80,7 @@ Appointments.createAppointment = (req, res) => {
   }
 
   createAppointmentLogFunction = (results, callback) => {
-    const {
-      validateData,
-      createAppointment
-    } = results;
+    const { validateData, createAppointment } = results;
     const logObj = Object.assign({}, {
       appointment_id: createAppointment.data.appointment.appointment_id,
       status: createAppointment.data.appointment.status
