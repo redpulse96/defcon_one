@@ -6,23 +6,26 @@ PatientPrescriptions.fetchPatientPrescriptions = (req, res) => {
 
   let whereObj = Object.assign({}, req.params, {
     include: [{
-      model: models.PatientDiagnosisRoleMapping,
+      model: models['Appointments'],
       as: 'patient_diagnosis_role_mapping'
     }, {
-      model: models.PatientExaminationsRoleMapping,
+      model: models['PatientDiagnosisRoleMapping'],
+      as: 'patient_diagnosis_role_mapping'
+    }, {
+      model: models['PatientExaminationsRoleMapping'],
       as: 'patient_examinations_role_mapping'
     }, {
-      model: models.PatientInvestigationsRoleMapping,
+      model: models['PatientInvestigationsRoleMapping'],
       as: 'patient_investigations_role_mapping'
     }, {
-      model: models.PatientSymptomsRoleMapping,
+      model: models['PatientSymptomsRoleMapping'],
       as: 'patient_symptoms_role_mapping'
     }, {
-      model: models.Roles,
+      model: models['Roles'],
       as: 'role'
     }]
   });
-  models.PatientPrescriptions.findOne(whereObj)
+  models['PatientPrescriptions'].findOne(whereObj)
     .then(fetch_res => {
       log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
       log.info(fetch_res);
@@ -51,7 +54,7 @@ PatientPrescriptions.createPatientPrescriptions = (req, res) => {
 
   let createObj = Object.assign({}, req.body);
   createObj.reference_id = utils.GenerateUniqueID(10, 'A#vb');
-  models.PatientPrescriptions.create(createObj)
+  models['PatientPrescriptions'].create(createObj)
     .then(create_res => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
       log.info(create_res);

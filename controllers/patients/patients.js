@@ -22,15 +22,25 @@ Patients.patientsList = (req, res) => {
   });
   models['Patients'].scope('activeScope').findAll(filterObj)
     .then(patients_res => {
+      let response;
       log.info('---LIST_OF_PATIENTS_OF_THE_USER---');
       log.info(patients_res);
-      return res.send({
-        success: true,
-        message: 'Patients list fetch success',
-        data: {
-          patients_list: patients_res
-        }
-      });
+      if (patients_res && patients_res.length) {
+        response = {
+          success: true,
+          message: 'Patients list fetch success',
+          data: {
+            patients_list: patients_res
+          }
+        };
+      } else {
+        response = {
+          success: false,
+          message: 'Patients list fetch success',
+          data: {}
+        };
+      }
+      return res.send(response);
     })
     .catch(patients_err => {
       log.info('---LIST_OF_PATIENTS_ERROR---');

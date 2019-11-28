@@ -157,6 +157,7 @@ CREATE TABLE IF NOT EXISTS `patient_diagnosis_role_mapping` (
 CREATE TABLE IF NOT EXISTS `patient_prescription` (
   `patient_prescription_id` bigInt(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `patient_id` bigInt(11) NOT NULL,
+  `appointment_id` bigint(11) DEFAULT NULL,
   `patient_symptom_role_mapping_id` bigInt(11) NOT NULL,
   `patient_examination_role_mapping_id` bigInt(11) NOT NULL,
   `patient_investigation_role_mapping_id` bigInt(11) NOT NULL,
@@ -219,3 +220,5 @@ ALTER TABLE `patient_prescription` ADD FOREIGN KEY (`patient_diagnosis_role_mapp
 ALTER TABLE `patient_prescription` ADD FOREIGN KEY (`patient_investigation_role_mapping_id`) REFERENCES `patient_investigations_role_mapping` (`patient_investigation_role_mapping_id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE `patient_prescription` ADD FOREIGN KEY (`patient_examination_role_mapping_id`) REFERENCES `patient_examinations_role_mapping` (`patient_examination_role_mapping_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE `patient_prescription` ADD FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`);

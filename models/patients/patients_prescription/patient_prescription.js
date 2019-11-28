@@ -16,6 +16,14 @@ module.exports = (sequelize, DataTypes) => {
         key: 'patient_id'
       }
     },
+    appointment_id: {
+      type: DataTypes.BIGINT(11),
+      allowNull: true,
+      references: {
+        model: 'Appointments',
+        key: 'appointment_id'
+      }
+    },
     patient_symptom_role_mapping_id: {
       type: DataTypes.BIGINT(11),
       allowNull: true,
@@ -102,6 +110,10 @@ module.exports = (sequelize, DataTypes) => {
   });
   PatientPrescription.associate = models => {
     // associations can be defined here
+    PatientPrescription.belongsTo(models['Appointments'], {
+      as: 'appointment',
+      foreignKey: 'appointment_id'
+    });
     PatientPrescription.belongsTo(models['PatientSymptomsRoleMapping'], {
       as: 'patient_symptoms_role_mapping',
       foreignKey: 'patient_symptom_role_mapping_id'
