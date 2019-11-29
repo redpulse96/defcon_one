@@ -12,7 +12,7 @@ const { SECRET_KEY } = require('../public/javascripts/constants');
 
 const corsOptions = {
   "origin": /localhost:3000$/,
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "methods": "GET,POST",
   "preflightContinue": true,
   "optionsSuccessStatus": 204
 };
