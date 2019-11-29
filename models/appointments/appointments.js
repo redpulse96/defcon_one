@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT(11),
       allowNull: false
     },
-    status: {
+    appointment_status: {
       type: DataTypes.ENUM,
       values: ['closed', 'pending', 'rescheduled', 'operating'],
       allowNull: false

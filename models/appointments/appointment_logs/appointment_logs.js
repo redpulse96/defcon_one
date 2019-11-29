@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT(11),
       allowNull: false
     },
-    status: {
+    appointment_status: {
       type: DataTypes.STRING(50),
       allowNull: true
     },
