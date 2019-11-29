@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     rescheduled_date: {
       type: DataTypes.DATEONLY,
-      defaultValue: 'CURRENT_TIMESTAMP',
+      defaultValue: null,
       allowNull: true
     },
     from_time: {

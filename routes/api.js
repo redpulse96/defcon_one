@@ -18,6 +18,7 @@ const PatientSymptomsRoleMapping = require('../controllers/patients/patient_symp
 router.get('/Appointments/fetchAppointments', Appointments.fetchAppointment);
 router.get('/Appointments/statusBasedAppointments/:user_id/:custom_date', Appointments.statusBasedAppointments);
 router.post('/Appointments/createAppointments', Appointments.createAppointment);
+router.post('/Appointments/appointmentFulfilment', Appointments.appointmentFulfilment);
 
 router.get('/AppointmentLogs/fetchAppointmentLogs', AppointmentLogs.fetchAppointmentLogs);
 

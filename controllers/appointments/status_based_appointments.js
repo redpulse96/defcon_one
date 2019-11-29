@@ -23,6 +23,7 @@ module.exports = Appointments => {
         model: models['AppointmentLogs'],
         as: 'appointment_logs'
       }],
+      
       order: [
         ['appointment_date', 'ASC']
       ]

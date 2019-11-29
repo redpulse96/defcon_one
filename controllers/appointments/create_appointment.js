@@ -1,5 +1,7 @@
 const log = require('../../config/log_config').logger('appointments_controller');
 const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs'];
+const utils = require('../utility/utils');
+
 const async = packageHelper.async;
 const moment = packageHelper.moment;
 
@@ -11,34 +13,20 @@ module.exports = Appointments => {
       createAppointment: ['validateData', createAppointmentFunction],
       createAppointmentLog: ['createAppointment', createAppointmentLogFunction]
     })
-    .then(result => {
-      log.info('---RESULT---');
-      log.info(result);
-      res.send({
-        success: true,
-        message: 'appointment created',
-        data: {
-          createAppointment: result.createAppointment
-        }
-      });
-    })
-    .catch(err => {
-      log.error('---ERROR---');
-      log.error(err);
-      res.status(err.error_code).send(err);
-    });
+    .then(async_auto_res => res.send(async_auto_res.createAppointment))
+    .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
 
-    validateData = callback => {
+    function validateData(callback) {
       let paramsCheck = {
         data: req.body,
-        mandatoryParams: ['appointment_name', 'appointment_date', 'patient_id', 'status', 'created_by']
+        mandatoryParams: ['appointment_name', 'appointment_date', 'patient_id', 'appointment_status', 'created_by']
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(res => callback(null, res))
         .catch(err => callback(err));
     }
 
-    const createAppointmentFunction = (results, callback) => {
+    function createAppointmentFunction(results, callback) {
       const { validateData } = results;
       const createObj = Object.assign({}, validateData.data);
       createObj.appointment_date = moment(createObj.appointment_date).format('YYYY MM DD hh:mm:ss');
@@ -68,7 +56,7 @@ module.exports = Appointments => {
         });
     }
 
-    const createAppointmentLogFunction = (results, callback) => {
+    function createAppointmentLogFunction(results, callback) {
       const { validateData, createAppointment } = results;
       const logObj = Object.assign({}, {
         appointment_id: createAppointment.data.appointment.appointment_id,
