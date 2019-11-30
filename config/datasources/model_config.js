@@ -17,4 +17,5 @@ module.exports = {
   PatientPrescription: '../models/patients/patients_prescription/patient_prescription.js',
   Patients: '../models/patients/patients.js',
   Roles: '../models/roles/roles.js',
+  Users: '../models/users.js'
 }

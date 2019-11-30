@@ -1,4 +1,5 @@
 const log = require('../../config/log_config').logger('appointments_controller');
+const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs'];
 const utils = require('../utility/utils');
 const async = packageHelper.async;
 
@@ -9,7 +10,7 @@ const status_matrix = {
   'closed': []
 };
 
-module.exports = (Appointments, AppointmentLogs) => {
+module.exports = Appointments => {
 
   Appointments.appointmentFulfilment = (req, res) => {
     async.auto({

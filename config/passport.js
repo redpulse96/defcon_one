@@ -1,4 +1,4 @@
-const Users = require(packageHelper.MODEL_CONFIG_DIR)['Users'];
+const Users = require('../models/users');
 
 const localStrategy = packageHelper.passport_local.Strategy;
 const bcrypt = packageHelper.bcrypt;
