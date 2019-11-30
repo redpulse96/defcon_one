@@ -7,22 +7,20 @@ PatientPrescriptions.fetchPatientPrescriptions = (req, res) => {
   let whereObj = Object.assign({}, req.params, {
     include: [{
       model: models['Appointments'],
-      as: 'patient_diagnosis_role_mapping'
-    }, {
-      model: models['PatientDiagnosisRoleMapping'],
-      as: 'patient_diagnosis_role_mapping'
-    }, {
-      model: models['PatientExaminationsRoleMapping'],
-      as: 'patient_examinations_role_mapping'
-    }, {
-      model: models['PatientInvestigationsRoleMapping'],
-      as: 'patient_investigations_role_mapping'
-    }, {
-      model: models['PatientSymptomsRoleMapping'],
-      as: 'patient_symptoms_role_mapping'
-    }, {
-      model: models['Roles'],
-      as: 'role'
+      as: 'appointment',
+      include: [{
+        model: models['PatientDiagnosisRoleMapping'],
+        as: 'patient_diagnosis_role_mapping'
+      }, {
+        model: models['PatientExaminationsRoleMapping'],
+        as: 'patient_examinations_role_mapping'
+      }, {
+        model: models['PatientInvestigationsRoleMapping'],
+        as: 'patient_investigations_role_mapping'
+      }, {
+        model: models['PatientSymptomsRoleMapping'],
+        as: 'patient_symptoms_role_mapping'
+      }]
     }]
   });
   models['PatientPrescriptions'].findOne(whereObj)
@@ -40,12 +38,10 @@ PatientPrescriptions.fetchPatientPrescriptions = (req, res) => {
     .catch(fetch_err => {
       log.info('---PATIENT_PRESCRIPTION_FETCH_FAILURE---');
       log.info(fetch_err);
-      return res.send({
+      return res.status(500).send({
         success: false,
-        message: 'PatientPrescriptions Role Mapping fetching failure',
-        data: {
-          patient_prescription: fetch_err
-        }
+        message: 'Internal server error',
+        data: {}
       });
     });
 }
@@ -69,12 +65,10 @@ PatientPrescriptions.createPatientPrescriptions = (req, res) => {
     .catch(create_err => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_FAILURE---');
       log.info(create_err);
-      return res.send({
+      return res.status(500).send({
         success: false,
-        message: 'PatientPrescriptions Role Mapping creation failure',
-        data: {
-          patient_prescription: create_err
-        }
+        message: 'Internal server error',
+        data: {}
       });
     });
 }

@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   const Diagnosis = sequelize.define('diagnosis', {
     diagnosis_id: {

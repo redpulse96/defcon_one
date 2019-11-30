@@ -19,6 +19,7 @@ const packageHelper = {
   debug: require('debug'),
   express: require('express'),
   express_session: require('express-session'),
+  figlet: require('figlet'),
   fs: require('fs'),
   http: require('http'),
   jsonwebtoken: require('jsonwebtoken'),

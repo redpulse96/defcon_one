@@ -61,11 +61,10 @@ module.exports = Patients => {
         include: [{
           model: models['AppointmentLogs'],
           as: 'appointment_logs'
-        }]
-      }, {
-        model: models['PatientPrescription'],
-        as: 'patient_prescription',
-        include: [{
+        }, {
+          model: models['PatientPrescription'],
+          as: 'patient_prescription'
+        }, {
           model: models['PatientDiagnosisRoleMapping'],
           as: 'patient_diagnosis_role_mapping'
         }, {

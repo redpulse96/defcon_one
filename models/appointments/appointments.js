@@ -78,12 +78,13 @@ module.exports = (sequelize, DataTypes) => {
       ]
     },
     scopes: {
-  activeScope: {
-      where: {
-        is_active: true,
-        is_archived: false
+      activeScope: {
+        where: {
+          is_active: true,
+          is_archived: false
+        }
       }
-    }},
+    },
     underscored: true,
     sequelize,
     modelName: 'appointments',
@@ -95,6 +96,31 @@ module.exports = (sequelize, DataTypes) => {
     Appointments.hasMany(models['AppointmentLogs'], {
       as: 'appointment_logs',
       onDelete: "CASCADE",
+      foreignKey: 'appointment_id'
+    });
+    Appointments.hasMany(models['PatientPrescription'], {
+      as: 'patient_prescription',
+      onUpdate: "CASCADE",
+      foreignKey: 'appointment_id'
+    });
+    Appointments.hasMany(models['PatientSymptomsRoleMapping'], {
+      as: 'patient_symptoms_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'appointment_id'
+    });
+    Appointments.hasMany(models['PatientInvestigationsRoleMapping'], {
+      as: 'patient_investigations_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'appointment_id'
+    });
+    Appointments.hasMany(models['PatientExaminationsRoleMapping'], {
+      as: 'patient_examinations_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'appointment_id'
+    });
+    Appointments.hasMany(models['PatientDiagnosisRoleMapping'], {
+      as: 'patient_diagnosis_role_mapping',
+      onUpdate: "CASCADE",
       foreignKey: 'appointment_id'
     });
   };

@@ -5,6 +5,7 @@ global.models = require('./config/datasources/index');
 
 const app = require('./config/server');
 const debug = packageHelper.debug('defcon-one:server');
+const figlet = packageHelper.figlet;
 
 /**
  * Normalize a port into a number, string, or false.
@@ -71,6 +72,7 @@ const onListening = () => {
 
   console.log('Listening on ' + bind);
   console.log('server is listening on ', bind);
+  console.log(figlet.textSync('Defcon One'));
 }
 
 models.sequelize.authenticate()

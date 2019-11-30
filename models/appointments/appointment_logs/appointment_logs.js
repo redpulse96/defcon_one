@@ -44,12 +44,13 @@ module.exports = (sequelize, DataTypes) => {
       ]
     },
     scopes: {
-  activeScope: {
-      where: {
-        is_active: true,
-        is_archived: false
+      activeScope: {
+        where: {
+          is_active: true,
+          is_archived: false
+        }
       }
-    }},
+    },
     underscored: true,
     sequelize,
     modelName: 'appointment_logs',

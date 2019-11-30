@@ -25,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
         key: 'symptom_role_mapping_id'
       }
     },
+    appointment_id: {
+      type: DataTypes.BIGINT(11),
+      allowNull: true,
+      references: {
+        model: 'Appointments',
+        key: 'appointment_id'
+      }
+    },
     is_active: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
@@ -53,12 +61,13 @@ module.exports = (sequelize, DataTypes) => {
       ]
     },
     scopes: {
-  activeScope: {
-      where: {
-        is_active: true,
-        is_archived: false
+      activeScope: {
+        where: {
+          is_active: true,
+          is_archived: false
+        }
       }
-    }},
+    },
     underscored: true,
     sequelize,
     modelName: 'patient_symptoms_role_mapping',
@@ -74,6 +83,10 @@ module.exports = (sequelize, DataTypes) => {
     PatientSymptomsRoleMapping.belongsTo(models['SymptomsRoleMapping'], {
       as: 'symptoms_role_mapping',
       foreignKey: 'symptom_role_mapping_id'
+    });
+    PatientSymptomsRoleMapping.belongsTo(models['Appointments'], {
+      as: 'appointment',
+      foreignKey: 'appointment_id'
     });
   };
 

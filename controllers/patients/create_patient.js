@@ -40,7 +40,7 @@ module.exports = Patients => {
           log.info('---PATIENTS_CREATION_SUCCESS---');
           log.info(create_res, is_new);
           if (is_new) {
-            return callback({
+            return callback(null, {
               success: true,
               message: 'Patients creation success',
               data: {

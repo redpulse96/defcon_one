@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   const InvestigationsRoleMapping = sequelize.define('investigations_role_mapping', {
     investigation_role_mapping_id: {
