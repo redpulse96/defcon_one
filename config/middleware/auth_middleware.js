@@ -5,13 +5,14 @@ const Users = require(packageHelper.MODEL_CONFIG_DIR)['Users'];
 const bcrypt = packageHelper.bcrypt;
 const jwt = packageHelper.jsonwebtoken;
 
+const utils = require('../../controllers/utility/utils');
 const { DEFAULT_USERNAME } = require('../../public/javascripts/constants');
 const { SECRET_KEY } = require('../../public/javascripts/constants');
 
 const validateUser = (req, res, next) => {
   //find the user from users model
   let whereObj = {
-    username: req.body.username ? req.body.username : req.body.mobile_no + DEFAULT_USERNAME,
+    username: utils.validateKeys(() => req.body.username, req.body.mobile_no + DEFAULT_USERNAME, null),
   }
   Users.findOne(whereObj)
     .then(user_details => {
