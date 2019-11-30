@@ -1,4 +1,4 @@
-const Patients = require('../../models/patients/patients');
+const Patients = require(packageHelper.MODEL_CONFIG_DIR)['Patients'];
 
 require('./fetch_patient')(Patients);
 require('./create_patient')(Patients);

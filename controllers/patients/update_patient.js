@@ -4,17 +4,12 @@ const async = packageHelper.async;
 module.exports = Patients => {
 
   Patients.updatePatient = (req, res) => {
-
     async.auto({
       validateData: validateData,
       updatePatient: ['validateData', updatePatientFunction]
-    }, (async_auto_error, async_auto_result) => {
-      if (async_auto_error) {
-        return res.status(async_auto_error.error_code).send(async_auto_error);
-      } else {
-        return res.send(async_auto_result.updatePatient);
-      }
-    });
+    })
+    .then(async_auto_res => res.send(async_auto_res.updatePatient))
+    .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
 
     const validateData = callback => {
       let paramsCheck = {
@@ -23,10 +18,10 @@ module.exports = Patients => {
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(res => {
-          return callback(null, res)
+          return callback(null, res);
         })
         .catch(err => {
-          return callback(err)
+          return callback(err);
         });
     }
 
@@ -54,6 +49,7 @@ module.exports = Patients => {
           } else {
             return callback({
               success: false,
+              error_code: 500,
               message: 'Patient details updated failure',
               data: {}
             });

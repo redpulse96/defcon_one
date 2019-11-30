@@ -1,4 +1,5 @@
 const log = require('../../config/log_config').logger('patients_controller');
+const utils = require('../utility/utils');
 
 module.exports = Patients => {
 
@@ -13,7 +14,7 @@ module.exports = Patients => {
     let filterObj = Object.assign({}, {
       where: {
         created_by: {
-          [OP.in]: [req.user.username, req.user.parent.username]
+          [OP.in]: utils.validateKeys(() => [req.user.username, req.user.parent.username], [], null)
         }
       }
     });
@@ -42,7 +43,7 @@ module.exports = Patients => {
       .catch(patients_err => {
         log.info('---LIST_OF_PATIENTS_ERROR---');
         log.info(patients_err);
-        return res.send({
+        return res.status(500).send({
           success: false,
           message: 'Patients list fetch failure',
           data: {}
@@ -51,7 +52,6 @@ module.exports = Patients => {
   }
 
   Patients.patientDetails = (req, res) => {
-
     let whereObj = Object.assign({}, {
       where: req.params
     }, {
@@ -87,19 +87,25 @@ module.exports = Patients => {
         if (fetch_res) {
           return res.send({
             success: true,
-            message: 'Patients Role Mapping fetching success',
+            message: 'Patients fetching success',
             data: {
               patient_details: fetch_res
             }
+          });
+        } else {
+          return res.status(502).send({
+            success: false,
+            message: 'Patient does not exist',
+            data: {}
           });
         }
       })
       .catch(fetch_err => {
         log.error('---PATIENTS_FETCH_FAILURE---');
         log.error(fetch_err);
-        return res.send({
+        return res.status(500).send({
           success: false,
-          message: 'Patients Role Mapping fetching failure',
+          message: 'Internal server error',
           data: {}
         });
       });

@@ -1,6 +1,5 @@
 const log = require('../../config/log_config').logger('appointments_controller');
 const utils = require('../utility/utils');
-
 const async = packageHelper.async;
 
 const status_matrix = {
@@ -13,7 +12,6 @@ const status_matrix = {
 module.exports = (Appointments, AppointmentLogs) => {
 
   Appointments.appointmentFulfilment = (req, res) => {
-
     async.auto({
       validateData: validateDataFunction,
       fetchCurrentAppointment: ['validateData', fetchCurrentAppointmentFunction],
@@ -98,9 +96,7 @@ module.exports = (Appointments, AppointmentLogs) => {
 
     function updateAppointmentStatusFunction(results, callback) {
       const { fetchCurrentAppointment } = results;
-      let updateObj = {
-        appointment_status: req.body.appointment_status
-      };
+      let updateObj = { appointment_status: req.body.appointment_status };
       fetchCurrentAppointment.data.appointment_detail.appointment_status = req.body.appointment_status;
       fetchCurrentAppointment.data.appointment_detail.update(updateObj)
         .then(update_appointment_res => {
@@ -136,13 +132,11 @@ module.exports = (Appointments, AppointmentLogs) => {
     }
 
     function createAppointmentLogFunction(results, callback) {
-      const {
-        updateAppointmentStatus
-      } = results;
+      const { updateAppointmentStatus } = results;
       let createLogObj = {
         appointment_id: updateAppointmentStatus.data.appointment_details.appointment_id,
         appointment_status: updateAppointmentStatus.data.appointment_details.appointment_status,
-        doctor_remarks: req.body.doctor_remarks ? req.body.doctor_remarks : null
+        doctor_remarks: utils.validateKeys(() => req.body.doctor_remarks, null, null)
       };
       AppointmentLogs.createAppointmentLogs(createLogObj)
         .then(create_log_res => callback(null, create_log_res))

@@ -1,7 +1,6 @@
 const log = require('../../config/log_config').logger('appointments_controller');
 const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs'];
 const utils = require('../utility/utils');
-
 const async = packageHelper.async;
 const moment = packageHelper.moment;
 
@@ -9,14 +8,14 @@ module.exports = Appointments => {
 
   Appointments.createAppointment = (req, res) => {
     async.auto({
-      validateData: validateData,
+      validateData: validateDataFunction,
       createAppointment: ['validateData', createAppointmentFunction],
       createAppointmentLog: ['createAppointment', createAppointmentLogFunction]
     })
     .then(async_auto_res => res.send(async_auto_res.createAppointment))
     .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
 
-    function validateData(callback) {
+    function validateDataFunction(callback) {
       let paramsCheck = {
         data: req.body,
         mandatoryParams: ['appointment_name', 'appointment_date', 'patient_id', 'appointment_status', 'created_by']

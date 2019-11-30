@@ -1,22 +1,18 @@
 const log = require('../../config/log_config').logger('patients_controller');
+const utils = require('../utility/utils');
 const async = packageHelper.async;
 
 module.exports = Patients => {
 
   Patients.createPatients = (req, res) => {
-
     async.auto({
-      validateData: validateData,
+      validateData: validateDataFunction,
       createPatient: ['validateData', createPatientFunction]
-    }, (async_auto_error, async_auto_result) => {
-      if (async_auto_error) {
-        return res.status(async_auto_error.error_code).send(async_auto_error);
-      } else {
-        return res.send(async_auto_result.createPatient);
-      }
-    });
+    })
+    .then(async_auto_result => res.send(async_auto_result.createPatient))
+    .catch(async_auto_error => res.status(async_auto_error.error_code).send(async_auto_error));
 
-    const validateData = callback => {
+    function validateDataFunction(callback) {
       let paramsCheck = {
         data: req.body,
         mandatoryParams: ['patient_name', 'mobile_no', 'date_of_birth']
@@ -30,15 +26,13 @@ module.exports = Patients => {
         });
     }
 
-    const createPatientFunction = callback => {
+    function createPatientFunction(results, callback) {
       let createObj = Object.assign({}, req.body, {
-        created_by: req.user.username
+        created_by: utils.validateKeys(() => req.user.username, null, null)
       });
       models['Patients'].scope('activeScope').findOrCreate({
           where: {
-            mobile_no: createObj.mobile_no,
-            is_active: true,
-            is_archived: false
+            mobile_no: createObj.mobile_no
           },
           defaults: createObj
         })
@@ -54,8 +48,9 @@ module.exports = Patients => {
               }
             });
           } else {
-            return callback(null, {
+            return callback({
               success: false,
+              error_code: 400,
               message: 'Mobile number already exists,\nkindly priovide a different mobile number',
               data: {}
             });

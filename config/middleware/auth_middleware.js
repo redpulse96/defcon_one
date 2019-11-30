@@ -1,6 +1,6 @@
 const log = require('../log_config').logger('auth_middleware');
-const Users = require('../../models/users');
-const AccessToken = require('../../controllers/access_token');
+const AccessToken = require(packageHelper.MODEL_CONFIG_DIR)['AccessToken'];
+const Users = require(packageHelper.MODEL_CONFIG_DIR)['Users'];
 
 const bcrypt = packageHelper.bcrypt;
 const jwt = packageHelper.jsonwebtoken;

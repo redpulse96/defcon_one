@@ -15,7 +15,7 @@ mongoose.connect(mongo_config.url, {
     useUnifiedTopology: true,
     useNewUrlParser: true
   })
-  .then((res) => {
+  .then(() => {
     console.log('Mongodb connection established')
     db['Users'] = '';
   })

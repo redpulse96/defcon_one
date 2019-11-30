@@ -5,7 +5,6 @@ const moment = packageHelper.moment;
 module.exports = Appointments => {
 
   Appointments.statusBasedAppointments = (req, res) => {
-
     if (!req.params) {
       return res.send({
         success: false,
@@ -23,7 +22,7 @@ module.exports = Appointments => {
         model: models['AppointmentLogs'],
         as: 'appointment_logs'
       }],
-      
+
       order: [
         ['appointment_date', 'ASC']
       ]
