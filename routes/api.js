@@ -14,6 +14,7 @@ const PatientDiagnosisRoleMapping = require('../controllers/patients/patient_dia
 const PatientExaminationsRoleMapping = require('../controllers/patients/patient_examinations_role_mapping/patient_examinations_role_mapping');
 const PatientInvestigationsRoleMapping = require('../controllers/patients/patient_investigations_role_mapping/patient_investigations_role_mapping');
 const PatientSymptomsRoleMapping = require('../controllers/patients/patient_symptoms_role_mapping/patient_symptoms_role_mapping');
+const PatientPrescription = require('../controllers/patients/patients_prescription/patient_prescription');
 
 router.get('/Appointments/statusBasedAppointments/:user_id/:custom_date', Appointments.statusBasedAppointments);
 router.post('/Appointments/createAppointments', Appointments.createAppointment);
@@ -49,5 +50,7 @@ router.post('/PatientInvestigationsRoleMapping/createPatientInvestigationsRoleMa
 
 router.get('/PatientSymptomsRoleMapping/fetchPatientSymptomsRoleMapping', PatientSymptomsRoleMapping.fetchPatientSymptomsRoleMapping);
 router.post('/PatientSymptomsRoleMapping/createPatientSymptomsRoleMapping', PatientSymptomsRoleMapping.createPatientSymptomsRoleMapping);
+
+router.post('/PatientPrescription/createPatientPrescription', PatientPrescription.createPatientPrescription);
 
 module.exports = router;

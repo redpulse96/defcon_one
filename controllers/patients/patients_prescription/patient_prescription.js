@@ -1,8 +1,8 @@
 const log = require('../../../config/log_config').logger('patient_prescriptions_controller');
-const PatientPrescriptions = require(packageHelper.MODEL_CONFIG_DIR)['PatientPrescriptions'];
+const PatientPrescription = require(packageHelper.MODEL_CONFIG_DIR)['PatientPrescription'];
 const utils = require('../../utility/utils');
 
-PatientPrescriptions.fetchPatientPrescriptions = (req, res) => {
+PatientPrescription.fetchPatientPrescription = (req, res) => {
 
   let whereObj = Object.assign({}, req.params, {
     include: [{
@@ -23,13 +23,13 @@ PatientPrescriptions.fetchPatientPrescriptions = (req, res) => {
       }]
     }]
   });
-  models['PatientPrescriptions'].findOne(whereObj)
+  models['PatientPrescription'].findOne(whereObj)
     .then(fetch_res => {
       log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
       log.info(fetch_res);
       return res.send({
         success: true,
-        message: 'PatientPrescriptions Role Mapping fetching success',
+        message: 'PatientPrescription fetching success',
         data: {
           patient_prescription: fetch_res
         }
@@ -46,17 +46,17 @@ PatientPrescriptions.fetchPatientPrescriptions = (req, res) => {
     });
 }
 
-PatientPrescriptions.createPatientPrescriptions = (req, res) => {
+PatientPrescription.createPatientPrescription = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
+  let createObj = Object.assign({}, req.body, { created_by: req.user.username });
   createObj.reference_id = utils.GenerateUniqueID(10, 'A#vb');
-  models['PatientPrescriptions'].create(createObj)
+  models['PatientPrescription'].create(createObj)
     .then(create_res => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
       log.info(create_res);
       return res.send({
         success: true,
-        message: 'PatientPrescriptions Role Mapping creation success',
+        message: 'PatientPrescription creation success',
         data: {
           patient_prescription: create_res.toJSON()
         }
@@ -73,4 +73,4 @@ PatientPrescriptions.createPatientPrescriptions = (req, res) => {
     });
 }
 
-module.exports = PatientPrescriptions;
+module.exports = PatientPrescription;
