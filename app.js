@@ -73,7 +73,7 @@ const onListening = () => {
 
   console.log('Listening on ' + bind);
   console.log('server is listening on ', bind);
-  console.log(figlet.textSync('Defcon One'));
+  console.log(figlet.textSync('Defcon One Loaded'));
 }
 
 models.sequelize.authenticate()
