@@ -49,6 +49,7 @@ app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNA
 
 app.use('/', indexRoutes);
 app.use('/users', userRoutes);
+// THIS BELOW LINE SHOULD BE DELETED LATER;
 app.use('/api', (req, res, next) => {
   req.user = {
     "feature_rights": [1, 2, 3],
@@ -77,8 +78,11 @@ app.use((err, req, res, next) => {
   res.locals.error = req.app.get('env') === 'dev' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(err.status || 500).send({
+    success: false,
+    message: err.message || 'Internal server error',
+    data: {}
+  });
 });
 
 module.exports = app;
