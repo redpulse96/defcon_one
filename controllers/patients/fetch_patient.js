@@ -4,20 +4,16 @@ const utils = require('../utility/utils');
 module.exports = Patients => {
 
   Patients.patientsList = (req, res) => {
-    if (!req.params) {
-      return res.send({
-        success: false,
-        message: 'Insufficient parameters',
-        data: {}
-      });
-    }
     let filterObj = Object.assign({}, {
       where: {
         created_by: {
-          $in: utils.validateKeys(() => [req.user.username, req.user.parent.username], [], null)
+          $in: utils.validateKeys(() => [req.user.username], [], null)
         }
       }
     });
+    if (req.user.parent) {
+      filterObj.where.created_by.$in.push(req.user.parent);
+    }
     models['Patients'].scope('activeScope').findAll(filterObj)
       .then(patients_res => {
         let response;

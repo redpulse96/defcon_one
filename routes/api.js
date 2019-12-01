@@ -33,6 +33,7 @@ router.post('/InvestigationsRoleMapping/createInvestigationsRoleMapping', Invest
 router.get('/SymptomsRoleMapping/fetchSymptomsRoleMapping', SymptomsRoleMapping.fetchSymptomsRoleMapping);
 router.post('/SymptomsRoleMapping/createSymptomsRoleMapping', SymptomsRoleMapping.createSymptomsRoleMapping);
 
+router.get('/Patients/patientsList', Patients.patientsList);
 router.get('/Patients/patientDetails/:patient_id', Patients.patientDetails);
 router.post('/Patients/createPatients', Patients.createPatients);
 router.post('/Patients/updatePatient', Patients.updatePatientDetails);

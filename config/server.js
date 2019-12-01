@@ -49,7 +49,20 @@ app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNA
 
 app.use('/', indexRoutes);
 app.use('/users', userRoutes);
-app.use('/api', cors(corsOptions), apiRoutes);
+app.use('/api', (req, res, next) => {
+  req.user = {
+    "feature_rights": [1, 2, 3],
+    "is_active": true,
+    "is_archived": false,
+    "mobile_no": 7760225404,
+    "name": "DEMO TEST",
+    "role_type": "r_dentist",
+    "username": "demo@emr.in",
+    "password": "$2a$10$7eWmc4bEcDjJVtqWmZqOPuIBiDVAq1HavfqbaFfGVqzw/CDBiwSFa",
+    "date": "2019-11-30 15:07:37"
+  };
+  next();
+}, cors(corsOptions), apiRoutes);
 // app.use('/api', ensureAuth, verifyToken, apiRoutes);
 
 // catch 404 and forward to error handler 
