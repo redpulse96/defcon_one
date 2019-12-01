@@ -14,7 +14,7 @@ module.exports = Patients => {
     let filterObj = Object.assign({}, {
       where: {
         created_by: {
-          [OP.in]: utils.validateKeys(() => [req.user.username, req.user.parent.username], [], null)
+          $in: utils.validateKeys(() => [req.user.username, req.user.parent.username], [], null)
         }
       }
     });

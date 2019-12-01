@@ -2,6 +2,7 @@
 
 global.packageHelper = require('./config/package_helper');
 global.models = require('./config/datasources/index');
+global.Op = require('./config/datasources/operator_aliasing');
 
 const app = require('./config/server');
 const debug = packageHelper.debug('defcon-one:server');

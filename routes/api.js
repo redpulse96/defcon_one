@@ -35,6 +35,7 @@ router.post('/SymptomsRoleMapping/createSymptomsRoleMapping', SymptomsRoleMappin
 
 router.get('/Patients/patientDetails/:patient_id', Patients.patientDetails);
 router.post('/Patients/createPatients', Patients.createPatients);
+router.post('/Patients/updatePatient', Patients.updatePatientDetails);
 
 router.get('/PatientDiagnosisRoleMapping/fetchPatientDiagnosisRoleMapping', PatientDiagnosisRoleMapping.fetchPatientDiagnosisRoleMapping);
 router.post('/PatientDiagnosisRoleMapping/createPatientDiagnosisRoleMapping', PatientDiagnosisRoleMapping.createPatientDiagnosisRoleMapping);

@@ -1,5 +1,6 @@
 const packageHelper = require('../package_helper');
 const datasources = require('./datasources');
+const operatorsAliases = require('./operator_aliasing');
 
 let mysql_config = {};
 let mongo_config = {};
@@ -32,6 +33,7 @@ mysql_config = {
     dialect: datasources[env].mysql.connector,
     host: datasources[env].mysql.host,
     port: datasources[env].mysql.port,
+    operatorsAliases: operatorsAliases,
     pool: {
       max: 30,
       min: 0,
