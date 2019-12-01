@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Investigations.hasMany(models['InvestigationsRoleMapping'], {
       onDelete: "CASCADE",
-      foreignKey: 'investigations_role_mapping_id'
+      foreignKey: 'investigation_id'
     });
   };
 

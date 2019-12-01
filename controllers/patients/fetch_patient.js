@@ -62,16 +62,60 @@ module.exports = Patients => {
           as: 'patient_prescription'
         }, {
           model: models['PatientDiagnosisRoleMapping'],
-          as: 'patient_diagnosis_role_mapping'
+          as: 'patient_diagnosis_role_mapping',
+          include: [{
+            model: models['DiagnosisRoleMapping'],
+            as: 'diagnosis_role_mapping',
+            include: [{
+              model: models['Diagnosis'],
+              as: 'diagnosis',
+            }, {
+              model: models['Roles'],
+              as: 'role',
+            }]
+          }]
         }, {
           model: models['PatientExaminationsRoleMapping'],
-          as: 'patient_examinations_role_mapping'
+          as: 'patient_examinations_role_mapping',
+          include: [{
+            model: models['ExaminationsRoleMapping'],
+            as: 'examinations_role_mapping',
+            include: [{
+              model: models['Examinations'],
+              as: 'examination',
+            }, {
+              model: models['Roles'],
+              as: 'role',
+            }]
+          }]
         }, {
           model: models['PatientInvestigationsRoleMapping'],
-          as: 'patient_investigations_role_mapping'
+          as: 'patient_investigations_role_mapping',
+          include: [{
+            model: models['InvestigationsRoleMapping'],
+            as: 'investigations_role_mapping',
+            include: [{
+              model: models['Investigations'],
+              as: 'investigation',
+            }, {
+              model: models['Roles'],
+              as: 'role',
+            }]
+          }]
         }, {
           model: models['PatientSymptomsRoleMapping'],
-          as: 'patient_symptoms_role_mapping'
+          as: 'patient_symptoms_role_mapping',
+          include: [{
+            model: models['SymptomsRoleMapping'],
+            as: 'symptoms_role_mapping',
+            include: [{
+              model: models['Symptoms'],
+              as: 'symptom',
+            }, {
+              model: models['Roles'],
+              as: 'role',
+            }]
+          }]
         }]
       }]
     });
