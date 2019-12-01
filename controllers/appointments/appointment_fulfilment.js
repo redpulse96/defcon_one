@@ -20,7 +20,7 @@ module.exports = Appointments => {
       updateAppointmentStatus: ['checkStatusMatrix', updateAppointmentStatusFunction],
       createAppointmentLog: ['updateAppointmentStatus', createAppointmentLogFunction]
     })
-    .then(async_auto_res => res.send(async_auto_res.updateAppointmentStatus))
+    .then(async_auto_res => res.send(async_auto_res.fetchCurrentAppointment))
     .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
 
     function validateDataFunction(callback) {

@@ -2,10 +2,10 @@ const indexRoutes = require('../routes/index');
 const userRoutes = require('../routes/users');
 const apiRoutes = require('../routes/api');
 
-const passport = packageHelper.passport;
-const cors = packageHelper.cors;
-const session = packageHelper.express_session;
 const app = packageHelper.express();
+const cors = packageHelper.cors;
+const passport = packageHelper.passport;
+const session = packageHelper.express_session;
 
 const { verifyToken, ensureAuth } = require('./middleware/auth_middleware');
 const { SECRET_KEY } = require('../public/javascripts/constants');
@@ -72,7 +72,7 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'dev' ? err : {};
