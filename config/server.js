@@ -50,7 +50,7 @@ app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNA
 app.use('/', indexRoutes);
 app.use('/users', userRoutes);
 // THIS BELOW LINE SHOULD BE DELETED LATER;
-app.use('/api', (req, res, next) => {
+app.use('/api', cors(corsOptions), (req, res, next) => {
   req.user = {
     "feature_rights": [1, 2, 3],
     "is_active": true,
@@ -63,7 +63,7 @@ app.use('/api', (req, res, next) => {
     "date": "2019-11-30 15:07:37"
   };
   next();
-}, cors(corsOptions), apiRoutes);
+}, apiRoutes);
 // app.use('/api', ensureAuth, verifyToken, apiRoutes);
 
 // catch 404 and forward to error handler 
