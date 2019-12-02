@@ -13,29 +13,8 @@ generateLogger = (serviceName, level) => {
           level: 'info',
           service: serviceName || 'defcon_one'
         },
-        format: format.combine(
-          format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss'
-          }),
-          format.errors({
-            stack: true
-          }),
-          format.splat(),
-          format.json()
-        ),
         transports: [
-          new transports.Console({
-            format: format.combine(
-              format.timestamp({
-                format: 'YYYY-MM-DD HH:mm:ss'
-              }),
-              format.errors({
-                stack: true
-              }),
-              format.splat(),
-              format.json()
-            )
-          }),
+          new transports.Console(),
           new transports.File({
             filename: packageHelper.LOGS_DIR + 'defcon_one_info.log',
             level: 'info'

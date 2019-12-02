@@ -76,6 +76,7 @@ module.exports = Patients => {
     });
     models['Patients'].findOne(whereObj)
       .then(fetch_res => {
+        fetch_res = fetch_res.toJSON();
         log.info('---PATIENTS_FETCH_SUCCESS---');
         log.info(fetch_res);
         if (fetch_res) {

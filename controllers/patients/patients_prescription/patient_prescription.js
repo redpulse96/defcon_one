@@ -25,6 +25,7 @@ PatientPrescription.fetchPatientPrescription = (req, res) => {
   });
   models['PatientPrescription'].findOne(whereObj)
     .then(fetch_res => {
+      fetch_res = fetch_res.toJSON();
       log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
       log.info(fetch_res);
       return res.send({
