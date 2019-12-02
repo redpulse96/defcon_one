@@ -11,7 +11,7 @@ const { verifyToken, ensureAuth } = require('./middleware/auth_middleware');
 const { SECRET_KEY } = require('../public/javascripts/constants');
 
 const corsOptions = {
-  "origin": /localhost:3000$/,
+  "origin": /localhost:3000/,
   "methods": "GET,POST",
   "preflightContinue": true,
   "optionsSuccessStatus": 204
