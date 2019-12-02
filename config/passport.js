@@ -16,6 +16,7 @@ module.exports = passport => {
           bcrypt.compare(password, userResult.password, (matchErr, isMatched) => {
             if(matchErr) throw matchErr;
              if(isMatched) {
+               userResult = userResult.toJSON();
                return done(null, userResult);
              } else {
               return done(null, false, 'Incorrect username or password');

@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     defaultScope: {
+      attributes: ['access_token', 'username', 'ttl'],
       order: [
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
@@ -49,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     scopes: {
       activeScope: {
+        attributes: ['access_token', 'username', 'ttl'],
         where: {
           is_active: true,
           is_archived: false
