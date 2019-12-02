@@ -1,5 +1,4 @@
 const packageHelper = require('./package_helper');
-const _ = packageHelper.lodash;
 
 const { createLogger, format, transports } = packageHelper.winston;
 
@@ -239,7 +238,7 @@ const logger = (serviceName) => {
     warning: generateLogger(serviceName, 'warning')
   };
 
-  let constructLog = (level) => {
+  const constructLog = level => {
     let levelName = level ? level : 'info';
 
     return (...args) => {
@@ -247,7 +246,7 @@ const logger = (serviceName) => {
         newLog[levelName].log({
           service: serviceName,
           level: levelName,
-          message: _.concat(...args),
+          message: args,
           timestamp: new Date()
         });
       } catch (e) {
