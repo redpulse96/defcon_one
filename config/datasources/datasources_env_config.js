@@ -34,6 +34,7 @@ mysql_config = {
     host: datasources[env].mysql.host,
     port: datasources[env].mysql.port,
     operatorsAliases: operatorsAliases,
+    logging: false,
     pool: {
       max: 30,
       min: 0,
