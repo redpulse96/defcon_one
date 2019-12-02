@@ -22,18 +22,18 @@ generateLogger = (serviceName, level) => {
           format.json()
         ),
         transports: [
-          new transports.Console({
-            format: format.combine(
-              format.timestamp({
-                format: 'YYYY-MM-DD HH:mm:ss'
-              }),
-              format.errors({
-                stack: true
-              }),
-              format.splat(),
-              format.json()
-            )
-          }),
+          // new transports.Console({
+          //   format: format.combine(
+          //     format.timestamp({
+          //       format: 'YYYY-MM-DD HH:mm:ss'
+          //     }),
+          //     format.errors({
+          //       stack: true
+          //     }),
+          //     format.splat(),
+          //     format.json()
+          //   )
+          // }),
           new transports.File({
             filename: packageHelper.LOGS_DIR + 'defcon_one_info.log',
             level: 'info'
@@ -245,21 +245,21 @@ const logger = (serviceName) => {
           timestamp: new Date()
         });
 
-        if (packageHelper.NODE_ENV !== 'production') {
-          newLog[levelName].add(new transports.Console({
-            format: format.combine(
-              format.timestamp({
-                format: 'YYYY-MM-DD HH:mm:ss'
-              }),
-              format.errors({
-                stack: true
-              }),
-              format.splat(),
-              format.json(),
-              format.simple()
-            )
-          }));
-        }
+        // if (packageHelper.NODE_ENV !== 'production') {
+        //   newLog[levelName].add(new transports.Console({
+        //     format: format.combine(
+        //       format.timestamp({
+        //         format: 'YYYY-MM-DD HH:mm:ss'
+        //       }),
+        //       format.errors({
+        //         stack: true
+        //       }),
+        //       format.splat(),
+        //       format.json(),
+        //       format.simple()
+        //     )
+        //   }));
+        // }
       } catch (e) {
         console.log('ERROR_IN_LOGS: ');
         console.dir(JSON.stringify(e));
