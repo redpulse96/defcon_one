@@ -238,6 +238,7 @@ const logger = (serviceName) => {
   const newLog = {
     info: generateLogger(serviceName, 'info'),
     error: generateLogger(serviceName, 'error'),
+    trace: generateLogger(serviceName, 'trace'),
     debug: generateLogger(serviceName, 'debug'),
     warning: generateLogger(serviceName, 'warning')
   };

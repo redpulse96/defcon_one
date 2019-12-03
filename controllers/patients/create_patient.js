@@ -7,10 +7,11 @@ module.exports = Patients => {
   Patients.createPatients = (req, res) => {
     async.auto({
       validateData: validateDataFunction,
+      isNewPatient: isNewPatientFunction,
       createPatient: ['validateData', createPatientFunction]
     })
     .then(async_auto_result => res.send(async_auto_result.createPatient))
-    .catch(async_auto_error => res.status(async_auto_error.error_code).send(async_auto_error));
+    .catch(async_auto_error => res.status(async_auto_error.error_code || 500).send(async_auto_error));
 
     function validateDataFunction(callback) {
       let paramsCheck = {
@@ -24,6 +25,33 @@ module.exports = Patients => {
         .catch(err => {
           return callback(err)
         });
+    }
+
+    function isNewPatientFunction(results, callback) {
+      const { validateData } = results;
+      let where = {
+        mobile_no: validateData.data.mobile_no
+      };
+      models['Patients'].scope('activeScope').findOne({
+        where
+      })
+      .then(existing_patient__res => {
+        log.info('---existing_patient__res---');
+        log.info(existing_patient__res);
+        if (existing_patient__res) {
+          return callback({
+            success: false,
+            error_code: 400,
+            message: 'Mobile no alreadt exists,\nkindly priovide a different mobile number',
+            data: {}
+          });
+        } else {
+          return callback(null);
+        }
+      })
+      .catch(existing_patient_err => {
+        return callback(existing_patient_err);
+      });
     }
 
     function createPatientFunction(results, callback) {
