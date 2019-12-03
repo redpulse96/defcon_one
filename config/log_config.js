@@ -13,10 +13,18 @@ generateLogger = (serviceName, level) => {
           service: serviceName || 'defcon_one'
         },
         transports: [
-          new transports.Console(),
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_info.log',
-            level: 'info'
+          new transports.Console({
+            level: 'info',
+            format: format.combine(
+              format.timestamp({
+                format: 'YYYY-MM-DD HH:mm:ss'
+              }),
+              format.errors({
+                stack: true
+              }),
+              format.splat(),
+              format.json()
+            )
           })
         ]
       };
@@ -41,9 +49,18 @@ generateLogger = (serviceName, level) => {
           format.json()
         ),
         transports: [
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_error.log',
-            level: 'error'
+          new transports.Console({
+            level: 'info',
+            format: format.combine(
+              format.timestamp({
+                format: 'YYYY-MM-DD HH:mm:ss'
+              }),
+              format.errors({
+                stack: true
+              }),
+              format.splat(),
+              format.json()
+            )
           })
         ]
       };
@@ -66,6 +83,7 @@ generateLogger = (serviceName, level) => {
         ),
         transports: [
           new transports.Console({
+            level: 'info',
             format: format.combine(
               format.timestamp({
                 format: 'YYYY-MM-DD HH:mm:ss'
@@ -76,10 +94,6 @@ generateLogger = (serviceName, level) => {
               format.splat(),
               format.json()
             )
-          }),
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_debug.log',
-            level: 'debug'
           })
         ]
       };
@@ -102,6 +116,7 @@ generateLogger = (serviceName, level) => {
         ),
         transports: [
           new transports.Console({
+            level: 'info',
             format: format.combine(
               format.timestamp({
                 format: 'YYYY-MM-DD HH:mm:ss'
@@ -112,10 +127,6 @@ generateLogger = (serviceName, level) => {
               format.splat(),
               format.json()
             )
-          }),
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_warn.log',
-            level: 'warning'
           })
         ]
       };
@@ -138,6 +149,7 @@ generateLogger = (serviceName, level) => {
         ),
         transports: [
           new transports.Console({
+            level: 'info',
             format: format.combine(
               format.timestamp({
                 format: 'YYYY-MM-DD HH:mm:ss'
@@ -148,10 +160,6 @@ generateLogger = (serviceName, level) => {
               format.splat(),
               format.json()
             )
-          }),
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_trace.log',
-            level: 'trace'
           })
         ]
       };
@@ -173,9 +181,18 @@ generateLogger = (serviceName, level) => {
           format.json()
         ),
         transports: [
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_crit.log',
-            level: 'crit'
+          new transports.Console({
+            level: 'info',
+            format: format.combine(
+              format.timestamp({
+                format: 'YYYY-MM-DD HH:mm:ss'
+              }),
+              format.errors({
+                stack: true
+              }),
+              format.splat(),
+              format.json()
+            )
           })
         ]
       };
@@ -197,9 +214,18 @@ generateLogger = (serviceName, level) => {
           format.json()
         ),
         transports: [
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_fatal.log',
-            level: 'fatal'
+          new transports.Console({
+            level: 'fatal',
+            format: format.combine(
+              format.timestamp({
+                format: 'YYYY-MM-DD HH:mm:ss'
+              }),
+              format.errors({
+                stack: true
+              }),
+              format.splat(),
+              format.json()
+            )
           })
         ]
       };
