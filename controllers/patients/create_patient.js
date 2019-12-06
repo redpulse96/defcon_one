@@ -1,6 +1,7 @@
 const log = require('../../config/log_config').logger('patients_controller');
 const utils = require('../utility/utils');
 const async = packageHelper.async;
+const moment = packageHelper.moment;
 
 module.exports = Patients => {
 
@@ -56,7 +57,8 @@ module.exports = Patients => {
 
     function createPatientFunction(results, callback) {
       let createObj = Object.assign({}, req.body, {
-        created_by: utils.validateKeys(() => req.user.username, null, null)
+        created_by: utils.validateKeys(() => req.user.username, null, null),
+        date_of_birth: moment(req.body.date_of_birth).format('YYYY-MM-DD')
       });
       models['Patients']
       .scope('activeScope')
