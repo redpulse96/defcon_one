@@ -1,5 +1,6 @@
 const log = require('../../config/log_config').logger('utils');
 const _ = packageHelper.lodash;
+const moment = packageHelper.moment;
 
 module.exports = {
   /**
@@ -82,6 +83,26 @@ module.exports = {
               break
             case 'BOOLEAN':
               if (!_.isBoolean(paramObj.data[val.key])) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            case 'DATE':
+              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD')) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            case 'DATETIME':
+              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD hh:mm:ss A')) {
                 return reject({
                   success: false,
                   error_code: 400,

@@ -17,7 +17,17 @@ module.exports = Patients => {
     function validateDataFunction(callback) {
       let paramsCheck = {
         data: req.body,
-        mandatoryParams: ['patient_name', 'mobile_no', 'date_of_birth']
+        mandatoryParams: ['patient_name', 'mobile_no', 'date_of_birth'],
+        checkValType: [{
+          key: 'patient_name',
+          checkValue: 'STRING'
+        }, {
+          key: 'mobile_no',
+          checkValue: 'NUMBER'
+        }, {
+          key: 'date_of_birth',
+          checkValue: 'DATE'
+        }]
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(param_res => {
