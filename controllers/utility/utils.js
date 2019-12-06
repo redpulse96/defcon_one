@@ -24,7 +24,7 @@ module.exports = {
    * @param {Array} mandatoryParams - array of keys that are checked against the data
    * isOptional will by default false and an error alert will be sent to slack. If passed as true, the functionality remains same but no alert will be sent to slack
    */
-  hasMandatoryParams: (paramObj) => {
+  hasMandatoryParams: paramObj => {
     return new Promise((resolve, reject) => {
       if (paramObj.mandatoryParams && paramObj.mandatoryParams.length) {
         let reqParams = Object.keys(paramObj.data);

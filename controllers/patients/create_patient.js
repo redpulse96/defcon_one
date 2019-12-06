@@ -7,8 +7,8 @@ module.exports = Patients => {
   Patients.createPatients = (req, res) => {
     async.auto({
       validateData: validateDataFunction,
-      isNewPatient: isNewPatientFunction,
-      createPatient: ['validateData', createPatientFunction]
+      isNewPatient: ['validateData', isNewPatientFunction],
+      createPatient: ['validateData', 'isNewPatient', createPatientFunction]
     })
     .then(async_auto_result => res.send(async_auto_result.createPatient))
     .catch(async_auto_error => res.status(async_auto_error.error_code || 500).send(async_auto_error));
