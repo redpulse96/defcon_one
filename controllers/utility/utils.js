@@ -29,6 +29,8 @@ module.exports = {
       if (paramObj.mandatoryParams && paramObj.mandatoryParams.length) {
         let reqParams = Object.keys(paramObj.data);
         if (!_.difference(paramObj.mandatoryParams, reqParams).length) {
+          log.info('All keys are present');
+          log.info(paramObj);
           return resolve({
             success: true,
             message: 'All mandatory keys are present',

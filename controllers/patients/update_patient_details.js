@@ -12,7 +12,7 @@ module.exports = Patients => {
       returnPatientDetails: ['updatePatient', returnPatientDetailsFunction]
     })
     .then(async_auto_res => res.send(async_auto_res.returnPatientDetails))
-    .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
+    .catch(async_auto_err => res.status(async_auto_err.error_code || 500).send(async_auto_err));
 
     function validateDataFunction(callback) {
       let paramsCheck = {

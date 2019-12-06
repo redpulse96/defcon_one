@@ -19,11 +19,11 @@ module.exports = Patients => {
         mandatoryParams: ['patient_name', 'mobile_no', 'date_of_birth']
       }
       utils.hasMandatoryParams(paramsCheck)
-        .then(res => {
-          return callback(null, res)
+        .then(param_res => {
+          return callback(null, param_res);
         })
-        .catch(err => {
-          return callback(err)
+        .catch(param_err => {
+          return callback(param_err);
         });
     }
 
@@ -42,7 +42,7 @@ module.exports = Patients => {
           return callback({
             success: false,
             error_code: 400,
-            message: 'Mobile no alreadt exists,\nkindly priovide a different mobile number',
+            message: 'Mobile no already exists,\nkindly priovide a different mobile number',
             data: {}
           });
         } else {

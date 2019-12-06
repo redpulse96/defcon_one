@@ -32,7 +32,7 @@ module.exports = Appointments => {
     if (req.user.parent) {
       filter.where.created_by.$in.push(req.user.parent);
     }
-    models['Appointments'].findAll(filter)
+    models['Appointments'].scope('activeScope').findAll(filter)
       .then(appointments_res => {
         let response;
         log.info('---APPOINTMENT_LIST---');
@@ -40,7 +40,7 @@ module.exports = Appointments => {
         if (appointments_res) {
           response = {
             success: true,
-            error_code: 200,
+            http_code: 200,
             message: 'Appointments list fetch success',
             data: {
               appointments_list: _.groupBy(appointments_res, 'status')
@@ -49,12 +49,12 @@ module.exports = Appointments => {
         } else {
           response = {
             success: false,
-            error_code: 400,
+            http_code: 400,
             message: 'No appointments exist for the selected date,\nKindly select a different date',
             data: {}
           };
         }
-        res.status(error_code).send(response);
+        res.status(response.http_code).send(response);
       })
       .catch(appointments_err => {
         log.info('---APPOINTMENT_LIST_ERROR---');

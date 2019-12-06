@@ -123,6 +123,10 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: "CASCADE",
       foreignKey: 'appointment_id'
     });
+    Appointments.belongsTo(models['Patients'], {
+      as: 'patient',
+      foreignKey: 'patient_id'
+    });
   };
 
   return Appointments;
