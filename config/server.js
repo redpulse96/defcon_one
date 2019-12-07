@@ -67,10 +67,11 @@ app.use('/api', cors(corsOptions), (req, res, next) => {
 // app.use('/api', ensureAuth, verifyToken, apiRoutes);
 
 // catch 404 and forward to error handler 
-app.use((err, req, res) => {
-  res.status(packageHelper.createError(404)).send({
+app.use((err, res) => {
+  console.error(err);
+  res.status(404).send({
     success: false,
-    message: err.message || 'Not found',
+    message: packageHelper.createError(404).message || 'Not found',
     data: {}
   });
 });
