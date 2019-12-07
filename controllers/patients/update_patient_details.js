@@ -7,7 +7,7 @@ module.exports = Patients => {
   Patients.updatePatientDetails = (req, res) => {
     async.auto({
       validateData: validateDataFunction,
-      checkUniqueMobileNo: checkUniqueMobileNoFunction,
+      checkUniqueMobileNo: ['validateData', checkUniqueMobileNoFunction],
       updatePatient: ['checkUniqueMobileNo', updatePatientFunction],
       returnPatientDetails: ['updatePatient', returnPatientDetailsFunction]
     })
