@@ -1,5 +1,6 @@
 const log = require('../../config/log_config').logger('patients_controller');
 const utils = require('../utility/utils');
+const _ = packageHelper.lodash;
 const async = packageHelper.async;
 
 module.exports = Patients => {
@@ -42,20 +43,24 @@ module.exports = Patients => {
       }
       models['Patients'].scope('activeScope').findOne(filter)
       .then(patient_res => {
+        let existingMobileNo = true;
         log.error('---patient_err---');
         log.error(patient_res);
-        if (patient_res) {
+        if (validateData.data.update_obj.mobile_no) {
+          existingMobileNo = !!(_.map(patient_res, 'mobile_no').indexOf(validateData.data.update_obj.mobile_no) > -1);
+        }
+        if (patient_res && existingMobileNo) {
+          return callback(null, {
+            success: true,
+            message: 'The mobile no can be updated',
+            data: patient_res
+          });
+        } else {
           return callback({
             success: true,
             error_code: 400,
-            message: 'Mobile no already exists,\nKindly provide a different number',
+            message: 'Mobile no already belongs to a different patient,\nKindly provide a different number',
             data: {}
-          });
-        } else {
-          return callback(null, {
-            success: true,
-            message: 'The mobile no is new and can be created',
-            data: patient_res
           });
         }
       })
