@@ -5,12 +5,12 @@ module.exports = (sequelize, DataTypes) => {
     role_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
-      autoIncreament: true,
-      allowNull: false
+      autoIncrement: true,
+      defaultValue: null
     },
-    role: {
+    role_type: {
       type: DataTypes.ENUM,
-      values: ['r_dentist', 'r_ortho'],
+      values: ['r_dentist', 'r_ortho'], //more will be added based on the new roles
       allowNull: true
     },
     role_name: {
@@ -36,26 +36,29 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     created_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      type: DataTypes.NOW,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     },
     updated_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+      type: DataTypes.TIME,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     }
   }, {
     defaultScope: {
-      where: {
-        is_active: true,
-        is_archived: false
-      },
       order: [
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
     },
+    scopes: {
+  activeScope: {
+      where: {
+        is_active: true,
+        is_archived: false
+      }
+    }},
     underscored: true,
     sequelize,
     modelName: 'roles',
@@ -64,18 +67,23 @@ module.exports = (sequelize, DataTypes) => {
   });
   Roles.associate = models => {
     // associations can be defined here
-    Roles.hasMany(models.SymptomsRoleMapping, {
+    Roles.hasMany(models['SymptomsRoleMapping'], {
       as: 'symptoms_role_mapping',
       onDelete: "CASCADE",
       foreignKey: 'role_id'
     });
-    Roles.hasMany(models.ExaminationsRoleMapping, {
+    Roles.hasMany(models['ExaminationsRoleMapping'], {
       as: 'examinations_role_mapping',
       onDelete: "CASCADE",
       foreignKey: 'role_id'
     });
-    Roles.hasMany(models.DiagnosisRoleMapping, {
+    Roles.hasMany(models['DiagnosisRoleMapping'], {
       as: 'diagnosis_role_mapping',
+      onDelete: "CASCADE",
+      foreignKey: 'role_id'
+    });
+    Roles.hasMany(models['InvestigationsRoleMapping'], {
+      as: 'investigations_role_mapping',
       onDelete: "CASCADE",
       foreignKey: 'role_id'
     });

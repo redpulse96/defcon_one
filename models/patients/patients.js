@@ -1,18 +1,18 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const patients = sequelize.define('patients', {
+  const Patients = sequelize.define('patients', {
     patient_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
-      autoIncreament: true,
-      allowNull: false
+      autoIncrement: true,
+      defaultValue: null
     },
     patient_name: {
       type: DataTypes.STRING(50),
       allowNull: true
     },
     mobile_no: {
-      type: DataTypes.INTEGER(10),
+      type: DataTypes.BIGINT(10),
       allowNull: true
     },
     phone_code: {
@@ -41,13 +41,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     date_of_birth: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       defaultValue: null,
       allowNull: true
     },
     email: {
       type: DataTypes.STRING(50),
       allowNull: true
+    },
+    created_by: {
+      type: DataTypes.STRING(50),
+      defaultValue: null
     },
     is_active: {
       type: DataTypes.BOOLEAN,
@@ -60,25 +64,29 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     created_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      type: DataTypes.NOW,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     },
     updated_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+      type: DataTypes.TIME,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     }
   }, {
     defaultScope: {
-      where: {
-        is_active: 1,
-        is_archived: 0
-      },
       order: [
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
+    },
+    scopes: {
+      activeScope: {
+        where: {
+          is_active: true,
+          is_archived: false
+        }
+      }
     },
     underscored: true,
     sequelize,
@@ -86,9 +94,38 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true,
     timestamps: false
   });
-  patients.associate = models => {
+  Patients.associate = models => {
     // associations can be defined here
+    Patients.hasMany(models['Appointments'], {
+      as: 'appointments',
+      foreignKey: 'patient_id'
+    });
+    Patients.hasMany(models['PatientPrescription'], {
+      as: 'patient_prescription',
+      onDelete: "CASCADE",
+      foreignKey: 'patient_id'
+    });
+    Patients.hasMany(models['PatientSymptomsRoleMapping'], {
+      as: 'patient_symptoms_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'patient_id'
+    });
+    Patients.hasMany(models['PatientInvestigationsRoleMapping'], {
+      as: 'patient_investigations_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'patient_id'
+    });
+    Patients.hasMany(models['PatientExaminationsRoleMapping'], {
+      as: 'patient_examinations_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'patient_id'
+    });
+    Patients.hasMany(models['PatientDiagnosisRoleMapping'], {
+      as: 'patient_diagnosis_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'patient_id'
+    });
   };
 
-  return patients;
+  return Patients;
 };

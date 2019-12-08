@@ -1,0 +1,21 @@
+module.exports = {
+  AccessToken: '../models/access_token.js',
+  Appointments: '../models/appointments/appointments.js',
+  AppointmentLogs: '../models/appointments/appointment_logs/appointment_logs.js',
+  DiagnosisRoleMapping: '../models/diagnosis/diagnosis_role_mapping/diagnosis_role_mapping.js',
+  Diagnosis: '../models/diagnosis/diagnosis.js',
+  ExaminationsRoleMapping: '../models/examinations/examinations_role_mapping/examinations_role_mapping.js',
+  Examinations: '../models/examinations/examinations.js',
+  InvestigationsRoleMapping: '../models/investigations/investigations_role_mapping/investigations_role_mapping.js',
+  Investigations: '../models/investigations/investigations.js',
+  SymptomsRoleMapping: '../models/symptoms/symptoms_role_mapping/symptoms_role_mapping.js',
+  Symptoms: '../models/symptoms/symptoms.js',
+  PatientDiagnosisRoleMapping: '../models/patients/patient_diagnosis_role_mapping/patient_diagnosis_role_mapping.js',
+  PatientExaminationsRoleMapping: '../models/patients/patient_examinations_role_mapping/patient_examinations_role_mapping.js',
+  PatientInvestigationsRoleMapping: '../models/patients/patient_investigations_role_mapping/patient_investigations_role_mapping.js',
+  PatientSymptomsRoleMapping: '../models/patients/patient_symptoms_role_mapping/patient_symptoms_role_mapping.js',
+  PatientPrescription: '../models/patients/patients_prescription/patient_prescription.js',
+  Patients: '../models/patients/patients.js',
+  Roles: '../models/roles/roles.js',
+  Users: '../models/users.js'
+}
