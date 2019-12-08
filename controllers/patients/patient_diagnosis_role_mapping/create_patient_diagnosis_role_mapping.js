@@ -35,7 +35,7 @@ module.exports = PatientDiagnosisRoleMapping => {
             success: true,
             message: 'Patient Diagnosis Role Mapping creation success',
             data: {
-              patient_diagnosis_role_mapping: create_res.toJSON()
+              patient_diagnosis_role_mapping: create_res
             }
           });
         })

@@ -1,5 +1,6 @@
 const log = require('../../../config/log_config').logger('patient_symptoms_role_mappings_controller');
 const utils = require('../../utility/utils');
+const async = packageHelper.async;
 
 module.exports = PatientSymptomsRoleMapping => {
 
@@ -34,7 +35,7 @@ module.exports = PatientSymptomsRoleMapping => {
             success: true,
             message: 'Patient Symptoms Role Mapping creation success',
             data: {
-              patient_symptoms_role_mapping: create_res.toJSON()
+              patient_symptoms_role_mapping: create_res
             }
           });
         })
