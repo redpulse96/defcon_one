@@ -39,8 +39,8 @@ PatientInvestigationsRoleMapping.fetchPatientInvestigationsRoleMapping = (req, r
 
 PatientInvestigationsRoleMapping.createPatientInvestigationsRoleMapping = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
-  models.PatientInvestigationsRoleMapping.create(createObj)
+  let createArray = Object.assign({}, req.body);
+  models['PatientInvestigationsRoleMapping'].bulkCreate(createArray, { returning: true })
     .then(create_res => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
       log.info(create_res);
