@@ -9,7 +9,8 @@ module.exports = Appointments => {
   Appointments.createAppointment = (req, res) => {
     async.auto({
       validateData: validateDataFunction,
-      createAppointment: ['validateData', createAppointmentFunction],
+      checkPatientExistance: ['validateData', checkPatientExistanceFunction],
+      createAppointment: ['validateData', 'checkPatientExistance', createAppointmentFunction],
       createAppointmentLog: ['createAppointment', createAppointmentLogFunction]
     })
     .then(async_auto_res => res.send(async_auto_res.createAppointment))
@@ -18,17 +19,59 @@ module.exports = Appointments => {
     function validateDataFunction(callback) {
       let paramsCheck = {
         data: req.body,
-        mandatoryParams: ['appointment_name', 'appointment_date', 'patient_id', 'appointment_status', 'created_by']
+        mandatoryParams: ['appointment_name', 'appointment_date', 'patient_id', 'appointment_status', 'from_time', 'to_time']
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(res => callback(null, res))
         .catch(err => callback(err));
     }
 
+    function checkPatientExistanceFunction(results, callback) {
+      const { validateData } = results;
+      let filterPatientObj = {
+        where: {
+          patient_id: validateData.data.patient_id
+        }
+      };
+      models['Patients'].scope('activeScope').findOne(filterPatientObj)
+      .then(patient_res => {
+        log.info('---patient_res---');
+        log.info(patient_res);
+        if (patient_res) {
+          return callback(null, {
+            success: true,
+            message: 'Patient exists',
+            data: {
+              patient_details: patient_res
+            }
+          });
+        } else {
+          return callback({
+            success: false,
+            error_code: 400,
+            message: 'Patient does not exist',
+            data: {}
+          });
+        }
+      })
+      .catch(patient_err => {
+        log.error('---patient_err---');
+        log.error(patient_err);
+        return callback({
+          success: false,
+          error_code: 500,
+          message: 'Patient does not exist',
+          data: {}
+        })
+      });
+    }
+
     function createAppointmentFunction(results, callback) {
       const { validateData } = results;
-      const createObj = Object.assign({}, validateData.data);
-      createObj.appointment_date = moment(createObj.appointment_date).format('YYYY MM DD hh:mm:ss');
+      const createObj = Object.assign({}, validateData.data, { created_by: req.user.username });
+      createObj.appointment_date = moment(createObj.appointment_date).format('YYYY-MM-DD');
+      createObj.from_time = moment(createObj.from_time).format('hh:mm:ss');
+      createObj.to_time = moment(createObj.to_time).format('hh:mm:ss');
       // createObj.to_time = moment(createObj.to_time).format();
 
       models['Appointments'].create(createObj)
