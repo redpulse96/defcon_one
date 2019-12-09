@@ -2,6 +2,8 @@ const log = require('../../config/log_config').logger('appointments_controller')
 const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs'];
 const utils = require('../utility/utils');
 const async = packageHelper.async;
+const moment = packageHelper.moment;
+const _ = packageHelper.lodash;
 
 const status_matrix = {
   'pending': ['operating', 'rescheduled', 'closed'],
@@ -17,11 +19,20 @@ module.exports = Appointments => {
       validateData: validateDataFunction,
       fetchCurrentAppointment: ['validateData', fetchCurrentAppointmentFunction],
       checkStatusMatrix: ['fetchCurrentAppointment', checkStatusMatrixFunction],
-      updateAppointmentStatus: ['checkStatusMatrix', updateAppointmentStatusFunction],
+      rescheduleAppointment: ['fetchCurrentAppointment', 'checkStatusMatrix', rescheduleAppointmentFunction],
+      updateAppointmentStatus: ['checkStatusMatrix', 'rescheduleAppointment', updateAppointmentStatusFunction],
       createAppointmentLog: ['updateAppointmentStatus', createAppointmentLogFunction]
     })
-    .then(async_auto_res => res.send(async_auto_res.fetchCurrentAppointment))
-    .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
+    .then(async_auto_res => {
+      log.info('---async_auto_res---');
+      log.info(async_auto_res);
+      return res.send(async_auto_res.fetchCurrentAppointment)
+    })
+    .catch(async_auto_err => {
+      log.error('---async_auto_err---');
+      log.error(async_auto_err);
+      return res.status(async_auto_err.error_code).send(async_auto_err)
+    });
 
     function validateDataFunction(callback) {
       let paramsCheck = {
@@ -96,10 +107,92 @@ module.exports = Appointments => {
       }
     }
 
+    function rescheduleAppointmentFunction(results, callback) {
+      const { fetchCurrentAppointment, checkStatusMatrix } = results;
+      if (req.body.appointment_status === 'rescheduled') {
+        log.info('---APPOINTMENT_RESCHEDULING_REQUEST_RAISED---');
+        if (!(_.has(req.body, 'rescheduled_date') || _.has(req.body, 'from_time') || _.has(req.body, 'to_time'))) {
+          return callback({
+            success: false,
+            error_code: 400,
+            message: 'Appointment rescheduled request raised,\nbut the required details have not been specified',
+            data: {}
+          });
+        } else {
+          let filter = {
+            where: {
+              rescheduled_date: req.body.rescheduled_date,
+              $and: [{
+                $or: [{
+                  from_time: {
+                    $gte: req.body.from_time
+                  }
+                }, {
+                  from_time: {
+                    $lte: req.body.from_time
+                  }
+                }],
+              }, {
+                $or: [{
+                  to_time: {
+                    $gte: req.body.to_time
+                  }
+                }, {
+                  to_time: {
+                    $lte: req.body.to_time
+                  }
+                }]
+              }]
+            }
+          };
+          models['Appointments'].findAll(filter)
+            .then(appointment_date_res => {
+              log.info('---appointment_date_res---');
+              log.info(appointment_date_res);
+              if(appointment_date_res && appointment_date_res.length) {
+                return callback({
+                  success: false,
+                  error_code: 200,
+                  message: 'There is already an appointment scheduled at the specified slot,\nkindly choose a different slot',
+                  data: {}
+                });
+              } else {
+                req.body.doctor_remarks = 'Appointment has been rescheduled to ' + req.body.rescheduled_date + ' at slot ' + req.body.from_time + ' to ' + req.body.to_time;
+                req.body.appointment_date = moment(req.body.rescheduled_date).format('YYYY-MM-DD');
+                req.body.rescheduled_date = moment(req.body.rescheduled_date).format('YYYY-MM-DD');
+                req.body.from_time = moment(req.body.from_time).format('hh:mm:ss');
+                req.body.to_time = moment(req.body.to_time).format('hh:mm:ss');
+                return callback(null, { isRescheduled: true });
+              }
+            })
+            .catch(appointment_date_err => {
+              log.error('---appointment_date_err---');
+              log.error(appointment_date_err);
+              return callback({
+                success: false,
+                error_code: 500,
+                message: 'Internal server error',
+                data: {}
+              });
+            });
+        }
+      } else {
+        return callback(null, { isRescheduled: false });
+      }
+    }
+
     function updateAppointmentStatusFunction(results, callback) {
-      const { fetchCurrentAppointment } = results;
+      const { rescheduleAppointment, fetchCurrentAppointment } = results;
       let updateObj = { appointment_status: req.body.appointment_status };
       fetchCurrentAppointment.data.appointment_detail.appointment_status = req.body.appointment_status;
+      if (rescheduleAppointment.isRescheduled) {
+        Object.assign(updateObj, {
+          appointment_date: req.body.rescheduled_date,
+          rescheduled_date: req.body.rescheduled_date,
+          from_time: req.body.from_time,
+          to_time: req.body.to_time
+        });
+      }
       fetchCurrentAppointment.data.appointment_detail.update(updateObj)
         .then(update_appointment_res => {
           log.info('---update_appointment_res---');
