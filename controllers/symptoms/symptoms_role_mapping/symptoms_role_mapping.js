@@ -4,11 +4,14 @@ const SymptomsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['SymptomsRol
 SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
 
   let whereObj = Object.assign({}, req.params, {
+    where: {
+      role_id: req.user.role_id
+    },
     include: [{
-      model: models.Symptoms,
+      model: models['Symptoms'],
       as: 'symptom'
     }, {
-      model: models.Roles,
+      model: models['Roles'],
       as: 'role'
     }]
   });
@@ -27,7 +30,7 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
     .catch(fetch_err => {
       log.info('---SRM_FETCH_FAILURE---');
       log.info(fetch_err);
-      return res.send({
+      return res.status(500).send({
         success: false,
         message: 'Symptoms Role Mapping fetching failure',
         data: {

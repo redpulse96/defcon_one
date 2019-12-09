@@ -4,11 +4,14 @@ const InvestigationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['Inves
 InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
 
   let whereObj = Object.assign({}, req.params, {
+    where: {
+      role_id: req.user.role_id
+    },
     include: [{
-      model: models.investigationsRoleMapping,
-      as: 'investigations_role_mapping'
+      model: models['Investigations'],
+      as: 'investigation'
     }, {
-      model: models.Roles,
+      model: models['Roles'],
       as: 'role'
     }]
   });
@@ -18,7 +21,7 @@ InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
       log.info(fetch_res);
       return res.send({
         success: true,
-        message: 'Patient investigations Role Mapping fetching success',
+        message: 'Investigations Role Mapping fetching success',
         data: {
           investigations_role_mapping: fetch_res
         }
@@ -27,9 +30,9 @@ InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
     .catch(fetch_err => {
       log.info('---InvestigationsRoleMapping_FETCH_FAILURE---');
       log.info(fetch_err);
-      return res.send({
+      return res.status(500).send({
         success: false,
-        message: 'Patient investigations Role Mapping fetching failure',
+        message: 'Investigations Role Mapping fetching failure',
         data: {
           investigations_role_mapping: fetch_err
         }

@@ -4,11 +4,14 @@ const DiagnosisRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['DiagnosisR
 DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
 
   let whereObj = Object.assign({}, req.params, {
+    where: {
+      role_id: req.user.role_id
+    },
     include: [{
-      model: models.DiagnosisRoleMapping,
-      as: 'diagnosis_role_mapping'
+      model: models['Diagnosis'],
+      as: 'diagnosis'
     }, {
-      model: models.Roles,
+      model: models['Roles'],
       as: 'role'
     }]
   });

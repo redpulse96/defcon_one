@@ -3,6 +3,7 @@ const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs
 const utils = require('../utility/utils');
 const async = packageHelper.async;
 const moment = packageHelper.moment;
+const twilio = packageHelper.twilio;
 
 module.exports = Appointments => {
 

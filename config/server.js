@@ -58,6 +58,7 @@ app.use('/api', cors(corsOptions), (req, res, next) => {
     "mobile_no": 7760225404,
     "name": "DEMO TEST",
     "role_type": "r_dentist",
+    "role_id": 1,
     "username": "demo@emr.in",
     "password": "$2a$10$7eWmc4bEcDjJVtqWmZqOPuIBiDVAq1HavfqbaFfGVqzw/CDBiwSFa",
     "date": "2019-11-30 15:07:37"

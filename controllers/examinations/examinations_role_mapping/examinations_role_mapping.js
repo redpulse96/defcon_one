@@ -4,11 +4,14 @@ const ExaminationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['Examina
 ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
 
   let whereObj = Object.assign({}, req.params, {
+    where: {
+      role_id: req.user.role_id
+    },
     include: [{
-      model: models.examinationsRoleMapping,
-      as: 'examinations_role_mapping'
+      model: models['Examinations'],
+      as: 'examination'
     }, {
-      model: models.Roles,
+      model: models['Roles'],
       as: 'role'
     }]
   });
@@ -27,7 +30,7 @@ ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
     .catch(fetch_err => {
       log.info('---ExaminationsRoleMapping_FETCH_FAILURE---');
       log.info(fetch_err);
-      return res.send({
+      return res.status(500).send({
         success: false,
         message: 'examinations Role Mapping fetching failure',
         data: {

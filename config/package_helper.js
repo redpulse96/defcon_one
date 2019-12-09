@@ -1,4 +1,5 @@
 /* jshint node: true */
+const TWILIO = require('../public/javascripts/constants').TWILIO;
 
 const packageHelper = {
   DIRNAME: __dirname,
@@ -33,6 +34,7 @@ const packageHelper = {
   publicIp: require('public-ip'),
   request: require('request'),
   sequelize: require('sequelize'),
+  twilio: require('twilio')(TWILIO.ACCOUNTSID, TWILIO.AUTHTOKEN),
   winston: require('winston')
 };
 
