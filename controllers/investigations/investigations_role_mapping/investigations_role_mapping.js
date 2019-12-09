@@ -15,7 +15,7 @@ InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
       as: 'role'
     }]
   });
-  models.InvestigationsRoleMapping.findAll(whereObj)
+  models['InvestigationsRoleMapping'].scope('activeScope').findAll(whereObj)
     .then(fetch_res => {
       log.info('---InvestigationsRoleMapping_FETCH_SUCCESS---');
       log.info(fetch_res);

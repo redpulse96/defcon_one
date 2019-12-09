@@ -15,7 +15,7 @@ DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
       as: 'role'
     }]
   });
-  models.DiagnosisRoleMapping.findAll(whereObj)
+  models['DiagnosisRoleMapping'].scope('activeScope').findAll(whereObj)
     .then(fetch_res => {
       log.info('---DiagnosisRoleMapping_FETCH_SUCCESS---');
       log.info(fetch_res);
