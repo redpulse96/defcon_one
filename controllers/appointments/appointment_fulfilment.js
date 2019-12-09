@@ -26,12 +26,12 @@ module.exports = Appointments => {
     .then(async_auto_res => {
       log.info('---async_auto_res---');
       log.info(async_auto_res);
-      return res.send(async_auto_res.fetchCurrentAppointment)
+      return res.send(async_auto_res.fetchCurrentAppointment);
     })
     .catch(async_auto_err => {
       log.error('---async_auto_err---');
       log.error(async_auto_err);
-      return res.status(async_auto_err.error_code).send(async_auto_err)
+      return res.status(async_auto_err.error_code).send(async_auto_err);
     });
 
     function validateDataFunction(callback) {

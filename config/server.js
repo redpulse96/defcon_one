@@ -7,13 +7,14 @@ const cors = packageHelper.cors;
 const passport = packageHelper.passport;
 const session = packageHelper.express_session;
 
+const { apiLogger } = require('./middleware/log_middleware');
 const { verifyToken, ensureAuth, attachUserToRequest } = require('./middleware/auth_middleware');
 const { SECRET_KEY } = require('../public/javascripts/constants');
 
 const corsOptions = {
   "origin": /localhost:3000/,
   "methods": "GET,POST",
-  "preflightContinue": true,
+  "preflightContinue": false,
   "optionsSuccessStatus": 204
 };
 
@@ -50,7 +51,7 @@ app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNA
 app.use('/', indexRoutes);
 app.use('/users', userRoutes);
 // THIS BELOW LINE SHOULD BE DELETED LATER;
-app.use('/api', cors(corsOptions), (req, res, next) => {
+app.use('/api', cors(corsOptions), apiLogger, (req, res, next) => {
   req.user = {
     "feature_rights": [1, 2, 3],
     "is_active": true,
