@@ -108,7 +108,6 @@ module.exports = Appointments => {
     }
 
     function rescheduleAppointmentFunction(results, callback) {
-      const { fetchCurrentAppointment, checkStatusMatrix } = results;
       if (req.body.appointment_status === 'rescheduled') {
         log.info('---APPOINTMENT_RESCHEDULING_REQUEST_RAISED---');
         if (!(_.has(req.body, 'rescheduled_date') || _.has(req.body, 'from_time') || _.has(req.body, 'to_time'))) {
@@ -145,7 +144,7 @@ module.exports = Appointments => {
               }]
             }
           };
-          models['Appointments'].findAll(filter)
+          models['Appointments'].scope('activeScope').findAll(filter)
             .then(appointment_date_res => {
               log.info('---appointment_date_res---');
               log.info(appointment_date_res);

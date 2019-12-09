@@ -10,10 +10,10 @@ module.exports = Appointments => {
     async.auto({
       validateData: validateDataFunction,
       checkPatientExistance: ['validateData', checkPatientExistanceFunction],
-      createAppointment: ['validateData', 'checkPatientExistance', createAppointmentFunction],
-      createAppointmentLog: ['createAppointment', createAppointmentLogFunction]
+      createNewAppointment: ['validateData', 'checkPatientExistance', createNewAppointmentFunction],
+      createAppointmentLog: ['createNewAppointment', createAppointmentLogFunction]
     })
-    .then(async_auto_res => res.send(async_auto_res.createAppointment))
+    .then(async_auto_res => res.send(async_auto_res.createNewAppointment))
     .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
 
     function validateDataFunction(callback) {
@@ -66,7 +66,7 @@ module.exports = Appointments => {
       });
     }
 
-    function createAppointmentFunction(results, callback) {
+    function createNewAppointmentFunction(results, callback) {
       const { validateData } = results;
       const createObj = Object.assign({}, validateData.data, { created_by: req.user.username });
       createObj.appointment_date = moment(createObj.appointment_date).format('YYYY-MM-DD');
@@ -99,10 +99,10 @@ module.exports = Appointments => {
     }
 
     function createAppointmentLogFunction(results, callback) {
-      const { validateData, createAppointment } = results;
+      const { validateData, createNewAppointment } = results;
       const logObj = Object.assign({}, {
-        appointment_id: createAppointment.data.appointment.appointment_id,
-        status: createAppointment.data.appointment.status
+        appointment_id: createNewAppointment.data.appointment.appointment_id,
+        status: createNewAppointment.data.appointment.status
       }, validateData.data);
       AppointmentLogs.createAppointmentLogs(logObj)
         .then(log_res => callback(null, log_res))
