@@ -16,7 +16,7 @@ module.exports = PatientSymptomsRoleMapping => {
       let paramsCheck = {
         data: req.body,
         checkValType: {
-          key: patientSymptomsRoleMappings,
+          key: 'patientSymptomsRoleMappings',
           checkValue: 'Array'
         }
       }
