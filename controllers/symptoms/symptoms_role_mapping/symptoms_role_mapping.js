@@ -15,7 +15,7 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
       as: 'role'
     }]
   });
-  models.SymptomsRoleMapping.findOne(whereObj)
+  models.SymptomsRoleMapping.findAll(whereObj)
     .then(fetch_res => {
       log.info('---SRM_FETCH_SUCCESS---');
       log.info(fetch_res);
