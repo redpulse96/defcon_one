@@ -94,6 +94,19 @@ const generateToken = (req, res) => {
   }
 }
 
+const ensureAuth = (req, res, next) => {
+  console.log(req.isAuthenticated());
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.status(500).send({
+      success: false,
+      message: 'Permission denied',
+      data: {}
+    });
+  }
+}
+
 const verifyToken = (req, res, next) => {
   //GET AUTH HEADER VALUE
   const bearer_token = req.headers['bearer_token'];
@@ -116,6 +129,7 @@ const verifyToken = (req, res, next) => {
         .then(token_res => {
           log.info('---token_res---');
           log.info(token_res);
+          req.username = token_res.data.username;
           next();
         })
         .catch(token_err => {
@@ -139,17 +153,62 @@ const verifyToken = (req, res, next) => {
   }
 }
 
-const ensureAuth = (req, res, next) => {
-  console.log(req.isAuthenticated());
-  if (req.isAuthenticated()) {
-    return next();
-  } else {
-    res.status(500).send({
+const attachUserToRequest = (req, res, next) => {
+  let filterUserObj = {
+    where: {
+      username: req.username
+    }
+  };
+  Users.findOne(filterUserObj)
+  .then(userDetails => {
+    log.info('---userDetails---');
+    log.info(userDetails);
+    if (userDetails) {
+      Object.assign(req.user, userDetails);
+      let whereObj = {
+        where: {
+          role_type: userDetails.role_type
+        }
+      };
+      models['Roles'].findOne(whereObj)
+      .then(roleDetails => {
+        if (roleDetails) {
+          req.user.role_id = roleDetails.role_id;
+          next();
+        } else {
+          return res.status(400).send({
+            success: false,
+            message: 'Permission denied',
+            data: {}
+          });
+        }
+      })
+      .catch(userError => {
+        log.error('---userError---');
+        log.error(userError);
+        return res.status(400).send({
+          success: false,
+          message: 'Permission denied',
+          data: {}
+        });
+      });
+    } else {
+      return res.status(400).send({
+        success: false,
+        message: 'Permission denied',
+        data: {}
+      });
+    }
+  })
+  .catch(userError => {
+    log.error('---userError---');
+    log.error(userError);
+    return res.status(400).send({
       success: false,
       message: 'Permission denied',
       data: {}
     });
-  }
+  });
 }
 
 const destroyToken = (req, res, next) => {
@@ -176,7 +235,8 @@ const destroyToken = (req, res, next) => {
 module.exports = {
   validateUser,
   generateToken,
-  verifyToken,
   ensureAuth,
+  verifyToken,
+  attachUserToRequest,
   destroyToken
 }

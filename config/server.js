@@ -7,7 +7,7 @@ const cors = packageHelper.cors;
 const passport = packageHelper.passport;
 const session = packageHelper.express_session;
 
-const { verifyToken, ensureAuth } = require('./middleware/auth_middleware');
+const { verifyToken, ensureAuth, attachUserToRequest } = require('./middleware/auth_middleware');
 const { SECRET_KEY } = require('../public/javascripts/constants');
 
 const corsOptions = {
@@ -65,7 +65,7 @@ app.use('/api', cors(corsOptions), (req, res, next) => {
   };
   next();
 }, apiRoutes);
-// app.use('/api', ensureAuth, verifyToken, apiRoutes);
+// app.use('/api', ensureAuth, verifyToken, attachUserToRequest, apiRoutes);
 
 // catch 404 and forward to error handler 
 app.use((err, res) => {
