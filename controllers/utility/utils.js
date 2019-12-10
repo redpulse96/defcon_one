@@ -47,7 +47,7 @@ module.exports = {
           });
         }
       }
-      if (paramObj.checkValType && paramObj.checkValType.length) {
+      if (paramObj.checkValType && Object.keys(paramObj.checkValType).length) {
         paramObj.checkValType.forEach(val => {
           switch (val.checkValue.toUpperCase().trim()) {
             case 'ARRAY':
@@ -113,11 +113,21 @@ module.exports = {
             default:
               return resolve({
                 success: true,
-                error_code: 400,
                 message: 'Value type matches successfully',
-                data: val
+                data: data
               });
           }
+        });
+        resolve({
+          success: true,
+          message: 'Value type matches successfully',
+          data: data
+        });
+      } else {
+        return resolve({
+          success: true,
+          message: 'Value type matches successfully',
+          data: data
         });
       }
     });

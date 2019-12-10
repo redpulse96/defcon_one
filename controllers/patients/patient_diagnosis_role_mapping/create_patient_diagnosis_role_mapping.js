@@ -15,10 +15,7 @@ module.exports = PatientDiagnosisRoleMapping => {
     function validateDataFunction(callback) {
       let paramsCheck = {
         data: req.body,
-        checkValType: {
-          key: 'patientDiagnosisRoleMappings',
-          checkValue: 'Array'
-        }
+        mandatoryParams: 'patientDiagnosisRoleMappings'
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(param_res => callback(null, param_res))
@@ -26,7 +23,7 @@ module.exports = PatientDiagnosisRoleMapping => {
     }
 
     function createPatientDiagnosisRoleMappingFunction(results, callback) {
-      let createArray = Object.assign({}, req.body.patientDiagnosisRoleMappings);
+      let createArray = req.body.patientDiagnosisRoleMappings;
       models['PatientDiagnosisRoleMapping'].bulkCreate(createArray, { returning: true })
         .then(create_res => {
           log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');

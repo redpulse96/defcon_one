@@ -9,16 +9,13 @@ module.exports = PatientSymptomsRoleMapping => {
       validateData: validateDataFunction,
       createPatientSymptomsRoleMapping: ['validateData', createPatientSymptomsRoleMappingFunction]
     })
-      .then(async_auto_res => res.send(async_auto_res))
+      .then(async_auto_res => res.send(async_auto_res.createPatientSymptomsRoleMapping))
       .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
 
     function validateDataFunction(callback) {
       let paramsCheck = {
         data: req.body,
-        checkValType: {
-          key: 'patientSymptomsRoleMappings',
-          checkValue: 'Array'
-        }
+        mandatoryParams: 'patientSymptomsRoleMappings'
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(param_res => callback(null, param_res))
@@ -26,7 +23,7 @@ module.exports = PatientSymptomsRoleMapping => {
     }
 
     function createPatientSymptomsRoleMappingFunction(results, callback) {
-      let createArray = Object.assign({}, req.body.patientSymptomsRoleMappings);
+      let createArray = req.body.patientSymptomsRoleMappings;
       models['PatientSymptomsRoleMapping'].bulkCreate(createArray, { returning: true })
         .then(create_res => {
           log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
