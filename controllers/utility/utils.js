@@ -47,7 +47,7 @@ module.exports = {
           });
         }
       }
-      if (paramObj.checkValType && Object.keys(paramObj.checkValType).length) {
+      if (paramObj.checkValType && paramObj.checkValType.length) {
         paramObj.checkValType.forEach(val => {
           switch (val.checkValue.toUpperCase().trim()) {
             case 'ARRAY':
@@ -101,7 +101,7 @@ module.exports = {
               }
               break;
             case 'DATETIME':
-              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD hh:mm:ss A')) {
+              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD hh:mm:ss')) {
                 return reject({
                   success: false,
                   error_code: 400,

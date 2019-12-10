@@ -38,6 +38,7 @@ require('./passport')(passport);
 app.use(session({
   secret: SECRET_KEY,
   resave: true,
+  session: true,
   saveUninitialized: true
 }));
  
