@@ -16,25 +16,23 @@ module.exports = Patients => {
     }
     models['Patients'].scope('activeScope').findAll(filterObj)
       .then(patients_res => {
-        let response;
         log.info('---LIST_OF_PATIENTS_OF_THE_USER---');
         log.info(patients_res);
         if (patients_res && patients_res.length) {
-          response = {
+          return res.send({
             success: true,
             message: 'Patients list fetch success',
             data: {
               patients_list: patients_res
             }
-          };
+          });
         } else {
-          response = {
+          return res.status(500).send({
             success: false,
-            message: 'Patients list fetch success',
+            message: 'No patients fetched',
             data: {}
-          };
+          });
         }
-        return res.send(response);
       })
       .catch(patients_err => {
         log.info('---LIST_OF_PATIENTS_ERROR---');

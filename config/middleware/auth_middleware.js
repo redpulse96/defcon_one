@@ -21,7 +21,9 @@ const validateUser = (req, res, next) => {
         bcrypt.compare(req.body.password, user_details.password, (matchErr, isMatched) => {
           if (matchErr) throw matchErr;
           if (isMatched) {
-            req.user = user_details.toJSON();
+            user_details = user_details.toJSON();
+            log.info('---user_details---');
+            log.info(user_details);
             return next();
           } else {
             return res.status(403).send({
@@ -73,7 +75,6 @@ const generateToken = (req, res) => {
           .then(access_token_res => {
             log.info('---TOKEN_GENERATED---');
             log.info(token);
-            access_token_res.data.token = token;
             access_token_res.data.user_details = req.user
             return res.send(access_token_res);
           })

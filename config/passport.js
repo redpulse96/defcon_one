@@ -15,12 +15,20 @@ module.exports = passport => {
           // Match password
           bcrypt.compare(password, userResult.password, (matchErr, isMatched) => {
             if(matchErr) throw matchErr;
-             if(isMatched) {
-               userResult = userResult.toJSON();
-               return done(null, userResult);
-             } else {
-              return done(null, false, 'Incorrect username or password');
-             }
+            if(isMatched) {
+              userResult = userResult.toJSON();
+              return done(null, {
+                name: userResult.name,
+                username: userResult.username,
+                mobile_no: userResult.mobile_no,
+                feature_rights: userResult.feature_rights,
+                role_type: userResult.role_type,
+                is_active: userResult.is_active,
+                is_archived: userResult.is_archived
+              });
+            } else {
+            return done(null, false, 'Incorrect username or password');
+            }
           });
         } else {
           return done(null, false, 'Invalid username');
@@ -37,9 +45,9 @@ module.exports = passport => {
     done(null, user);
   });
   
-  passport.deserializeUser((id, done) => {
-    Users.findById(id, (err, user) => {
-      done(err, user);
+  passport.deserializeUser((user, done) => {
+    Users.findById(user._id, (err, user_res) => {
+      done(err, user_res);
     });
   });
 }
