@@ -7,9 +7,9 @@ const apiLogger = (req, res, next) => {
   log.info(req.method);
   log.info('<<<<===============API_HEADERS===============>>>>');
   log.info(req.headers);
-  log.info('<<<<===============API_PAYLOAD_START===============>>>>');
+  log.info('<<<<===============START_API_PAYLOAD===============>>>>');
   log.info(req.body || req.params);
-  log.info('<<<<===============API_PAYLOAD_END===============>>>>');
+  log.info('<<<<===============END_API_PAYLOAD===============>>>>');
   next();
 }
 
