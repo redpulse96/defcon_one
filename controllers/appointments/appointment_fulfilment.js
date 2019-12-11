@@ -54,7 +54,6 @@ module.exports = Appointments => {
       };
       models['Appointments'].findOne(whereObj)
         .then(appointment_res => {
-          appointment_res = appointment_res.toJSON();
           log.info('---APPOINTMENTS_FETCH_SUCCESS---');
           log.info(appointment_res);
           if (appointment_res) {
