@@ -20,7 +20,7 @@ module.exports = Appointments => {
       fetchCurrentAppointment: ['validateData', fetchCurrentAppointmentFunction],
       checkStatusMatrix: ['fetchCurrentAppointment', checkStatusMatrixFunction],
       rescheduleAppointment: ['fetchCurrentAppointment', 'checkStatusMatrix', rescheduleAppointmentFunction],
-      updateAppointmentStatus: ['checkStatusMatrix', 'rescheduleAppointment', updateAppointmentStatusFunction],
+      updateAppointmentStatus: ['fetchCurrentAppointment', 'rescheduleAppointment', updateAppointmentStatusFunction],
       createAppointmentLog: ['updateAppointmentStatus', createAppointmentLogFunction]
     })
     .then(async_auto_res => {
