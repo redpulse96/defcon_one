@@ -18,7 +18,7 @@ const PatientPrescription = require('../controllers/patients/patients_prescripti
 
 router.get('/Appointments/statusBasedAppointments/:user_id/:custom_date', Appointments.statusBasedAppointments);
 router.post('/Appointments/createAppointments', Appointments.createAppointment);
-router.get('/Appointments/AppointmentDetails/:appointment_id', Appointments.AppointmentDetails);
+router.get('/Appointments/appointmentDetails/:appointment_id', Appointments.appointmentDetails);
 router.post('/Appointments/appointmentFulfilment', Appointments.appointmentFulfilment);
 
 router.get('/AppointmentLogs/fetchAppointmentLogs', AppointmentLogs.fetchAppointmentLogs);

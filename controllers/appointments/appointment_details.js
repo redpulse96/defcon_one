@@ -3,7 +3,7 @@ const utils = require('../utility/utils');
 const async = packageHelper.async;
 
 module.exports = Appointments => {
-  Appointments.AppointmentDetails = (req, res) => {
+  Appointments.appointmentDetails = (req, res) => {
     async.auto({
       validateData: validateDataFunction,
       fetchAppointmentDetails: ['validateData', fetchAppointmentDetailsFunction]
