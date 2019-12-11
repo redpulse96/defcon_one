@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
 global.packageHelper = require('./config/package_helper');
+global.models = require('./config/datasources/index');
+global.Op = require('./config/datasources/operator_aliasing');
 
 const app = require('./config/server');
-const models = require('./config/components/index');
+const debug = packageHelper.debug('defcon-one:server');
+const figlet = packageHelper.figlet;
 
 /**
  * Normalize a port into a number, string, or false.
@@ -25,8 +28,9 @@ const normalizePort = val => {
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || '5000');
+const port = normalizePort(packageHelper.PORT || '5000');
 app.set('port', port);
+app.set('ip', packageHelper.SERVER_HOST_IP);
 
 /**
  * Event listener for HTTP server "error" event.
@@ -61,20 +65,24 @@ const onError = error => {
  * Event listener for HTTP server "listening" event.
  */
 const onListening = () => {
-  let addr = '';
+  let addr = app.get('ip');
   let bind = typeof addr === 'string' ?
     'pipe ' + addr :
     'port ' + addr.port;
+  debug('Listening on ' + bind);
+
   console.log('Listening on ' + bind);
   console.log('server is listening on ', bind);
+  console.log(figlet.textSync('Defcon One Loaded'));
 }
 
-models.sequelize.sync()
+models.sequelize.authenticate()
   .then(() => {
     /**
      * Listen on provided port, on all network interfaces.
      */
-    app.listen(port);
-    app.on('error', onError);
-    app.on('listening', onListening);
+    app.listen(port, err => {
+      if (err) throw onError(err);
+      onListening();
+    });
   });

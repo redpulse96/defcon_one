@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     examination_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
-      autoIncreament: true,
-      allowNull: false
+      autoIncrement: true,
+      defaultValue: null
     },
     examination_name: {
       type: DataTypes.STRING(50),
@@ -31,25 +31,30 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     created_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      type: DataTypes.NOW,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     },
     updated_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+      type: DataTypes.TIME,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     }
   }, {
     defaultScope: {
-      where: {
-        is_active: 1,
-        is_archived: 0
-      },
       order: [
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
+    },
+    scopes: {
+      activeScope: {
+        where: {
+          is_active: true,
+          is_archived: false
+        },
+        attributes: { exclude: ['is_active', 'is_archived', 'created_date', 'updated_date'] }
+      }
     },
     sequelize,
     modelName: 'examinations',
@@ -58,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
   });
   Examinations.associate = models => {
     // associations can be defined here
-    Examinations.hasMany(models.ExaminationsRoleMapping, {
+    Examinations.hasMany(models['ExaminationsRoleMapping'], {
       onDelete: "CASCADE",
       foreignKey: 'examination_role_mapping_id'
     });

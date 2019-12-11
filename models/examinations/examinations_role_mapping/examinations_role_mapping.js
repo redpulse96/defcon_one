@@ -1,11 +1,12 @@
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   const ExaminationsRoleMapping = sequelize.define('examinations_role_mapping', {
     examination_role_mapping_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
-      autoIncreament: true,
-      allowNull: false
+      autoIncrement: true,
+      defaultValue: null
     },
     examination_id: {
       type: DataTypes.BIGINT(1),
@@ -21,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       onDelete: "CASCADE",
       references: {
-        model: 'roles',
+        model: 'Roles',
         key: 'role_id'
       }
     },
@@ -36,25 +37,30 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     created_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      type: DataTypes.NOW,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     },
     updated_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+      type: DataTypes.TIME,
+      defaultValue: DataTypes.NOW,
       allowNull: true
     }
   }, {
     defaultScope: {
-      where: {
-        is_active: 1,
-        is_archived: 0
-      },
       order: [
         ['created_date', 'DESC'],
         ['updated_date', 'DESC']
       ]
+    },
+    scopes: {
+      activeScope: {
+        where: {
+          is_active: true,
+          is_archived: false
+        },
+        attributes: { exclude: ['is_active', 'is_archived', 'created_date', 'updated_date'] }
+      }
     },
     sequelize,
     modelName: 'examinations_role_mapping',
@@ -63,6 +69,14 @@ module.exports = (sequelize, DataTypes) => {
   });
   ExaminationsRoleMapping.associate = models => {
     // associations can be defined here
+    ExaminationsRoleMapping.belongsTo(models['Examinations'], {
+      as: 'examination',
+      foreignKey: 'examination_id'
+    });
+    ExaminationsRoleMapping.belongsTo(models['Roles'], {
+      as: 'role',
+      foreignKey: 'role_id'
+    });
   };
 
   return ExaminationsRoleMapping;
