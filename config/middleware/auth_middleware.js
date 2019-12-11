@@ -9,6 +9,48 @@ const jwt = packageHelper.jsonwebtoken;
 const { DEFAULT_USERNAME } = require('../../public/javascripts/constants');
 const { SECRET_KEY } = require('../../public/javascripts/constants');
 
+const generateToken = (req, res) => {
+  if (req.user) {
+    jwt.sign({
+      username: req.user.username
+    }, SECRET_KEY, (err, token) => {
+      if (err) {
+        log.error('---GENERATETOKEN_ERROR---');
+        log.error(err);
+        return res.status(403).send({
+          success: false,
+          message: 'Permission denied',
+          data: {}
+        });
+      } else {
+        let dataObj = {
+          access_token: token,
+          username: req.body.username
+        };
+        AccessToken.generateAccessToken(dataObj)
+          .then(access_token_res => {
+            log.info('---TOKEN_GENERATED---');
+            log.info(token);
+            access_token_res.data.user_details = req.user
+            return res.send(access_token_res);
+          })
+          .catch(access_token_err => {
+            log.info('---TOKEN_GENERATTION_FAILURE---');
+            log.info(access_token_err);
+            return res.send(access_token_err);
+          });
+      }
+    });
+  } else {
+    log.error('---USER_DOES_NOT_EXIST---');
+    return res.status(403).send({
+      success: false,
+      message: 'Permission denied',
+      data: {}
+    });
+  }
+}
+
 const validateUser = (req, res, next) => {
   //find the user from users model
   let whereObj = {
@@ -51,48 +93,6 @@ const validateUser = (req, res, next) => {
         data: {}
       });
     });
-}
-
-const generateToken = (req, res) => {
-  if (req.user) {
-    jwt.sign({
-      username: req.user.username
-    }, SECRET_KEY, (err, token) => {
-      if (err) {
-        log.error('---GENERATETOKEN_ERROR---');
-        log.error(err);
-        return res.status(403).send({
-          success: false,
-          message: 'Permission denied',
-          data: {}
-        });
-      } else {
-        let dataObj = {
-          access_token: token,
-          username: req.body.username
-        };
-        AccessToken.generateAccessToken(dataObj)
-          .then(access_token_res => {
-            log.info('---TOKEN_GENERATED---');
-            log.info(token);
-            access_token_res.data.user_details = req.user
-            return res.send(access_token_res);
-          })
-          .catch(access_token_err => {
-            log.info('---TOKEN_GENERATTION_FAILURE---');
-            log.info(access_token_err);
-            return res.send(access_token_err);
-          });
-      }
-    });
-  } else {
-    log.error('---USER_DOES_NOT_EXIST---');
-    return res.status(403).send({
-      success: false,
-      message: 'Permission denied',
-      data: {}
-    });
-  }
 }
 
 const ensureAuth = (req, res, next) => {
@@ -234,8 +234,8 @@ const destroyToken = (req, res, next) => {
 }
 
 module.exports = {
-  validateUser,
   generateToken,
+  validateUser,
   ensureAuth,
   verifyToken,
   attachUserToRequest,
