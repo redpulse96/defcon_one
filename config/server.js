@@ -50,7 +50,7 @@ app.use(packageHelper.cookieParser());
 app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNAME, '../public')));
 
 app.use('/', indexRoutes);
-app.use('/users', userRoutes);
+app.use('/users', cors(corsOptions), userRoutes);
 // THIS BELOW LINE SHOULD BE DELETED LATER;
 app.use('/api', cors(corsOptions), apiLogger, (req, res, next) => {
   req.user = {
