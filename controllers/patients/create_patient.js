@@ -11,8 +11,8 @@ module.exports = Patients => {
       isNewPatient: ['validateData', isNewPatientFunction],
       createPatient: ['validateData', 'isNewPatient', createPatientFunction]
     })
-    .then(async_auto_result => res.send(async_auto_result.createPatient))
-    .catch(async_auto_error => res.status(async_auto_error.error_code || 500).send(async_auto_error));
+    .then(asyncAutoResult => res.send(asyncAutoResult.createPatient))
+    .catch(asyncAutoError => res.status(asyncAutoError.error_code || 500).send(asyncAutoError));
 
     function validateDataFunction(callback) {
       let paramsCheck = {
@@ -30,11 +30,11 @@ module.exports = Patients => {
         }]
       }
       utils.hasMandatoryParams(paramsCheck)
-        .then(param_res => {
-          return callback(null, param_res);
+        .then(paramRes => {
+          return callback(null, paramRes);
         })
-        .catch(param_err => {
-          return callback(param_err);
+        .catch(paramErr => {
+          return callback(paramErr);
         });
     }
 
@@ -46,10 +46,10 @@ module.exports = Patients => {
       models['Patients'].scope('activeScope').findOne({
         where
       })
-      .then(existing_patient__res => {
-        log.info('---existing_patient__res---');
-        log.info(existing_patient__res);
-        if (existing_patient__res) {
+      .then(existingPatientRes => {
+        log.info('---existing_patient_res---');
+        log.info(existingPatientRes);
+        if (existingPatientRes) {
           return callback({
             success: false,
             error_code: 400,
@@ -60,8 +60,8 @@ module.exports = Patients => {
           return callback(null);
         }
       })
-      .catch(existing_patient_err => {
-        return callback(existing_patient_err);
+      .catch(existingPatientErr => {
+        return callback(existingPatientErr);
       });
     }
 
@@ -78,15 +78,15 @@ module.exports = Patients => {
         },
         defaults: createObj
       })
-      .then(([create_res, is_new]) => {
+      .then(([createRes, is_new]) => {
         log.info('---PATIENTS_CREATION_SUCCESS---');
-        log.info(create_res, is_new);
+        log.info(createRes, is_new);
         if (is_new) {
           return callback(null, {
             success: true,
             message: 'Patients creation success',
             data: {
-              patient: create_res.toJSON()
+              patient: createRes.toJSON()
             }
           });
         } else {
@@ -98,9 +98,9 @@ module.exports = Patients => {
           });
         }
       })
-      .catch(create_err => {
+      .catch(createErr => {
         log.error('---PATIENTS_CREATION_FAILURE---');
-        log.error(create_err);
+        log.error(createErr);
         return callback({
           success: false,
           error_code: 500,

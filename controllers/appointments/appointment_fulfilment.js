@@ -5,7 +5,7 @@ const async = packageHelper.async;
 const moment = packageHelper.moment;
 const _ = packageHelper.lodash;
 
-const status_matrix = {
+const statusMatrix = {
   'pending': ['operating', 'rescheduled', 'closed'],
   'operating': ['closed', 'rescheduled'],
   'rescheduled': ['pending', 'closed'],
@@ -23,15 +23,15 @@ module.exports = Appointments => {
       updateAppointmentStatus: ['fetchCurrentAppointment', 'rescheduleAppointment', updateAppointmentStatusFunction],
       createAppointmentLog: ['updateAppointmentStatus', createAppointmentLogFunction]
     })
-    .then(async_auto_res => {
-      log.info('---async_auto_res---');
-      log.info(async_auto_res);
-      return res.send(async_auto_res.fetchCurrentAppointment);
+    .then(asyncAutoRes => {
+      log.info('---asyncAutoRes---');
+      log.info(asyncAutoRes);
+      return res.send(asyncAutoRes.fetchCurrentAppointment);
     })
-    .catch(async_auto_err => {
-      log.error('---async_auto_err---');
-      log.error(async_auto_err);
-      return res.status(async_auto_err.error_code).send(async_auto_err);
+    .catch(asyncAutoErr => {
+      log.error('---asyncAutoErr---');
+      log.error(asyncAutoErr);
+      return res.status(asyncAutoErr.error_code).send(asyncAutoErr);
     });
 
     function validateDataFunction(callback) {
@@ -40,8 +40,8 @@ module.exports = Appointments => {
         mandatoryParams: ['appointment_id', 'appointment_status']
       }
       utils.hasMandatoryParams(paramsCheck)
-        .then(params_res => callback(null, params_res))
-        .catch(params_err => callback(params_err));
+        .then(paramsRes => callback(null, paramsRes))
+        .catch(paramsErr => callback(paramsErr));
     }
 
     function fetchCurrentAppointmentFunction(results, callback) {
@@ -53,15 +53,15 @@ module.exports = Appointments => {
         }
       };
       models['Appointments'].findOne(whereObj)
-        .then(appointment_res => {
+        .then(appointmentRes => {
           log.info('---APPOINTMENTS_FETCH_SUCCESS---');
-          log.info(appointment_res);
-          if (appointment_res) {
+          log.info(appointmentRes);
+          if (appointmentRes) {
             return callback(null, {
               success: true,
               message: 'Appointments fetching success',
               data: {
-                appointment_detail: appointment_res
+                appointment_detail: appointmentRes
               }
             });
           } else {
@@ -73,9 +73,9 @@ module.exports = Appointments => {
             });
           }
         })
-        .catch(appointment_err => {
+        .catch(appointmentErr => {
           log.info('---APPOINTMENTS_FETCH_FAILURE---');
-          log.info(appointment_err);
+          log.info(appointmentErr);
           return callback({
             success: false,
             error_code: 500,
@@ -89,12 +89,12 @@ module.exports = Appointments => {
       const { fetchCurrentAppointment } = results;
       log.info('---fetchCurrentAppointment---');
       log.info(fetchCurrentAppointment);
-      let current_status = fetchCurrentAppointment.data.appointment_detail.appointment_status;
-      if (status_matrix[current_status].indexOf(req.body.appointment_status) > -1) {
+      let currentStatus = fetchCurrentAppointment.data.appointment_detail.appointment_status;
+      if (statusMatrix[currentStatus].indexOf(req.body.appointment_status) > -1) {
         return callback(null, {
           success: true,
           message: 'Can go to the current status',
-          data: status_matrix[current_status]
+          data: statusMatrix[currentStatus]
         });
       } else {
         return callback({
@@ -108,7 +108,7 @@ module.exports = Appointments => {
 
     function rescheduleAppointmentFunction(results, callback) {
       if (req.body.appointment_status === 'rescheduled') {
-        log.info('---APPOINTMENT_RESCHEDULING_REQUEST_RAISED---');
+        log.info('---APPOINTMENTResCHEDULING_REQUEST_RAISED---');
         if (!(_.has(req.body, 'rescheduled_date') || _.has(req.body, 'from_time') || _.has(req.body, 'to_time'))) {
           return callback({
             success: false,
@@ -144,10 +144,10 @@ module.exports = Appointments => {
             }
           };
           models['Appointments'].scope('activeScope').findAll(filter)
-            .then(appointment_date_res => {
-              log.info('---appointment_date_res---');
-              log.info(appointment_date_res);
-              if(appointment_date_res && appointment_date_res.length) {
+            .then(appointmentDataRes => {
+              log.info('---appointment_dateRes---');
+              log.info(appointmentDataRes);
+              if(appointmentDataRes && appointmentDataRes.length) {
                 return callback({
                   success: false,
                   error_code: 200,
@@ -163,9 +163,9 @@ module.exports = Appointments => {
                 return callback(null, { isRescheduled: true });
               }
             })
-            .catch(appointment_date_err => {
-              log.error('---appointment_date_err---');
-              log.error(appointment_date_err);
+            .catch(appointmentDataErr => {
+              log.error('---appointment_data_err---');
+              log.error(appointmentDataErr);
               return callback({
                 success: false,
                 error_code: 500,
@@ -192,15 +192,15 @@ module.exports = Appointments => {
         });
       }
       fetchCurrentAppointment.data.appointment_detail.update(updateObj)
-        .then(update_appointment_res => {
-          log.info('---update_appointment_res---');
-          log.info(update_appointment_res);
-          if (update_appointment_res) {
+        .then(updateAppointmentRes => {
+          log.info('---update_appointmentRes---');
+          log.info(updateAppointmentRes);
+          if (updateAppointmentRes) {
             return callback(null, {
               success: true,
               message: 'Appointment details updated',
               data: {
-                appointment_details: update_appointment_res
+                appointment_details: updateAppointmentRes
               }
             });
           } else {
@@ -212,9 +212,9 @@ module.exports = Appointments => {
             });
           }
         })
-        .catch(update_appointment_err => {
+        .catch(updateAppointmentErr => {
           log.error('---update_appointment_err---');
-          log.error(update_appointment_err);
+          log.error(updateAppointmentErr);
           return callback({
             success: false,
             error_code: 500,
@@ -232,8 +232,8 @@ module.exports = Appointments => {
         doctor_remarks: utils.validateKeys(() => req.body.doctor_remarks, null, null)
       };
       AppointmentLogs.createAppointmentLogs(createLogObj)
-        .then(create_log_res => callback(null, create_log_res))
-        .catch(create_log_err => callback(create_log_err));
+        .then(createLogRes => callback(null, createLogRes))
+        .catch(createLogErr => callback(createLogErr));
     }
   }
 }

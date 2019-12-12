@@ -38,15 +38,15 @@ AccessToken.getAccessToken = req => {
       }
     };
     models['AccessToken'].scope('activeScope').findOne(whereObj)
-      .then(model_res => {
-        log.info('---GET_ACCESS_TOKEN_RES---');
-        log.info(model_res);
-        if (model_res) {
+      .then(modelRes => {
+        log.info('---GET_ACCESS_TOKENRes---');
+        log.info(modelRes);
+        if (modelRes) {
           return resolve({
             success: true,
             message: 'AccessToken fetch success',
             data: {
-              access_token: model_res
+              access_token: modelRes
             }
           });
         } else {

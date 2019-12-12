@@ -5,25 +5,25 @@ Diagnosis.fetchDiagnosis = (req, res) => {
 
   let whereObj = Object.assign({}, req.params);
   models.Diagnosis.findOne(whereObj)
-    .then(fetch_res => {
+    .then(fetchRes => {
       log.info('---DIAGNOSIS_FETCH_SUCCESS---');
-      log.info(fetch_res);
+      log.info(fetchRes);
       return res.send({
         success: true,
         message: 'Diagnosis fetching success',
         data: {
-          symptom: fetch_res
+          symptom: fetchRes
         }
       });
     })
-    .catch(fetch_err => {
+    .catch(fetchErr => {
       log.info('---DIAGNOSIS_FETCH_FAILURE---');
-      log.info(fetch_err);
+      log.info(fetchErr);
       return res.send({
         success: false,
         message: 'Diagnosis fetching failure',
         data: {
-          symptom: fetch_err
+          symptom: fetchErr
         }
       });
     });
@@ -33,25 +33,25 @@ Diagnosis.createDiagnosis = (req, res) => {
 
   let createObj = Object.assign({}, req.body);
   models.Diagnosis.create(createObj)
-    .then(create_res => {
+    .then(createRes => {
       log.info('---DIAGNOSIS_CREATION_SUCCESS---');
-      log.info(create_res);
+      log.info(createRes);
       return res.send({
         success: true,
         message: 'Diagnosis creation success',
         data: {
-          symptom: create_res
+          symptom: createRes
         }
       });
     })
-    .catch(create_err => {
+    .catch(createErr => {
       log.info('---DIAGNOSIS_CREATION_FAILURE---');
-      log.info(create_err);
+      log.info(createErr);
       return res.send({
         success: false,
         message: 'Diagnosis creation failure',
         data: {
-          symptom: create_err
+          symptom: createErr
         }
       });
     });

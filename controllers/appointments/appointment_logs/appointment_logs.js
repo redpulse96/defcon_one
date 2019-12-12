@@ -5,20 +5,20 @@ AppointmentLogs.fetchAppointmentLogs = (req, res) => {
 
   let whereObj = Object.assign({}, req.params);
   models['AppointmentLogs'].findAll(whereObj)
-    .then(fetch_res => {
+    .then(fetchRes => {
       log.info('---appointment_logs_FETCH_SUCCESS---');
-      log.info(fetch_res);
+      log.info(fetchRes);
       return res.send({
         success: true,
         message: 'AppointmentLogs fetching success',
         data: {
-          appointment_log: fetch_res
+          appointment_log: fetchRes
         }
       });
     })
-    .catch(fetch_err => {
+    .catch(fetchErr => {
       log.info('---appointment_logs_FETCH_FAILURE---');
-      log.info(fetch_err);
+      log.info(fetchErr);
       return res.status(500).send({
         success: false,
         message: 'AppointmentLogs fetching failure',
@@ -32,20 +32,20 @@ AppointmentLogs.createAppointmentLogs = data => {
   return new Promise((resolve, reject) => {
     let createObj = Object.assign({}, data);
     models['AppointmentLogs'].create(createObj)
-      .then(create_res => {
+      .then(createRes => {
         log.info('---appointment_logs_CREATION_SUCCESS---');
-        log.info(create_res);
+        log.info(createRes);
         return resolve({
           success: true,
           message: 'AppointmentLogs creation success',
           data: {
-            appointment_log: create_res
+            appointment_log: createRes
           }
         });
       })
-      .catch(create_err => {
+      .catch(createErr => {
         log.info('---appointment_logs_CREATION_FAILURE---');
-        log.info(create_err);
+        log.info(createErr);
         return reject({
           success: false,
           error_code: 500,

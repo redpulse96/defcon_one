@@ -13,8 +13,8 @@ module.exports = Appointments => {
       createNewAppointment: ['validateData', 'checkPatientExistance', createNewAppointmentFunction],
       createAppointmentLog: ['createNewAppointment', createAppointmentLogFunction]
     })
-    .then(async_auto_res => res.send(async_auto_res.createNewAppointment))
-    .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
+    .then(asyncAutoRes => res.send(asyncAutoRes.createNewAppointment))
+    .catch(asyncAutoErr => res.status(asyncAutoErr.error_code).send(asyncAutoErr));
 
     function validateDataFunction(callback) {
       let paramsCheck = {
@@ -34,15 +34,15 @@ module.exports = Appointments => {
         }
       };
       models['Patients'].scope('activeScope').findOne(filterPatientObj)
-      .then(patient_res => {
-        log.info('---patient_res---');
-        log.info(patient_res);
-        if (patient_res) {
+      .then(patientRes => {
+        log.info('---patientRes---');
+        log.info(patientRes);
+        if (patientRes) {
           return callback(null, {
             success: true,
             message: 'Patient exists',
             data: {
-              patient_details: patient_res
+              patient_details: patientRes
             }
           });
         } else {
@@ -54,9 +54,9 @@ module.exports = Appointments => {
           });
         }
       })
-      .catch(patient_err => {
-        log.error('---patient_err---');
-        log.error(patient_err);
+      .catch(patientErr => {
+        log.error('---patientErr---');
+        log.error(patientErr);
         return callback({
           success: false,
           error_code: 500,
@@ -75,20 +75,20 @@ module.exports = Appointments => {
       // createObj.to_time = moment(createObj.to_time).format();
 
       models['Appointments'].create(createObj)
-        .then(create_res => {
+        .then(createRes => {
           log.info('---APPOINTMENTS_CREATION_SUCCESS---');
-          log.info(create_res);
+          log.info(createRes);
           return callback(null, {
             success: true,
             message: 'Appointment creation success',
             data: {
-              appointment: create_res
+              appointment: createRes
             }
           });
         })
-        .catch(create_err => {
+        .catch(createErr => {
           log.error('---APPOINTMENTS_CREATION_FAILURE---');
-          log.error(create_err);
+          log.error(createErr);
           return callback({
             success: false,
             error_code: 500,
@@ -105,8 +105,8 @@ module.exports = Appointments => {
         status: createNewAppointment.data.appointment.status
       }, validateData.data);
       AppointmentLogs.createAppointmentLogs(logObj)
-        .then(log_res => callback(null, log_res))
-        .catch(log_err => callback(log_err));
+        .then(logRes => callback(null, logRes))
+        .catch(logErr => callback(logErr));
     }
   }
 }

@@ -28,11 +28,11 @@ const generateToken = (req, res) => {
           username: req.body.username
         };
         AccessToken.generateAccessToken(dataObj)
-          .then(access_token_res => {
+          .then(access_tokenRes => {
             log.info('---TOKEN_GENERATED---');
             log.info(token);
-            access_token_res.data.user_details = req.user
-            return res.send(access_token_res);
+            access_tokenRes.data.user_details = req.user
+            return res.send(access_tokenRes);
           })
           .catch(access_token_err => {
             log.info('---TOKEN_GENERATTION_FAILURE---');
@@ -130,10 +130,10 @@ const verifyToken = (req, res, next) => {
           authorization: req.token
         };
         AccessToken.getAccessToken(reqObj)
-        .then(token_res => {
-          log.info('---token_res---');
-          log.info(token_res);
-          req.username = token_res.data.username;
+        .then(tokenRes => {
+          log.info('---tokenRes---');
+          log.info(tokenRes);
+          req.username = tokenRes.data.username;
           next();
         })
         .catch(token_err => {
@@ -220,9 +220,9 @@ const destroyToken = (req, res, next) => {
     access_token: req.headers['authorization']
   };
   AccessToken.clearToken(tokenObj)
-  .then(token_res => {
-    log.info('---token_res---');
-    log.info(token_res);
+  .then(tokenRes => {
+    log.info('---tokenRes---');
+    log.info(tokenRes);
     next();
   })
   .catch(token_err => {

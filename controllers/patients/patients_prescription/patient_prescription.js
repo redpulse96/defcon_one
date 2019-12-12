@@ -24,21 +24,21 @@ PatientPrescription.fetchPatientPrescription = (req, res) => {
     }]
   });
   models['PatientPrescription'].findOne(whereObj)
-    .then(fetch_res => {
-      fetch_res = fetch_res.toJSON();
+    .then(fetchRes => {
+      fetchRes = fetchRes.toJSON();
       log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
-      log.info(fetch_res);
+      log.info(fetchRes);
       return res.send({
         success: true,
         message: 'PatientPrescription fetching success',
         data: {
-          patient_prescription: fetch_res
+          patient_prescription: fetchRes
         }
       });
     })
-    .catch(fetch_err => {
+    .catch(fetchErr => {
       log.info('---PATIENT_PRESCRIPTION_FETCH_FAILURE---');
-      log.info(fetch_err);
+      log.info(fetchErr);
       return res.status(500).send({
         success: false,
         message: 'Internal server error',
@@ -52,20 +52,20 @@ PatientPrescription.createPatientPrescription = (req, res) => {
   let createObj = Object.assign({}, req.body, { created_by: req.user.username });
   createObj.reference_id = utils.GenerateUniqueID(10, 'A#vb');
   models['PatientPrescription'].create(createObj)
-    .then(create_res => {
+    .then(createRes => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
-      log.info(create_res);
+      log.info(createRes);
       return res.send({
         success: true,
         message: 'PatientPrescription creation success',
         data: {
-          patient_prescription: create_res.toJSON()
+          patient_prescription: createRes.toJSON()
         }
       });
     })
-    .catch(create_err => {
+    .catch(createErr => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_FAILURE---');
-      log.info(create_err);
+      log.info(createErr);
       return res.status(500).send({
         success: false,
         message: 'Internal server error',

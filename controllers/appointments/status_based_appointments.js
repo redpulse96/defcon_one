@@ -33,17 +33,17 @@ module.exports = Appointments => {
       filter.where.created_by.$in.push(req.user.parent);
     }
     models['Appointments'].scope('activeScope').findAll(filter)
-      .then(appointments_res => {
+      .then(appointmentsRes => {
         let response;
         log.info('---APPOINTMENT_LIST---');
-        log.info(appointments_res);
-        if (appointments_res) {
+        log.info(appointmentsRes);
+        if (appointmentsRes) {
           response = {
             success: true,
             http_code: 200,
             message: 'Appointments list fetch success',
             data: {
-              appointments_list: _.groupBy(appointments_res, 'status')
+              appointments_list: _.groupBy(appointmentsRes, 'status')
             }
           };
         } else {
@@ -56,9 +56,9 @@ module.exports = Appointments => {
         }
         res.status(response.http_code).send(response);
       })
-      .catch(appointments_err => {
+      .catch(appointmentsErr => {
         log.info('---APPOINTMENT_LIST_ERROR---');
-        log.info(appointments_err);
+        log.info(appointmentsErr);
         res.status(500).send({
           success: false,
           message: 'Internal server error',

@@ -5,25 +5,25 @@ Investigations.fetchExamination = (req, res) => {
 
   let whereObj = Object.assign({}, req.params);
   models.Investigations.findOne(whereObj)
-    .then(fetch_res => {
+    .then(fetchRes => {
       log.info('---INVESTIGATIONS_FETCH_SUCCESS---');
-      log.info(fetch_res);
+      log.info(fetchRes);
       return res.send({
         success: true,
         message: 'Investigations fetching success',
         data: {
-          symptom: fetch_res
+          symptom: fetchRes
         }
       });
     })
-    .catch(fetch_err => {
+    .catch(fetchErr => {
       log.info('---INVESTIGATIONS_FETCH_FAILURE---');
-      log.info(fetch_err);
+      log.info(fetchErr);
       return res.send({
         success: false,
         message: 'Investigations fetching failure',
         data: {
-          symptom: fetch_err
+          symptom: fetchErr
         }
       });
     });
@@ -33,25 +33,25 @@ Investigations.createExamination = (req, res) => {
 
   let createObj = Object.assign({}, req.body);
   models.Investigations.create(createObj)
-    .then(create_res => {
+    .then(createRes => {
       log.info('---INVESTIGATIONS_CREATION_SUCCESS---');
-      log.info(create_res);
+      log.info(createRes);
       return res.send({
         success: true,
         message: 'Investigation creation success',
         data: {
-          symptom: create_res
+          symptom: createRes
         }
       });
     })
-    .catch(create_err => {
+    .catch(createErr => {
       log.info('---INVESTIGATIONS_CREATION_FAILURE---');
-      log.info(create_err);
+      log.info(createErr);
       return res.send({
         success: false,
         message: 'Investigation creation failure',
         data: {
-          symptom: create_err
+          symptom: createErr
         }
       });
     });

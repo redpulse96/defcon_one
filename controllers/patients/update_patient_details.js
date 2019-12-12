@@ -12,8 +12,8 @@ module.exports = Patients => {
       updatePatient: ['checkUniqueMobileNo', updatePatientFunction],
       returnPatientDetails: ['updatePatient', returnPatientDetailsFunction]
     })
-    .then(async_auto_res => res.send(async_auto_res.returnPatientDetails))
-    .catch(async_auto_err => res.status(async_auto_err.error_code || 500).send(async_auto_err));
+    .then(asyncAutoRes => res.send(asyncAutoRes.returnPatientDetails))
+    .catch(asyncAutoErr => res.status(asyncAutoErr.error_code || 500).send(asyncAutoErr));
 
     function validateDataFunction(callback) {
       let paramsCheck = {
@@ -42,18 +42,18 @@ module.exports = Patients => {
         filter.where.mobile_no.$in.push(validateData.data.update_obj.mobile_no);
       }
       models['Patients'].scope('activeScope').findOne(filter)
-      .then(patient_res => {
+      .then(patientRes => {
         let existingMobileNo = true;
-        log.error('---patient_err---');
-        log.error(patient_res);
+        log.error('---patientErr---');
+        log.error(patientRes);
         if (validateData.data.update_obj.mobile_no) {
-          existingMobileNo = !!(_.map(patient_res, 'mobile_no').indexOf(validateData.data.update_obj.mobile_no) > -1);
+          existingMobileNo = !!(_.map(patientRes, 'mobile_no').indexOf(validateData.data.update_obj.mobile_no) > -1);
         }
-        if (patient_res && existingMobileNo) {
+        if (patientRes && existingMobileNo) {
           return callback(null, {
             success: true,
             message: 'The mobile no can be updated',
-            data: patient_res
+            data: patientRes
           });
         } else {
           return callback({
@@ -64,9 +64,9 @@ module.exports = Patients => {
           });
         }
       })
-      .catch(patient_err => {
-        log.error('---patient_err---');
-        log.error(patient_err);
+      .catch(patientErr => {
+        log.error('---patientErr---');
+        log.error(patientErr);
         return callback({
           success: false,
           error_code: 500,
@@ -87,15 +87,15 @@ module.exports = Patients => {
         }
       };
       models['Patients'].update(req.body.update_obj, filter)
-        .then(updated_patient_res => {
-          log.info('---updated_patient_res---');
-          log.info(updated_patient_res);
-          if (updated_patient_res && updated_patient_res > 0) {
+        .then(updatedPatientRes => {
+          log.info('---updatedPatientRes---');
+          log.info(updatedPatientRes);
+          if (updatedPatientRes && updatedPatientRes > 0) {
             return callback(null, {
               success: true,
               message: 'Patient details updated successfully',
               data: {
-                patient_details: updated_patient_res
+                patient_details: updatedPatientRes
               }
             });
           } else {
@@ -107,9 +107,9 @@ module.exports = Patients => {
             });
           }
         })
-        .catch(updated_patient_err => {
-          log.error('---updated_patient_err---');
-          log.error(updated_patient_err);
+        .catch(updatedPatientErr => {
+          log.error('---updatedPatientErr---');
+          log.error(updatedPatientErr);
           return callback({
             success: false,
             error_code: 500,
@@ -125,20 +125,20 @@ module.exports = Patients => {
           mobile_no: req.body.mobile_no
         }
       })
-      .then(patient_res => {
-        log.info('---patient_res---');
-        log.info(patient_res);
+      .then(patientRes => {
+        log.info('---patientRes---');
+        log.info(patientRes);
         return callback(null, {
           success: true,
           message: 'Patient details',
           data: {
-            patient_details: patient_res
+            patient_details: patientRes
           }
         });
       })
-      .catch(patient_err => {
-        log.error('---patient_err---');
-        log.error(patient_err);
+      .catch(patientErr => {
+        log.error('---patientErr---');
+        log.error(patientErr);
         return callback({
           success: false,
           error_code: 500,

@@ -8,8 +8,8 @@ module.exports = Appointments => {
       validateData: validateDataFunction,
       fetchAppointmentDetails: ['validateData', fetchAppointmentDetailsFunction]
     })
-    .then(async_auto_res => res.send(async_auto_res))
-    .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
+    .then(asyncAutoRes => res.send(asyncAutoRes))
+    .catch(asyncAutoErr => res.status(asyncAutoErr.error_code).send(asyncAutoErr));
 
     function validateDataFunction(callback) {
       let paramsCheck = {
@@ -17,8 +17,8 @@ module.exports = Appointments => {
         mandatoryParams: ['appointment_id']
       }
       utils.hasMandatoryParams(paramsCheck)
-        .then(params_res => callback(null, params_res))
-        .catch(params_err => callback(params_err));
+        .then(paramsRes => callback(null, paramsRes))
+        .catch(paramsErr => callback(paramsErr));
     }
 
     function fetchAppointmentDetailsFunction(results, callback) {
@@ -53,15 +53,15 @@ module.exports = Appointments => {
         }]
       };
       models['Appointments'].findOne(filter)
-      .then(appointment_details => {
+      .then(appointmentDetails => {
         log.info('---APPOINTMENT_DETAILS---');
-        log.info(appointment_details);
-        if (appointment_details) {
+        log.info(appointmentDetails);
+        if (appointmentDetails) {
           return callback(null, {
             success: true,
             message: 'Appointment details fetched',
             data: {
-              appointment_details
+              appointmentDetails
             }
           });
         } else {
@@ -73,9 +73,9 @@ module.exports = Appointments => {
           });
         }
       })
-      .catch(appointment_details_err => {
+      .catch(appointmentDetailsErr => {
         log.error('---appointment_details_err---');
-        log.error(JSON.stringify(appointment_details_err));
+        log.error(JSON.stringify(appointmentDetailsErr));
         return callback({
           success: false,
           error_code: 500,

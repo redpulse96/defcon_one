@@ -13,20 +13,20 @@ module.exports = PatientSymptomsRoleMapping => {
       }]
     });
     models.PatientSymptomsRoleMapping.findOne(whereObj)
-      .then(fetch_res => {
+      .then(fetchRes => {
         log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
-        log.info(fetch_res);
+        log.info(fetchRes);
         return res.send({
           success: true,
           message: 'Patient Symptoms Role Mapping fetching success',
           data: {
-            patient_symptoms_role_mapping: fetch_res
+            patient_symptoms_role_mapping: fetchRes
           }
         });
       })
-      .catch(fetch_err => {
+      .catch(fetchErr => {
         log.info('---PATIENT_PRESCRIPTION_FETCH_FAILURE---');
-        log.info(fetch_err);
+        log.info(fetchErr);
         return res.send({
           success: false,
           message: 'Patient Symptoms Role Mapping fetching failure',

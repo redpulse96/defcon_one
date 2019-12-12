@@ -75,16 +75,16 @@ module.exports = Patients => {
       }]
     });
     models['Patients'].findOne(whereObj)
-      .then(fetch_res => {
-        fetch_res = fetch_res.toJSON();
+      .then(fetchRes => {
+        fetchRes = fetchRes.toJSON();
         log.info('---PATIENTS_FETCH_SUCCESS---');
-        log.info(fetch_res);
-        if (fetch_res) {
+        log.info(fetchRes);
+        if (fetchRes) {
           return res.send({
             success: true,
             message: 'Patients fetching success',
             data: {
-              patient_details: fetch_res
+              patient_details: fetchRes
             }
           });
         } else {
@@ -95,9 +95,9 @@ module.exports = Patients => {
           });
         }
       })
-      .catch(fetch_err => {
+      .catch(fetchErr => {
         log.error('---PATIENTS_FETCH_FAILURE---');
-        log.error(fetch_err);
+        log.error(fetchErr);
         return res.status(500).send({
           success: false,
           message: 'Internal server error',
