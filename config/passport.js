@@ -18,6 +18,7 @@ module.exports = passport => {
             if(isMatched) {
               userResult = userResult.toJSON();
               return done(null, {
+                _id: userResult._id,
                 name: userResult.name,
                 username: userResult.username,
                 mobile_no: userResult.mobile_no,

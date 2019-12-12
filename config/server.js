@@ -39,7 +39,8 @@ app.use(session({
   secret: SECRET_KEY,
   resave: true,
   session: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {maxAge: 3600000} //3600000 for 1 hour
 }));
  
 // Passport middleware
@@ -50,24 +51,10 @@ app.use(packageHelper.cookieParser());
 app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNAME, '../public')));
 
 app.use('/', indexRoutes);
-app.use('/users', cors(corsOptions), userRoutes);
+app.use('/users', cors(corsOptions), apiLogger, userRoutes);
+
 // THIS BELOW LINE SHOULD BE DELETED LATER;
-app.use('/api', cors(corsOptions), apiLogger, (req, res, next) => {
-  req.user = {
-    "feature_rights": [1, 2, 3],
-    "is_active": true,
-    "is_archived": false,
-    "mobile_no": 7760225404,
-    "name": "DEMO TEST",
-    "role_type": "r_dentist",
-    "role_id": 1,
-    "username": "demo@emr.in",
-    "password": "$2a$10$7eWmc4bEcDjJVtqWmZqOPuIBiDVAq1HavfqbaFfGVqzw/CDBiwSFa",
-    "date": "2019-11-30 15:07:37"
-  };
-  next();
-}, apiRoutes);
-// app.use('/api', ensureAuth, verifyToken, attachUserToRequest, apiRoutes);
+app.use('/api', cors(corsOptions), ensureAuth, verifyToken, apiLogger, attachUserToRequest, apiRoutes);
 
 // catch 404 and forward to error handler 
 app.use((err, res) => {

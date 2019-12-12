@@ -66,6 +66,9 @@ const validateUser = (req, res, next) => {
             user_details = user_details.toJSON();
             log.info('---user_details---');
             log.info(user_details);
+            req.session.messages = "Login successfull";
+            req.session.authenticated = true;
+            req.authenticated = true;
             return next();
           } else {
             return res.status(403).send({
