@@ -13,7 +13,7 @@ const generateToken = (req, res) => {
   if (req.user) {
     jwt.sign({
       username: req.user.username
-    }, SECRET_KEY, (err, token) => {
+    }, utils.GenerateUniqueID(80, SECRET_KEY), (err, token) => {
       if (err) {
         log.error('---GENERATETOKEN_ERROR---');
         log.error(err);
@@ -28,26 +28,29 @@ const generateToken = (req, res) => {
           username: req.body.username
         };
         AccessToken.generateAccessToken(dataObj)
-          .then(access_tokenRes => {
+          .then(accessTokenRes => {
             log.info('---TOKEN_GENERATED---');
             log.info(token);
-            access_tokenRes.data.user_details = req.user
-            return res.send(access_tokenRes);
+            accessTokenRes.data.access_token_res.user_details = req.user;
+            utils.generateResponse(accessTokenRes)(res);
+            // return res.send(accessTokenRes);
           })
-          .catch(access_token_err => {
+          .catch(accessTokenErr => {
             log.info('---TOKEN_GENERATTION_FAILURE---');
-            log.info(access_token_err);
-            return res.send(access_token_err);
+            log.info(accessTokenErr);
+            utils.generateResponse(accessTokenErr)(res);
+            // return res.send(accessTokenErr);
           });
       }
     });
   } else {
     log.error('---USER_DOES_NOT_EXIST---');
-    return res.status(403).send({
+    utils.generateResponse({
+      error_code: 403,
       success: false,
       message: 'Permission denied',
       data: {}
-    });
+    })(res);
   }
 }
 
@@ -113,39 +116,39 @@ const ensureAuth = (req, res, next) => {
 
 const verifyToken = (req, res, next) => {
   //GET AUTH HEADER VALUE
-  const bearer_token = req.headers['bearer_token'];
+  const bearer_token = req.headers['authorization'];
   if (bearer_token) {
     req.token = bearer_token;
-    jwt.verify(req.token, SECRET_KEY, (err, authData) => {
-      if (err) {
-        return res.status(403).send({
-          success: false,
-          message: 'Permission denied',
-          data: err
-        });
-      } else {
-        log.info('---TOKEN_VERIFIED---');
-        log.info(authData);
-        let reqObj = {
-          authorization: req.token
-        };
-        AccessToken.getAccessToken(reqObj)
-        .then(tokenRes => {
-          log.info('---tokenRes---');
-          log.info(tokenRes);
-          req.username = tokenRes.data.username;
-          next();
-        })
-        .catch(token_err => {
-          log.info('---token_err---');
-          log.info(token_err);
+    let reqObj = {
+      authorization: req.token
+    };
+    AccessToken.getAccessToken(reqObj)
+    .then(tokenRes => {
+      log.info('---tokenRes---');
+      log.info(tokenRes);
+      req.username = tokenRes.data.access_token_res.username;
+      jwt.verify(req.token, tokenRes.data.access_token_res.access_token, (err, authData) => {
+        if (err) {
           return res.status(403).send({
             success: false,
             message: 'Permission denied',
-            data: {}
+            data: err
           });
-        });
-      }
+        } else {
+          log.info('---TOKEN_VERIFIED---');
+          log.info(authData);
+          next();
+        }
+      });
+    })
+    .catch(tokenErr => {
+      log.info('---token_err---');
+      log.info(tokenErr);
+      return res.status(403).send({
+        success: false,
+        message: 'Permission denied',
+        data: {}
+      });
     });
   } else {
     //FORBIDDEN
@@ -159,9 +162,7 @@ const verifyToken = (req, res, next) => {
 
 const attachUserToRequest = (req, res, next) => {
   let filterUserObj = {
-    where: {
-      username: req.username
-    }
+    username: req.username
   };
   Users.findOne(filterUserObj)
   .then(userDetails => {
@@ -225,9 +226,9 @@ const destroyToken = (req, res, next) => {
     log.info(tokenRes);
     next();
   })
-  .catch(token_err => {
+  .catch(tokenErr => {
     log.info('---token_err---');
-    log.info(token_err);
+    log.info(tokenErr);
     return res.status(500).send({
       success: false,
       message: 'Internal server error',

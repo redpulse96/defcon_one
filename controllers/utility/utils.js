@@ -1,5 +1,6 @@
 const log = require('../../config/log_config').logger('utils');
 const _ = packageHelper.lodash;
+const httpStatus = packageHelper.http_status_codes;
 const moment = packageHelper.moment;
 
 module.exports = {
@@ -149,6 +150,26 @@ module.exports = {
         return cb(e);
       else
         return defaultVal;
+    }
+  },
+  /**
+   * 
+   */
+  generateResponse: response => {
+    let statusCode;
+    switch (response.success) {
+      case true:
+        statusCode = httpStatus.OK;
+        break;
+      case false:
+        statusCode = httpStatus[response.error_code];
+        break;
+      default:
+        statusCode = httpStatus.OK;
+        break;
+    }
+    return res => {
+      return res.status(statusCode).send(response);
     }
   }
 }

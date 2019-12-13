@@ -14,7 +14,9 @@ AccessToken.generateAccessToken = data => {
         return resolve({
           success: true,
           message: 'login successfull',
-          data: res.toJSON()
+          data: {
+            access_token_res: res.toJSON()
+          }
         });
       })
       .catch(err => {
@@ -46,7 +48,7 @@ AccessToken.getAccessToken = req => {
             success: true,
             message: 'AccessToken fetch success',
             data: {
-              access_token: modelRes
+              access_token_res: modelRes
             }
           });
         } else {
@@ -92,7 +94,7 @@ AccessToken.clearToken = data => {
           success: true,
           message: 'access token destroyed successfully',
           data: res
-        })
+        });
       })
       .catch(err => {
         log.error('---ACCESS_TOKEN_DESTROYED_FAILURE---');
@@ -101,7 +103,7 @@ AccessToken.clearToken = data => {
           success: false,
           message: 'Something went wrong while destroying the access token',
           data: err
-        })
+        });
       });
   });
 };

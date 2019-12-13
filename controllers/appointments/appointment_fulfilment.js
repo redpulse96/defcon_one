@@ -4,13 +4,7 @@ const utils = require('../utility/utils');
 const async = packageHelper.async;
 const moment = packageHelper.moment;
 const _ = packageHelper.lodash;
-
-const statusMatrix = {
-  'pending': ['operating', 'rescheduled', 'closed'],
-  'operating': ['closed', 'rescheduled'],
-  'rescheduled': ['pending', 'closed'],
-  'closed': []
-};
+const { APPOINTMENT_STATUS_MATRIX } = require('../../public/javascripts/constants');
 
 module.exports = Appointments => {
 
@@ -87,6 +81,7 @@ module.exports = Appointments => {
 
     function checkStatusMatrixFunction(results, callback) {
       const { fetchCurrentAppointment } = results;
+      const statusMatrix = APPOINTMENT_STATUS_MATRIX;
       log.info('---fetchCurrentAppointment---');
       log.info(fetchCurrentAppointment);
       let currentStatus = fetchCurrentAppointment.data.appointment_detail.appointment_status;

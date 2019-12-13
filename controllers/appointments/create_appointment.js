@@ -26,8 +26,8 @@ module.exports = Appointments => {
         .catch(err => callback(err));
     }
 
-    function checkPatientExistanceFunction(results, callback) {
-      const { validateData } = results;
+    function checkPatientExistanceFunction(result, callback) {
+      const { validateData } = result;
       let filterPatientObj = {
         where: {
           patient_id: validateData.data.patient_id
@@ -66,8 +66,8 @@ module.exports = Appointments => {
       });
     }
 
-    function createNewAppointmentFunction(results, callback) {
-      const { validateData } = results;
+    function createNewAppointmentFunction(result, callback) {
+      const { validateData } = result;
       const createObj = Object.assign({}, validateData.data, { created_by: req.user.username });
       createObj.appointment_date = moment(createObj.appointment_date).format('YYYY-MM-DD');
       createObj.from_time = moment(createObj.from_time).format('hh:mm:ss');
@@ -98,8 +98,8 @@ module.exports = Appointments => {
         });
     }
 
-    function createAppointmentLogFunction(results, callback) {
-      const { validateData, createNewAppointment } = results;
+    function createAppointmentLogFunction(result, callback) {
+      const { validateData, createNewAppointment } = result;
       const logObj = Object.assign({}, {
         appointment_id: createNewAppointment.data.appointment.appointment_id,
         status: createNewAppointment.data.appointment.status

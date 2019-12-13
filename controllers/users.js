@@ -76,10 +76,10 @@ const registerUser = (req, res) => {
     .then(() => {
       req.body.username = req.body.username ? req.body.username : req.body.mobile_no + DEFAULT_USERNAME;
       Users.findOne({
-          mobile_no: req.body.mobile_no,
-          is_active: true,
-          is_archived: false
-        })
+        mobile_no: req.body.mobile_no,
+        is_active: true,
+        is_archived: false
+      })
         .then(existingUser => {
           if (existingUser) {
             log.info('---USER_ALREADY_EXISTS---');

@@ -23,6 +23,7 @@ const packageHelper = {
   figlet: require('figlet'),
   fs: require('fs'),
   http: require('http'),
+  http_status_codes: require('http-status-codes'),
   jsonwebtoken: require('jsonwebtoken'),
   lodash: require('lodash'),
   moment: require('moment'),
