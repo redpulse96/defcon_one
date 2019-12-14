@@ -13,7 +13,7 @@ const generateToken = (req, res) => {
   if (req.user) {
     jwt.sign({
       username: req.user.username
-    }, utils.GenerateUniqueID(80, SECRET_KEY), (err, token) => {
+    }, SECRET_KEY + req.user.username, (err, token) => {
       if (err) {
         log.error('---GENERATETOKEN_ERROR---');
         log.error(err);
@@ -127,7 +127,7 @@ const verifyToken = (req, res, next) => {
       log.info('---tokenRes---');
       log.info(tokenRes);
       req.username = tokenRes.data.access_token_res.username;
-      jwt.verify(req.token, tokenRes.data.access_token_res.access_token, (err, authData) => {
+      jwt.verify(req.token, SECRET_KEY + req.username, (err, authData) => {
         if (err) {
           return res.status(403).send({
             success: false,
