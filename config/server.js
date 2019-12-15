@@ -54,7 +54,7 @@ app.use('/', indexRoutes);
 app.use('/users', cors(corsOptions), apiLogger, userRoutes);
 
 // THIS BELOW LINE SHOULD BE DELETED LATER;
-app.use('/api', cors(corsOptions), ensureAuth, verifyToken, apiLogger, attachUserToRequest, apiRoutes);
+app.use('/api', cors(corsOptions), verifyToken, apiLogger, attachUserToRequest, apiRoutes); // ensureAuth should be added later
 
 // catch 404 and forward to error handler 
 app.use((err, res) => {

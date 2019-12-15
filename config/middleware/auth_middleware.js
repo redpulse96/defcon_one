@@ -2,12 +2,9 @@ const log = require('../log_config').logger('auth_middleware');
 const AccessToken = require('../../controllers/access_token');
 const Users = require('../../models/users');
 const utils = require('../../controllers/utility/utils');
-
 const bcrypt = packageHelper.bcrypt;
 const jwt = packageHelper.jsonwebtoken;
-
-const { DEFAULT_USERNAME } = require('../../public/javascripts/constants');
-const { SECRET_KEY } = require('../../public/javascripts/constants');
+const { SECRET_KEY, DEFAULT_USERNAME } = require('../../public/javascripts/constants');
 
 const generateToken = (req, res) => {
   if (req.user) {
