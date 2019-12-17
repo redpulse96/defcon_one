@@ -1,5 +1,9 @@
 const packageHelper = require('./package_helper');
-const { createLogger, format, transports } = packageHelper.winston;
+const {
+  createLogger,
+  format,
+  transports
+} = packageHelper.winston;
 
 generateLogger = (serviceName, level) => {
   let levelName = level ? level : 'info';

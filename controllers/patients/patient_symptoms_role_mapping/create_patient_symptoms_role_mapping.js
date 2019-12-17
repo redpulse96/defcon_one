@@ -23,7 +23,10 @@ module.exports = PatientSymptomsRoleMapping => {
     }
 
     function createPatientSymptomsRoleMappingFunction(results, callback) {
-      let createArray = req.body.patientSymptomsRoleMappings;
+      const {
+        validateData
+      } = results;
+      let createArray = validateData.data.patientSymptomsRoleMappings;
       models['PatientSymptomsRoleMapping'].bulkCreate(createArray, { returning: true })
         .then(createRes => {
           log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');

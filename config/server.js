@@ -7,9 +7,19 @@ const cors = packageHelper.cors;
 const passport = packageHelper.passport;
 const session = packageHelper.express_session;
 
-const { apiLogger } = require('./middleware/log_middleware');
-const { verifyToken, ensureAuth, attachUserToRequest } = require('./middleware/auth_middleware');
-const { SECRET_KEY } = require('../public/javascripts/constants');
+const {
+  apiLogger
+} = require('./middleware/log_middleware');
+
+const {
+  verifyToken,
+  ensureAuth,
+  attachUserToRequest
+} = require('./middleware/auth_middleware');
+
+const {
+  SECRET_KEY
+} = require('../public/javascripts/constants');
 
 const corsOptions = {
   "origin": /localhost:3000/,
@@ -40,9 +50,11 @@ app.use(session({
   resave: true,
   session: true,
   saveUninitialized: true,
-  cookie: {maxAge: 3600000} //3600000 for 1 hour
+  cookie: {
+    maxAge: 3600000
+  } //3600000 for 1 hour
 }));
- 
+
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
@@ -52,9 +64,7 @@ app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNA
 
 app.use('/', indexRoutes);
 app.use('/users', cors(corsOptions), apiLogger, userRoutes);
-
-// THIS BELOW LINE SHOULD BE DELETED LATER;
-app.use('/api', cors(corsOptions), verifyToken, apiLogger, attachUserToRequest, apiRoutes); // ensureAuth should be added later
+app.use('/api', cors(corsOptions), ensureAuth, verifyToken, apiLogger, attachUserToRequest, apiRoutes);
 
 // catch 404 and forward to error handler 
 app.use((err, res) => {

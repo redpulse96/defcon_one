@@ -27,48 +27,54 @@ module.exports = Appointments => {
     }
 
     function checkPatientExistanceFunction(result, callback) {
-      const { validateData } = result;
+      const {
+        validateData
+      } = result;
       let filterPatientObj = {
         where: {
           patient_id: validateData.data.patient_id
         }
       };
       models['Patients'].scope('activeScope').findOne(filterPatientObj)
-      .then(patientRes => {
-        log.info('---patientRes---');
-        log.info(patientRes);
-        if (patientRes) {
-          return callback(null, {
-            success: true,
-            message: 'Patient exists',
-            data: {
-              patient_details: patientRes
-            }
-          });
-        } else {
+        .then(patientRes => {
+          log.info('---patientRes---');
+          log.info(patientRes);
+          if (patientRes) {
+            return callback(null, {
+              success: true,
+              message: 'Patient exists',
+              data: {
+                patient_details: patientRes
+              }
+            });
+          } else {
+            return callback({
+              success: false,
+              error_code: 400,
+              message: 'Patient does not exist',
+              data: {}
+            });
+          }
+        })
+        .catch(patientErr => {
+          log.error('---patientErr---');
+          log.error(patientErr);
           return callback({
             success: false,
-            error_code: 400,
+            error_code: 500,
             message: 'Patient does not exist',
             data: {}
-          });
-        }
-      })
-      .catch(patientErr => {
-        log.error('---patientErr---');
-        log.error(patientErr);
-        return callback({
-          success: false,
-          error_code: 500,
-          message: 'Patient does not exist',
-          data: {}
-        })
-      });
+          })
+        });
     }
 
     function createNewAppointmentFunction(result, callback) {
-      const { validateData } = result;
-      const createObj = Object.assign({}, validateData.data, { created_by: req.user.username });
+      const {
+        validateData
+      } = result;
+      const createObj = Object.assign({}, validateData.data, {
+        created_by: req.user.username
+      });
       createObj.appointment_date = moment(createObj.appointment_date).format('YYYY-MM-DD');
       createObj.from_time = moment(createObj.from_time).format('hh:mm:ss');
       createObj.to_time = moment(createObj.to_time).format('hh:mm:ss');
@@ -99,7 +105,10 @@ module.exports = Appointments => {
     }
 
     function createAppointmentLogFunction(result, callback) {
-      const { validateData, createNewAppointment } = result;
+      const {
+        validateData,
+        createNewAppointment
+      } = result;
       const logObj = Object.assign({}, {
         appointment_id: createNewAppointment.data.appointment.appointment_id,
         status: createNewAppointment.data.appointment.status

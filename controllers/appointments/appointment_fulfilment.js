@@ -4,7 +4,10 @@ const utils = require('../utility/utils');
 const async = packageHelper.async;
 const moment = packageHelper.moment;
 const _ = packageHelper.lodash;
-const { APPOINTMENT_STATUS_MATRIX } = require('../../public/javascripts/constants');
+
+const {
+  APPOINTMENT_STATUS_MATRIX
+} = require('../../public/javascripts/constants');
 
 module.exports = Appointments => {
 
@@ -79,8 +82,10 @@ module.exports = Appointments => {
         });
     }
 
-    function checkStatusMatrixFunction(results, callback) {
-      const { fetchCurrentAppointment } = results;
+    function checkStatusMatrixFunction(result, callback) {
+      const {
+        fetchCurrentAppointment
+      } = result;
       const statusMatrix = APPOINTMENT_STATUS_MATRIX;
       log.info('---fetchCurrentAppointment---');
       log.info(fetchCurrentAppointment);
@@ -101,7 +106,7 @@ module.exports = Appointments => {
       }
     }
 
-    function rescheduleAppointmentFunction(results, callback) {
+    function rescheduleAppointmentFunction(result, callback) {
       if (req.body.appointment_status === 'rescheduled') {
         log.info('---APPOINTMENTResCHEDULING_REQUEST_RAISED---');
         if (!(_.has(req.body, 'rescheduled_date') || _.has(req.body, 'from_time') || _.has(req.body, 'to_time'))) {
@@ -142,7 +147,7 @@ module.exports = Appointments => {
             .then(appointmentDataRes => {
               log.info('---appointment_dateRes---');
               log.info(appointmentDataRes);
-              if(appointmentDataRes && appointmentDataRes.length) {
+              if (appointmentDataRes && appointmentDataRes.length) {
                 return callback({
                   success: false,
                   error_code: 200,
@@ -155,7 +160,9 @@ module.exports = Appointments => {
                 req.body.rescheduled_date = moment(req.body.rescheduled_date).format('YYYY-MM-DD');
                 req.body.from_time = moment(req.body.from_time).format('hh:mm:ss');
                 req.body.to_time = moment(req.body.to_time).format('hh:mm:ss');
-                return callback(null, { isRescheduled: true });
+                return callback(null, {
+                  isRescheduled: true
+                });
               }
             })
             .catch(appointmentDataErr => {
@@ -170,13 +177,20 @@ module.exports = Appointments => {
             });
         }
       } else {
-        return callback(null, { isRescheduled: false });
+        return callback(null, {
+          isRescheduled: false
+        });
       }
     }
 
-    function updateAppointmentStatusFunction(results, callback) {
-      const { rescheduleAppointment, fetchCurrentAppointment } = results;
-      let updateObj = { appointment_status: req.body.appointment_status };
+    function updateAppointmentStatusFunction(result, callback) {
+      const {
+        rescheduleAppointment,
+        fetchCurrentAppointment
+      } = result;
+      let updateObj = {
+        appointment_status: req.body.appointment_status
+      };
       fetchCurrentAppointment.data.appointment_detail.appointment_status = req.body.appointment_status;
       if (rescheduleAppointment.isRescheduled) {
         Object.assign(updateObj, {
@@ -219,8 +233,10 @@ module.exports = Appointments => {
         });
     }
 
-    function createAppointmentLogFunction(results, callback) {
-      const { updateAppointmentStatus } = results;
+    function createAppointmentLogFunction(result, callback) {
+      const {
+        updateAppointmentStatus
+      } = result;
       let createLogObj = {
         appointment_id: updateAppointmentStatus.data.appointment_details.appointment_id,
         appointment_status: updateAppointmentStatus.data.appointment_details.appointment_status,

@@ -4,7 +4,10 @@ const Users = require('../../models/users');
 const utils = require('../../controllers/utility/utils');
 const bcrypt = packageHelper.bcrypt;
 const jwt = packageHelper.jsonwebtoken;
-const { SECRET_KEY, DEFAULT_USERNAME } = require('../../public/javascripts/constants');
+const {
+  SECRET_KEY,
+  DEFAULT_USERNAME
+} = require('../../public/javascripts/constants');
 
 const generateToken = (req, res) => {
   if (req.user) {
@@ -120,33 +123,33 @@ const verifyToken = (req, res, next) => {
       authorization: req.token
     };
     AccessToken.getAccessToken(reqObj)
-    .then(tokenRes => {
-      log.info('---tokenRes---');
-      log.info(tokenRes);
-      req.username = tokenRes.data.access_token_res.username;
-      jwt.verify(req.token, SECRET_KEY + req.username, (err, authData) => {
-        if (err) {
-          return res.status(403).send({
-            success: false,
-            message: 'Permission denied',
-            data: err
-          });
-        } else {
-          log.info('---TOKEN_VERIFIED---');
-          log.info(authData);
-          next();
-        }
+      .then(tokenRes => {
+        log.info('---tokenRes---');
+        log.info(tokenRes);
+        req.username = tokenRes.data.access_token_res.username;
+        jwt.verify(req.token, SECRET_KEY + req.username, (err, authData) => {
+          if (err) {
+            return res.status(403).send({
+              success: false,
+              message: 'Permission denied',
+              data: err
+            });
+          } else {
+            log.info('---TOKEN_VERIFIED---');
+            log.info(authData);
+            next();
+          }
+        });
+      })
+      .catch(tokenErr => {
+        log.info('---token_err---');
+        log.info(tokenErr);
+        return res.status(403).send({
+          success: false,
+          message: 'Permission denied',
+          data: {}
+        });
       });
-    })
-    .catch(tokenErr => {
-      log.info('---token_err---');
-      log.info(tokenErr);
-      return res.status(403).send({
-        success: false,
-        message: 'Permission denied',
-        data: {}
-      });
-    });
   } else {
     //FORBIDDEN
     return res.status(403).send({
@@ -162,55 +165,55 @@ const attachUserToRequest = (req, res, next) => {
     username: req.username
   };
   Users.findOne(filterUserObj)
-  .then(userDetails => {
-    log.info('---userDetails---');
-    log.info(userDetails);
-    if (userDetails) {
-      Object.assign(req.user, userDetails);
-      let whereObj = {
-        where: {
-          role_type: userDetails.role_type
-        }
-      };
-      models['Roles'].findOne(whereObj)
-      .then(roleDetails => {
-        if (roleDetails) {
-          req.user.role_id = roleDetails.role_id;
-          next();
-        } else {
-          return res.status(400).send({
-            success: false,
-            message: 'Permission denied',
-            data: {}
+    .then(userDetails => {
+      log.info('---userDetails---');
+      log.info(userDetails);
+      if (userDetails) {
+        Object.assign(req.user, userDetails);
+        let whereObj = {
+          where: {
+            role_type: userDetails.role_type
+          }
+        };
+        models['Roles'].findOne(whereObj)
+          .then(roleDetails => {
+            if (roleDetails) {
+              req.user.role_id = roleDetails.role_id;
+              next();
+            } else {
+              return res.status(400).send({
+                success: false,
+                message: 'Permission denied',
+                data: {}
+              });
+            }
+          })
+          .catch(userError => {
+            log.error('---userError---');
+            log.error(userError);
+            return res.status(400).send({
+              success: false,
+              message: 'Permission denied',
+              data: {}
+            });
           });
-        }
-      })
-      .catch(userError => {
-        log.error('---userError---');
-        log.error(userError);
+      } else {
         return res.status(400).send({
           success: false,
           message: 'Permission denied',
           data: {}
         });
-      });
-    } else {
+      }
+    })
+    .catch(userError => {
+      log.error('---userError---');
+      log.error(userError);
       return res.status(400).send({
         success: false,
         message: 'Permission denied',
         data: {}
       });
-    }
-  })
-  .catch(userError => {
-    log.error('---userError---');
-    log.error(userError);
-    return res.status(400).send({
-      success: false,
-      message: 'Permission denied',
-      data: {}
     });
-  });
 }
 
 const destroyToken = (req, res, next) => {
@@ -218,20 +221,20 @@ const destroyToken = (req, res, next) => {
     access_token: req.headers['authorization']
   };
   AccessToken.clearToken(tokenObj)
-  .then(tokenRes => {
-    log.info('---tokenRes---');
-    log.info(tokenRes);
-    next();
-  })
-  .catch(tokenErr => {
-    log.info('---token_err---');
-    log.info(tokenErr);
-    return res.status(500).send({
-      success: false,
-      message: 'Internal server error',
-      data: {}
+    .then(tokenRes => {
+      log.info('---tokenRes---');
+      log.info(tokenRes);
+      next();
+    })
+    .catch(tokenErr => {
+      log.info('---token_err---');
+      log.info(tokenErr);
+      return res.status(500).send({
+        success: false,
+        message: 'Internal server error',
+        data: {}
+      });
     });
-  });
 }
 
 module.exports = {
