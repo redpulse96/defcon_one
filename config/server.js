@@ -64,7 +64,7 @@ app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNA
 
 app.use('/', indexRoutes);
 app.use('/users', cors(corsOptions), apiLogger, userRoutes);
-app.use('/api', cors(corsOptions), ensureAuth, verifyToken, apiLogger, attachUserToRequest, apiRoutes);
+app.use('/api', cors(corsOptions), verifyToken, apiLogger, attachUserToRequest, apiRoutes); // ensureAuth
 
 // catch 404 and forward to error handler 
 app.use((err, res) => {

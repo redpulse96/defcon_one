@@ -1,7 +1,6 @@
 const log = require('../config/log_config').logger('users_controller');
 const Users = require('../models/users');
 const utils = require('./utility/utils');
-
 const {
   DEFAULT_SALT,
   DEFAULT_USERNAME
@@ -82,7 +81,7 @@ const registerUser = (req, res) => {
         mobile_no: req.body.mobile_no,
         is_active: true,
         is_archived: false
-      })
+      });
     })
     .then(existingUser => {
       if (existingUser) {
@@ -99,11 +98,11 @@ const registerUser = (req, res) => {
           is_active: true,
           is_archived: false
         }));
-        return Users.generateSalt(newUser)
+        return Users.generateSalt(newUser);
       }
     })
     .then(saltRes => {
-      return Users.generateHash(newUser.password, saltRes.data.salt)
+      return Users.generateHash(newUser.password, saltRes.data.salt);
     })
     .then(hashRes => {
       log.info('---PASSWORD_HASHED_SUCCESS---');
@@ -151,7 +150,7 @@ const registerUser = (req, res) => {
     .catch((catchErr) => {
       log.error('---catchErr---');
       log.error(catchErr);
-      res.status(500).send({
+      return res.status(500).send({
         success: false,
         message: 'Internal server error',
         data: {}
@@ -160,7 +159,7 @@ const registerUser = (req, res) => {
     .catch(paramError => {
       log.error('---INSUFFICIENT_PARAMETERS---');
       log.error(paramError);
-      res.status(paramError.error_code).send(paramError);
+      return res.status(paramError.error_code).send(paramError);
     });
 }
 

@@ -31,12 +31,12 @@ AccessToken.generateAccessToken = data => {
   });
 };
 
-AccessToken.getAccessToken = req => {
+AccessToken.getAccessToken = data => {
   return new Promise((resolve, reject) => {
     log.info('----AccessToken.getAccessToken---');
     let whereObj = {
       where: {
-        access_token: req.authorization
+        access_token: data.authorization
       }
     };
     models['AccessToken'].scope('activeScope').findOne(whereObj)

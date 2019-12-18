@@ -238,7 +238,7 @@ generateLogger = (serviceName, level) => {
   return createLogger(generateLogObj);
 }
 
-const logger = (serviceName) => {
+const logger = serviceName => {
   const newLog = {
     info: generateLogger(serviceName, 'info'),
     error: generateLogger(serviceName, 'error'),

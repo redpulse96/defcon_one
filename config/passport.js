@@ -42,7 +42,7 @@ module.exports = passport => {
           return done(null, false, 'Invalid username');
         });
     })
-  );
+  )
 
   passport.serializeUser((user, done) => {
     done(null, user);

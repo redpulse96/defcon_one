@@ -5,11 +5,11 @@ const async = packageHelper.async;
 module.exports = Appointments => {
   Appointments.appointmentDetails = (req, res) => {
     async.auto({
-      validateData: validateDataFunction,
-      fetchAppointmentDetails: ['validateData', fetchAppointmentDetailsFunction]
-    })
-    .then(asyncAutoRes => res.send(asyncAutoRes))
-    .catch(asyncAutoErr => res.status(asyncAutoErr.error_code).send(asyncAutoErr));
+        validateData: validateDataFunction,
+        fetchAppointmentDetails: ['validateData', fetchAppointmentDetailsFunction]
+      })
+      .then(asyncAutoRes => res.send(asyncAutoRes))
+      .catch(asyncAutoErr => res.status(asyncAutoErr.error_code).send(asyncAutoErr));
 
     function validateDataFunction(callback) {
       let paramsCheck = {
@@ -20,39 +20,42 @@ module.exports = Appointments => {
         .then(paramsRes => callback(null, paramsRes))
         .catch(paramsErr => callback(paramsErr));
     }
+  }
 
-    function fetchAppointmentDetailsFunction(results, callback) {
-      const { validateData } = results;
-      let filter = {
-        where: {
-          appointment_id: validateData.data.appointment_id,
-          is_active: true,
-          is_archived: false
-        },
-        include: [{
-          model: models['AppointmentLogs'],
-          as: 'appointment_logs'
-        }, {
-          model: models['Patients'],
-          as: 'patient'
-        }, {
-          model: models['PatientPrescription'],
-          as: 'patient_prescription'
-        }, {
-          model: models['PatientDiagnosisRoleMapping'],
-          as: 'patient_diagnosis_role_mapping'
-        }, {
-          model: models['PatientExaminationsRoleMapping'],
-          as: 'patient_examinations_role_mapping'
-        }, {
-          model: models['PatientInvestigationsRoleMapping'],
-          as: 'patient_investigations_role_mapping'
-        }, {
-          model: models['PatientSymptomsRoleMapping'],
-          as: 'patient_symptoms_role_mapping'
-        }]
-      };
-      models['Appointments'].findOne(filter)
+  const fetchAppointmentDetailsFunction = (result, callback) => {
+    const {
+      validateData
+    } = result;
+    let filter = {
+      where: {
+        appointment_id: validateData.data.appointment_id,
+        is_active: true,
+        is_archived: false
+      },
+      include: [{
+        model: models['AppointmentLogs'],
+        as: 'appointment_logs'
+      }, {
+        model: models['Patients'],
+        as: 'patient'
+      }, {
+        model: models['PatientPrescription'],
+        as: 'patient_prescription'
+      }, {
+        model: models['PatientDiagnosisRoleMapping'],
+        as: 'patient_diagnosis_role_mapping'
+      }, {
+        model: models['PatientExaminationsRoleMapping'],
+        as: 'patient_examinations_role_mapping'
+      }, {
+        model: models['PatientInvestigationsRoleMapping'],
+        as: 'patient_investigations_role_mapping'
+      }, {
+        model: models['PatientSymptomsRoleMapping'],
+        as: 'patient_symptoms_role_mapping'
+      }]
+    };
+    models['Appointments'].findOne(filter)
       .then(appointmentDetails => {
         log.info('---APPOINTMENT_DETAILS---');
         log.info(appointmentDetails);
@@ -83,6 +86,5 @@ module.exports = Appointments => {
           data: {}
         });
       });
-    }
   }
 }

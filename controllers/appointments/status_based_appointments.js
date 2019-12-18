@@ -59,7 +59,7 @@ module.exports = Appointments => {
       .catch(appointmentsErr => {
         log.info('---APPOINTMENT_LIST_ERROR---');
         log.info(appointmentsErr);
-        res.status(500).send({
+        return res.status(500).send({
           success: false,
           message: 'Internal server error',
           data: {}
