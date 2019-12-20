@@ -13,7 +13,7 @@ module.exports = Appointments => {
         data: {}
       });
     }
-    let filter = Object.assign({}, {
+    let filter = {
       where: {
         created_by: {
           $in: [req.user.username]
@@ -28,7 +28,7 @@ module.exports = Appointments => {
       order: [
         ['appointment_date', 'ASC']
       ]
-    });
+    };
     if (req.user.parent) {
       filter.where.created_by.$in.push(req.user.parent);
     }

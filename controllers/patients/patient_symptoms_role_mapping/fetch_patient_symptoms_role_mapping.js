@@ -3,7 +3,8 @@ const log = require('../../../config/log_config').logger('patient_symptoms_role_
 module.exports = PatientSymptomsRoleMapping => {
 
   PatientSymptomsRoleMapping.fetchPatientSymptomsRoleMapping = (req, res) => {
-    let whereObj = Object.assign({}, req.params, {
+    let whereObj = {
+      ...req.params,
       include: [{
         model: models.SymptomsRoleMapping,
         as: 'symptoms_role_mapping'
@@ -11,7 +12,7 @@ module.exports = PatientSymptomsRoleMapping => {
         model: models.Roles,
         as: 'role'
       }]
-    });
+    };
     models.PatientSymptomsRoleMapping.findOne(whereObj)
       .then(fetchRes => {
         log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');

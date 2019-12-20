@@ -4,7 +4,8 @@ const utils = require('../../utility/utils');
 
 PatientPrescription.fetchPatientPrescription = (req, res) => {
 
-  let whereObj = Object.assign({}, req.params, {
+  let whereObj = {
+    ...req.params,
     include: [{
       model: models['Appointments'],
       as: 'appointment',
@@ -22,7 +23,7 @@ PatientPrescription.fetchPatientPrescription = (req, res) => {
         as: 'patient_symptoms_role_mapping'
       }]
     }]
-  });
+  };
   models['PatientPrescription'].findOne(whereObj)
     .then(fetchRes => {
       fetchRes = fetchRes.toJSON();
@@ -49,7 +50,10 @@ PatientPrescription.fetchPatientPrescription = (req, res) => {
 
 PatientPrescription.createPatientPrescription = (req, res) => {
 
-  let createObj = Object.assign({}, req.body, { created_by: req.user.username });
+  let createObj = {
+    ...req.body,
+    created_by: req.user.username
+  };
   createObj.reference_id = utils.GenerateUniqueID(10, 'A#vb');
   models['PatientPrescription'].create(createObj)
     .then(createRes => {

@@ -3,7 +3,8 @@ const InvestigationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['Inves
 
 InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
 
-  let whereObj = Object.assign({}, req.params, {
+  let whereObj = {
+    ...req.params,
     where: {
       role_id: req.user.role_id
     },
@@ -14,7 +15,7 @@ InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
       model: models['Roles'],
       as: 'role'
     }]
-  });
+  };
   models['InvestigationsRoleMapping'].scope('activeScope').findAll(whereObj)
     .then(fetchRes => {
       log.info('---InvestigationsRoleMapping_FETCH_SUCCESS---');
@@ -42,7 +43,9 @@ InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
 
 InvestigationsRoleMapping.createInvestigationsRoleMapping = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
+  let createObj = {
+    ...req.body
+  };
   models.InvestigationsRoleMapping.create(createObj)
     .then(createRes => {
       log.info('---InvestigationsRoleMapping_CREATION_SUCCESS---');

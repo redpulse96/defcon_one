@@ -3,7 +3,9 @@ const Investigations = require(packageHelper.MODEL_CONFIG_DIR)['Investigations']
 
 Investigations.fetchExamination = (req, res) => {
 
-  let whereObj = Object.assign({}, req.params);
+  let whereObj = {
+    ...req.params
+  };
   models.Investigations.findOne(whereObj)
     .then(fetchRes => {
       log.info('---INVESTIGATIONS_FETCH_SUCCESS---');
@@ -31,7 +33,9 @@ Investigations.fetchExamination = (req, res) => {
 
 Investigations.createExamination = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
+  let createObj = {
+    ...req.body
+  };
   models.Investigations.create(createObj)
     .then(createRes => {
       log.info('---INVESTIGATIONS_CREATION_SUCCESS---');

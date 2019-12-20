@@ -12,8 +12,12 @@ module.exports = Patients => {
       updatePatient: ['checkUniqueMobileNo', updatePatientFunction],
       returnPatientDetails: ['updatePatient', returnPatientDetailsFunction]
     })
-    .then(asyncAutoRes => res.send(asyncAutoRes.returnPatientDetails))
-    .catch(asyncAutoErr => res.status(asyncAutoErr.error_code || 500).send(asyncAutoErr));
+      .then(asyncAutoRes => {
+        return res.send(asyncAutoRes.returnPatientDetails);
+      })
+      .catch(asyncAutoErr => {
+        return res.status(asyncAutoErr.error_code || 500).send(asyncAutoErr);
+      });
 
     function validateDataFunction(callback) {
       let paramsCheck = {
@@ -28,20 +32,23 @@ module.exports = Patients => {
           return callback(err);
         });
     }
+  }
 
-    function checkUniqueMobileNoFunction(results, callback) {
-      const { validateData } = results;
-      let filter = {
-        where: {
-          mobile_no: {
-            $in: [validateData.data.mobile_no]
-          }
+  const checkUniqueMobileNoFunction = (result, callback) => {
+    const {
+      validateData
+    } = result;
+    let filter = {
+      where: {
+        mobile_no: {
+          $in: [validateData.data.mobile_no]
         }
-      };
-      if (validateData.data.update_obj.mobile_no) {
-        filter.where.mobile_no.$in.push(validateData.data.update_obj.mobile_no);
       }
-      models['Patients'].scope('activeScope').findOne(filter)
+    };
+    if (validateData.data.update_obj.mobile_no) {
+      filter.where.mobile_no.$in.push(validateData.data.update_obj.mobile_no);
+    }
+    models['Patients'].scope('activeScope').findOne(filter)
       .then(patientRes => {
         let existingMobileNo = true;
         log.error('---patientErr---');
@@ -74,57 +81,63 @@ module.exports = Patients => {
           data: {}
         });
       });
-    }
-    
-    function updatePatientFunction(results, callback) {
-      let filter = {
-        where: {
-          mobile_no: {
-            $in: [req.body.mobile_no]
-          },
-          is_active: true,
-          is_archived: false
-        }
-      };
-      models['Patients'].update(req.body.update_obj, filter)
-        .then(updatedPatientRes => {
-          log.info('---updatedPatientRes---');
-          log.info(updatedPatientRes);
-          if (updatedPatientRes && updatedPatientRes > 0) {
-            return callback(null, {
-              success: true,
-              message: 'Patient details updated successfully',
-              data: {
-                patient_details: updatedPatientRes
-              }
-            });
-          } else {
-            return callback({
-              success: false,
-              error_code: 500,
-              message: 'Patient details updation failure',
-              data: {}
-            });
-          }
-        })
-        .catch(updatedPatientErr => {
-          log.error('---updatedPatientErr---');
-          log.error(updatedPatientErr);
+  }
+
+  const updatePatientFunction = (result, callback) => {
+    const {
+      validateData
+    } = result;
+    let filter = {
+      where: {
+        mobile_no: {
+          $in: [validateData.data.mobile_no]
+        },
+        is_active: true,
+        is_archived: false
+      }
+    };
+    models['Patients'].update(validateData.data.update_obj, filter)
+      .then(updatedPatientRes => {
+        log.info('---updatedPatientRes---');
+        log.info(updatedPatientRes);
+        if (updatedPatientRes && updatedPatientRes > 0) {
+          return callback(null, {
+            success: true,
+            message: 'Patient details updated successfully',
+            data: {
+              patient_details: updatedPatientRes
+            }
+          });
+        } else {
           return callback({
             success: false,
             error_code: 500,
-            message: 'Internal server error',
+            message: 'Patient details updation failure',
             data: {}
           });
-        });
-    }
-
-    function returnPatientDetailsFunction(results, callback) {
-      models['Patients'].scope('activeScope').findOne({
-        where: {
-          mobile_no: req.body.mobile_no
         }
       })
+      .catch(updatedPatientErr => {
+        log.error('---updatedPatientErr---');
+        log.error(updatedPatientErr);
+        return callback({
+          success: false,
+          error_code: 500,
+          message: 'Internal server error',
+          data: {}
+        });
+      });
+  }
+
+  const returnPatientDetailsFunction = (result, callback) => {
+    const {
+      validateData
+    } = result;
+    models['Patients'].scope('activeScope').findOne({
+      where: {
+        mobile_no: validateData.data.mobile_no
+      }
+    })
       .then(patientRes => {
         log.info('---patientRes---');
         log.info(patientRes);
@@ -146,6 +159,5 @@ module.exports = Patients => {
           data: {}
         });
       });
-    }
   }
 }

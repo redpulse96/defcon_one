@@ -5,14 +5,18 @@ const moment = packageHelper.moment;
 
 module.exports = Patients => {
 
-  Patients.createPatients = (req, res) => {
+  Patients.createPatient = (req, res) => {
     async.auto({
       validateData: validateDataFunction,
       isNewPatient: ['validateData', isNewPatientFunction],
       createPatient: ['validateData', 'isNewPatient', createPatientFunction]
     })
-    .then(asyncAutoResult => res.send(asyncAutoResult.createPatient))
-    .catch(asyncAutoError => res.status(asyncAutoError.error_code || 500).send(asyncAutoError));
+    .then(asyncAutoResult => {
+      return res.send(asyncAutoResult.createPatient);
+    })
+    .catch(asyncAutoError => {
+      return res.status(asyncAutoError.error_code || 500).send(asyncAutoError);
+    });
 
     function validateDataFunction(callback) {
       let paramsCheck = {
@@ -28,22 +32,28 @@ module.exports = Patients => {
           key: 'date_of_birth',
           checkValue: 'DATE'
         }]
-      }
+      };
       utils.hasMandatoryParams(paramsCheck)
         .then(paramRes => {
+          paramRes.data.user = req.user;
           return callback(null, paramRes);
         })
         .catch(paramErr => {
           return callback(paramErr);
         });
     }
+  }
 
-    function isNewPatientFunction(results, callback) {
-      const { validateData } = results;
-      let where = {
-        mobile_no: validateData.data.mobile_no
-      };
-      models['Patients'].scope('activeScope').findOne({
+  const isNewPatientFunction = (result, callback) => {
+    const {
+      validateData
+    } = result;
+    let where = {
+      mobile_no: validateData.data.mobile_no
+    };
+    models['Patients']
+      .scope('activeScope')
+      .findOne({
         where
       })
       .then(existingPatientRes => {
@@ -63,14 +73,18 @@ module.exports = Patients => {
       .catch(existingPatientErr => {
         return callback(existingPatientErr);
       });
-    }
+  }
 
-    function createPatientFunction(results, callback) {
-      let createObj = Object.assign({}, req.body, {
-        created_by: utils.validateKeys(() => req.user.username, null, null),
-        date_of_birth: moment(req.body.date_of_birth).format('YYYY-MM-DD')
-      });
-      models['Patients']
+  const createPatientFunction = (result, callback) => {
+    const {
+      validateData
+    } = result;
+    let createObj = {
+      ...validateData.data,
+      created_by: utils.validateKeys(() => validateData.data.user.username, null, null),
+      date_of_birth: moment(validateData.data.date_of_birth).format('YYYY-MM-DD')
+    };
+    models['Patients']
       .scope('activeScope')
       .findOrCreate({
         where: {
@@ -108,6 +122,5 @@ module.exports = Patients => {
           data: {}
         });
       });
-    }
   }
 }

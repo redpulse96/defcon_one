@@ -4,13 +4,13 @@ const utils = require('../utility/utils');
 module.exports = Patients => {
 
   Patients.patientsList = (req, res) => {
-    let filterObj = Object.assign({}, {
+    let filterObj = {
       where: {
         created_by: {
           $in: utils.validateKeys(() => [req.user.username], [], null)
         }
       }
-    });
+    };
     if (req.user.parent) {
       filterObj.where.created_by.$in.push(req.user.parent);
     }

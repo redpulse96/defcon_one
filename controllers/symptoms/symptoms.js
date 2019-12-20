@@ -3,7 +3,9 @@ const Symptoms = require(packageHelper.MODEL_CONFIG_DIR)['Symptoms'];
 
 Symptoms.fetchSymptom = (req, res) => {
 
-  let whereObj = Object.assign({}, req.params);
+  let whereObj = {
+    ...req.params
+  };
   models.Symptoms.findOne(whereObj)
     .then(fetchRes => {
       log.info('---SYMPTOM_FETCH_SUCCESS---');
@@ -31,7 +33,9 @@ Symptoms.fetchSymptom = (req, res) => {
 
 Symptoms.createSymptom = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
+  let createObj = {
+    ...req.body
+  };
   models.Symptoms.create(createObj)
     .then(createRes => {
       log.info('---SYMPTOM_CREATION_SUCCESS---');

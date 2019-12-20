@@ -205,12 +205,13 @@ module.exports = Appointments => {
     };
     fetchCurrentAppointment.data.appointment_detail.appointment_status = validateData.data.appointment_status;
     if (rescheduleAppointment.isRescheduled) {
-      Object.assign(updateObj, {
+      updateObj = {
+        updateObj,
         appointment_date: validateData.data.rescheduled_date,
         rescheduled_date: validateData.data.rescheduled_date,
         from_time: validateData.data.from_time,
         to_time: validateData.data.to_time
-      });
+      };
     }
     fetchCurrentAppointment.data.appointment_detail.update(updateObj)
       .then(updateAppointmentRes => {

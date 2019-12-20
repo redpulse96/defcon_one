@@ -3,9 +3,8 @@ const log = require('../../config/log_config').logger('patients_controller');
 module.exports = Patients => {
 
   Patients.patientDetails = (req, res) => {
-    let whereObj = Object.assign({}, {
-      where: req.params
-    }, {
+    let whereObj = {
+      where: req.params,
       include: [{
         model: models['Appointments'],
         as: 'appointments',
@@ -73,7 +72,7 @@ module.exports = Patients => {
           }]
         }]
       }]
-    });
+    };
     models['Patients'].findOne(whereObj)
       .then(fetchRes => {
         fetchRes = fetchRes.toJSON();

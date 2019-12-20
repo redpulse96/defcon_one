@@ -3,7 +3,9 @@ const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs
 
 AppointmentLogs.fetchAppointmentLogs = (req, res) => {
 
-  let whereObj = Object.assign({}, req.params);
+  let whereObj = {
+    ...req.params
+  };
   models['AppointmentLogs'].findAll(whereObj)
     .then(fetchRes => {
       log.info('---appointment_logs_FETCH_SUCCESS---');
@@ -30,7 +32,9 @@ AppointmentLogs.fetchAppointmentLogs = (req, res) => {
 AppointmentLogs.createAppointmentLogs = data => {
 
   return new Promise((resolve, reject) => {
-    let createObj = Object.assign({}, data);
+    let createObj = {
+      data
+    };
     models['AppointmentLogs'].create(createObj)
       .then(createRes => {
         log.info('---appointment_logs_CREATION_SUCCESS---');

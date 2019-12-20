@@ -3,7 +3,9 @@ const Diagnosis = require(packageHelper.MODEL_CONFIG_DIR)['Diagnosis'];
 
 Diagnosis.fetchDiagnosis = (req, res) => {
 
-  let whereObj = Object.assign({}, req.params);
+  let whereObj = {
+    ...req.params
+  };
   models.Diagnosis.findOne(whereObj)
     .then(fetchRes => {
       log.info('---DIAGNOSIS_FETCH_SUCCESS---');
@@ -31,7 +33,9 @@ Diagnosis.fetchDiagnosis = (req, res) => {
 
 Diagnosis.createDiagnosis = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
+  let createObj = {
+    ...req.body
+  };
   models.Diagnosis.create(createObj)
     .then(createRes => {
       log.info('---DIAGNOSIS_CREATION_SUCCESS---');

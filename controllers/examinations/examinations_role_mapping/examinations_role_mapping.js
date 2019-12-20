@@ -3,7 +3,8 @@ const ExaminationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['Examina
 
 ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
 
-  let whereObj = Object.assign({}, req.params, {
+  let whereObj = {
+    ...req.params,
     where: {
       role_id: req.user.role_id
     },
@@ -14,7 +15,7 @@ ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
       model: models['Roles'],
       as: 'role'
     }]
-  });
+  };
   models['ExaminationsRoleMapping'].scope('activeScope').findAll(whereObj)
     .then(fetchRes => {
       log.info('---ExaminationsRoleMapping_FETCH_SUCCESS---');
@@ -42,7 +43,9 @@ ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
 
 ExaminationsRoleMapping.createExaminationsRoleMapping = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
+  let createObj = {
+    ...req.body
+  };
   models.ExaminationsRoleMapping.create(createObj)
     .then(createRes => {
       log.info('---ExaminationsRoleMapping_CREATION_SUCCESS---');

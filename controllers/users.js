@@ -70,10 +70,11 @@ Users.generateHash = (password, salt) => {
  * @param {Array} feature_rights - this should be added based on the feature rights based on the roles of the users
  */
 const registerUser = (req, res) => {
-  const paramsObj = {
+  let newUser;
+  let paramsObj = {
     data: req.body,
     mandatoryParams: ['name', 'mobile_no', 'role_type', 'password']
-  }
+  };
   utils.hasMandatoryParams(paramsObj)
     .then(() => {
       req.body.username = req.body.username ? req.body.username : req.body.mobile_no + DEFAULT_USERNAME;
@@ -87,17 +88,18 @@ const registerUser = (req, res) => {
       if (existingUser) {
         log.info('---USER_ALREADY_EXISTS---');
         log.info(existingUser);
-        res.status(400).send({
+        return res.status(400).send({
           success: false,
           message: 'User already exists',
           data: {}
         });
       } else {
-        let newUser = new Users(Object.assign({}, req.body, {
+        newUser = new Users({
+          ...req.body,
           feature_rights: FEAURE_RIGHTS[req.body['role_type']].FEATURE_RIGHTS,
           is_active: true,
           is_archived: false
-        }));
+        });
         return Users.generateSalt(newUser);
       }
     })
@@ -112,7 +114,7 @@ const registerUser = (req, res) => {
     .then(createdUserResult => {
       log.info('---CREATED_USER_SUCCESS---');
       log.info(createdUserResult);
-      res.status(200).send({
+      return res.status(200).send({
         success: true,
         message: 'User created successfully',
         data: {
@@ -123,7 +125,7 @@ const registerUser = (req, res) => {
     .catch(createdUserError => {
       log.error('---CREATED_USER_ERROR---');
       log.error(createdUserError);
-      res.status(500).send({
+      return res.status(500).send({
         success: false,
         message: 'Internal server error',
         data: {}
@@ -132,7 +134,7 @@ const registerUser = (req, res) => {
     .catch(hashErr => {
       log.error('---PASSOWRD_HASEHED_ERROR---');
       log.error(hashErr);
-      res.status(500).send({
+      return res.status(500).send({
         success: false,
         message: 'Internal server error',
         data: {}
@@ -141,7 +143,7 @@ const registerUser = (req, res) => {
     .catch(saltErr => {
       log.error('---PASSOWRD_SALT_ERROR---');
       log.error(saltErr);
-      res.status(500).send({
+      return res.status(500).send({
         success: false,
         message: 'Internal server error',
         data: {}

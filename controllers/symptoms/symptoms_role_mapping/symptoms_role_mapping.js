@@ -3,7 +3,8 @@ const SymptomsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['SymptomsRol
 
 SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
 
-  let whereObj = Object.assign({}, req.params, {
+  let whereObj = {
+    ...req.params,
     where: {
       role_id: req.user.role_id
     },
@@ -14,7 +15,7 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
       model: models['Roles'],
       as: 'role'
     }]
-  });
+  };
   models['SymptomsRoleMapping'].scope('activeScope').findAll(whereObj)
     .then(fetchRes => {
       log.info('---SRM_FETCH_SUCCESS---');
@@ -42,7 +43,9 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
 
 SymptomsRoleMapping.createSymptomsRoleMapping = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
+  let createObj = {
+    ...req.body
+  };
   models.SymptomsRoleMapping.create(createObj)
     .then(createRes => {
       log.info('---SRM_CREATION_SUCCESS---');

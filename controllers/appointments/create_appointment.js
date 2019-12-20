@@ -82,9 +82,9 @@ module.exports = Appointments => {
     const {
       validateData
     } = result;
-    const createObj = Object.assign({}, validateData.data, {
-      created_by: validateData.data.user.username
-    });
+    const createObj = {
+      ...validateData.data.user.username
+    };
     createObj.appointment_date = moment(createObj.appointment_date).format('YYYY-MM-DD');
     createObj.from_time = moment(createObj.from_time).format('hh:mm:ss');
     createObj.to_time = moment(createObj.to_time).format('hh:mm:ss');
@@ -118,10 +118,11 @@ module.exports = Appointments => {
       validateData,
       createNewAppointment
     } = result;
-    const logObj = Object.assign({}, {
+    let logObj = {
       appointment_id: createNewAppointment.data.appointment.appointment_id,
-      status: createNewAppointment.data.appointment.status
-    }, validateData.data);
+      status: createNewAppointment.data.appointment.status,
+      ...validateData.data
+    };
     AppointmentLogs.createAppointmentLogs(logObj)
       .then(logRes => callback(null, logRes))
       .catch(logErr => callback(logErr));
