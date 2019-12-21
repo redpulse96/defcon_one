@@ -250,14 +250,12 @@ const logger = serviceName => {
   const constructLog = level => {
     let levelName = level ? level : 'info';
 
-    return args => {
+    return (...args) => {
       try {
         newLog[levelName].log({
           service: serviceName,
           level: levelName,
-          message: {
-            ...args
-          },
+          message: args,
           timestamp: new Date()
         });
       } catch (e) {

@@ -1,15 +1,12 @@
 const indexRoutes = require('../routes/index');
 const userRoutes = require('../routes/users');
 const apiRoutes = require('../routes/api');
+const apiLogger = require('./middleware/log_middleware');
 
 const app = packageHelper.express();
 const cors = packageHelper.cors;
 const passport = packageHelper.passport;
 const session = packageHelper.express_session;
-
-const {
-  apiLogger
-} = require('./middleware/log_middleware');
 
 const {
   verifyToken,
