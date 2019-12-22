@@ -71,7 +71,6 @@ const onListening = () => {
     'port ' + addr.port;
   debug('Listening on ' + bind);
 
-  console.log('Listening on ' + bind);
   console.log('server is listening on ', bind);
   console.log(figlet.textSync('Defcon One Loaded'));
 }

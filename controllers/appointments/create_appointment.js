@@ -82,13 +82,13 @@ module.exports = Appointments => {
     const {
       validateData
     } = result;
-    const createObj = {
-      ...validateData.data.user.username
+    let createObj = {
+      ...validateData.data,
+      appointment_date: moment(validateData.data.appointment_date).format('YYYY-MM-DD'),
+      from_time: moment(validateData.data.from_time, 'HH:mm:ss').format('HH:mm:ss'),
+      to_time: moment(validateData.data.to_time, 'HH:mm:ss').format('HH:mm:ss'),
+      created_by: validateData.data.user.username
     };
-    createObj.appointment_date = moment(createObj.appointment_date).format('YYYY-MM-DD');
-    createObj.from_time = moment(createObj.from_time).format('hh:mm:ss');
-    createObj.to_time = moment(createObj.to_time).format('hh:mm:ss');
-
     models['Appointments'].create(createObj)
       .then(createRes => {
         log.info('---APPOINTMENTS_CREATION_SUCCESS---');
@@ -119,9 +119,9 @@ module.exports = Appointments => {
       createNewAppointment
     } = result;
     let logObj = {
+      ...validateData.data,
       appointment_id: createNewAppointment.data.appointment.appointment_id,
-      status: createNewAppointment.data.appointment.status,
-      ...validateData.data
+      status: createNewAppointment.data.appointment.status
     };
     AppointmentLogs.createAppointmentLogs(logObj)
       .then(logRes => callback(null, logRes))

@@ -169,9 +169,7 @@ const attachUserToRequest = (req, res, next) => {
       log.info('---userDetails---');
       log.info(userDetails);
       if (userDetails) {
-        req.user = {
-          ...userDetails
-        };
+        req.user = userDetails;
         let whereObj = {
           where: {
             role_type: userDetails.role_type

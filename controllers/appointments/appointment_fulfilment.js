@@ -169,8 +169,8 @@ module.exports = Appointments => {
               validateData.data.doctor_remarks = 'Appointment has been rescheduled to ' + validateData.data.rescheduled_date + ' at slot ' + validateData.data.from_time + ' to ' + validateData.data.to_time;
               validateData.data.appointment_date = moment(validateData.data.rescheduled_date).format('YYYY-MM-DD');
               validateData.data.rescheduled_date = moment(validateData.data.rescheduled_date).format('YYYY-MM-DD');
-              validateData.data.from_time = moment(validateData.data.from_time).format('hh:mm:ss');
-              validateData.data.to_time = moment(validateData.data.to_time).format('hh:mm:ss');
+              validateData.data.from_time = moment(validateData.data.from_time, 'HH:mm:ss').format('HH:mm:ss');
+              validateData.data.to_time = moment(validateData.data.to_time, 'HH:mm:ss').format('HH:mm:ss');
               return callback(null, {
                 isRescheduled: true
               });

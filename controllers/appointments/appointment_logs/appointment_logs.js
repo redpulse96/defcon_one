@@ -32,9 +32,7 @@ AppointmentLogs.fetchAppointmentLogs = (req, res) => {
 AppointmentLogs.createAppointmentLogs = data => {
 
   return new Promise((resolve, reject) => {
-    let createObj = {
-      data
-    };
+    let createObj = { ...data };
     models['AppointmentLogs'].create(createObj)
       .then(createRes => {
         log.info('---appointment_logs_CREATION_SUCCESS---');
