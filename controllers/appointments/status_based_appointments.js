@@ -32,7 +32,9 @@ module.exports = Appointments => {
     if (req.user.parent) {
       filter.where.created_by.$in.push(req.user.parent);
     }
-    models['Appointments'].scope('activeScope').findAll(filter)
+    models['Appointments']
+      .scope('activeScope')
+      .findAll(filter)
       .then(appointmentsRes => {
         let response;
         log.info('---APPOINTMENT_LIST---');

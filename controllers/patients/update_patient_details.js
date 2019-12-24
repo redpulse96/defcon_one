@@ -1,4 +1,5 @@
 const log = require('../../config/log_config').logger('patients_controller');
+const helperFunction = require('../utility/helper_function');
 const utils = require('../utility/utils');
 const _ = packageHelper.lodash;
 const async = packageHelper.async;
@@ -48,15 +49,13 @@ module.exports = Patients => {
     if (validateData.data.update_obj.mobile_no) {
       filter.where.mobile_no.$in.push(validateData.data.update_obj.mobile_no);
     }
-    models['Patients'].scope('activeScope').findOne(filter)
+    models['Patients']
+      .scope('activeScope')
+      .findOne(filter)
       .then(patientRes => {
-        let existingMobileNo = true;
         log.error('---patientErr---');
         log.error(patientRes);
-        if (validateData.data.update_obj.mobile_no) {
-          existingMobileNo = !!(_.map(patientRes, 'mobile_no').indexOf(validateData.data.update_obj.mobile_no) > -1);
-        }
-        if (patientRes && existingMobileNo) {
+        if (patientRes && !!(helperFunction.arrayFn.arrayMapFunction(patientRes, 'mobile_no').indexOf(validateData.data.update_obj.mobile_no) > -1)) {
           return callback(null, {
             success: true,
             message: 'The mobile no can be updated',
@@ -96,7 +95,8 @@ module.exports = Patients => {
         is_archived: false
       }
     };
-    models['Patients'].update(validateData.data.update_obj, filter)
+    models['Patients']
+      .update(validateData.data.update_obj, filter)
       .then(updatedPatientRes => {
         log.info('---updatedPatientRes---');
         log.info(updatedPatientRes);
@@ -134,10 +134,10 @@ module.exports = Patients => {
       validateData
     } = result;
     models['Patients'].scope('activeScope').findOne({
-      where: {
-        mobile_no: validateData.data.mobile_no
-      }
-    })
+        where: {
+          mobile_no: validateData.data.mobile_no
+        }
+      })
       .then(patientRes => {
         log.info('---patientRes---');
         log.info(patientRes);

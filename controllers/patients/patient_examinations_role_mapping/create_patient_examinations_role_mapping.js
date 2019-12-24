@@ -9,8 +9,8 @@ module.exports = PatientExaminationsRoleMapping => {
       validateData: validateDataFunction,
       createPatientExaminationsRoleMapping: ['validateData', createPatientExaminationsRoleMappingFunction]
     })
-    .then(asyncAutoRes => res.send(asyncAutoRes))
-    .catch(asyncAutoErr => res.status(asyncAutoErr.error_code).send(asyncAutoErr));
+      .then(asyncAutoRes => res.send(asyncAutoRes))
+      .catch(asyncAutoErr => res.status(asyncAutoErr.error_code).send(asyncAutoErr));
 
     function validateDataFunction(callback) {
       let paramsCheck = {

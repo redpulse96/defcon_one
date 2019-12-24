@@ -5,9 +5,9 @@ const async = packageHelper.async;
 module.exports = Appointments => {
   Appointments.appointmentDetails = (req, res) => {
     async.auto({
-        validateData: validateDataFunction,
-        fetchAppointmentDetails: ['validateData', fetchAppointmentDetailsFunction]
-      })
+      validateData: validateDataFunction,
+      fetchAppointmentDetails: ['validateData', fetchAppointmentDetailsFunction]
+    })
       .then(asyncAutoRes => res.send(asyncAutoRes))
       .catch(asyncAutoErr => res.status(asyncAutoErr.error_code).send(asyncAutoErr));
 

@@ -11,12 +11,12 @@ module.exports = Patients => {
       isNewPatient: ['validateData', isNewPatientFunction],
       createPatient: ['validateData', 'isNewPatient', createPatientFunction]
     })
-    .then(asyncAutoResult => {
-      return res.send(asyncAutoResult.createPatient);
-    })
-    .catch(asyncAutoError => {
-      return res.status(asyncAutoError.error_code || 500).send(asyncAutoError);
-    });
+      .then(asyncAutoResult => {
+        return res.send(asyncAutoResult.createPatient);
+      })
+      .catch(asyncAutoError => {
+        return res.status(asyncAutoError.error_code || 500).send(asyncAutoError);
+      });
 
     function validateDataFunction(callback) {
       let paramsCheck = {

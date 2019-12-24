@@ -13,12 +13,12 @@ module.exports = Appointments => {
       createNewAppointment: ['validateData', 'checkPatientExistance', createNewAppointmentFunction],
       createAppointmentLog: ['createNewAppointment', createAppointmentLogFunction]
     })
-    .then(asyncAutoRes => {
-      res.send(asyncAutoRes.createNewAppointment);
-    })
-    .catch(asyncAutoErr => {
-      res.status(asyncAutoErr.error_code).send(asyncAutoErr);
-    });
+      .then(asyncAutoRes => {
+        res.send(asyncAutoRes.createNewAppointment);
+      })
+      .catch(asyncAutoErr => {
+        res.status(asyncAutoErr.error_code).send(asyncAutoErr);
+      });
 
     function validateDataFunction(callback) {
       let paramsCheck = {
@@ -45,7 +45,9 @@ module.exports = Appointments => {
         patient_id: validateData.data.patient_id
       }
     };
-    models['Patients'].scope('activeScope').findOne(filterPatientObj)
+    models['Patients']
+      .scope('activeScope')
+      .findOne(filterPatientObj)
       .then(patientRes => {
         log.info('---patientRes---');
         log.info(patientRes);
@@ -89,7 +91,8 @@ module.exports = Appointments => {
       to_time: moment(validateData.data.to_time, 'HH:mm:ss').format('HH:mm:ss'),
       created_by: validateData.data.user.username
     };
-    models['Appointments'].create(createObj)
+    models['Appointments']
+      .create(createObj)
       .then(createRes => {
         log.info('---APPOINTMENTS_CREATION_SUCCESS---');
         log.info(createRes);

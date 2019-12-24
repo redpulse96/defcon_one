@@ -153,7 +153,7 @@ module.exports = {
     }
   },
   /**
-   * 
+   * @param {Object} response - Object with the response details
    */
   generateResponse: response => {
     let statusCode;

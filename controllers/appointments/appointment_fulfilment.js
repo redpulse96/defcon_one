@@ -19,16 +19,16 @@ module.exports = Appointments => {
       updateAppointmentStatus: ['fetchCurrentAppointment', 'rescheduleAppointment', updateAppointmentStatusFunction],
       createAppointmentLog: ['updateAppointmentStatus', createAppointmentLogFunction]
     })
-    .then(asyncAutoRes => {
-      log.info('---asyncAutoRes---');
-      log.info(asyncAutoRes);
-      return res.send(asyncAutoRes.fetchCurrentAppointment);
-    })
-    .catch(asyncAutoErr => {
-      log.error('---asyncAutoErr---');
-      log.error(asyncAutoErr);
-      return res.status(asyncAutoErr.error_code).send(asyncAutoErr);
-    });
+      .then(asyncAutoRes => {
+        log.info('---asyncAutoRes---');
+        log.info(asyncAutoRes);
+        return res.send(asyncAutoRes.fetchCurrentAppointment);
+      })
+      .catch(asyncAutoErr => {
+        log.error('---asyncAutoErr---');
+        log.error(asyncAutoErr);
+        return res.status(asyncAutoErr.error_code).send(asyncAutoErr);
+      });
 
     function validateDataFunction(callback) {
       let paramsCheck = {
