@@ -8,7 +8,7 @@ module.exports = Appointments => {
       validateData: validateDataFunction,
       fetchAppointmentDetails: ['validateData', fetchAppointmentDetailsFunction]
     })
-      .then(asyncAutoRes => res.send(asyncAutoRes))
+      .then(asyncAutoRes => res.send(asyncAutoRes.fetchAppointmentDetails))
       .catch(asyncAutoErr => res.status(asyncAutoErr.error_code).send(asyncAutoErr));
 
     function validateDataFunction(callback) {

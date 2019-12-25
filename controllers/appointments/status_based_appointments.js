@@ -15,11 +15,13 @@ module.exports = Appointments => {
     }
     let filter = {
       where: {
-        created_by: {
-          $in: [req.user.username]
-        },
-        assigned_to: req.user.username,
-        appointment_date: utils.validateKeys(() => moment(req.params.custom_date).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null)
+        $or: [{
+          appointment_date: utils.validateKeys(() => moment(req.params.custom_date).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null),
+          assigned_to: req.user.username
+        }, {
+          appointment_date: utils.validateKeys(() => moment(req.params.custom_date).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null),
+          created_by: req.user.username
+        }]
       },
       include: [{
         model: models['AppointmentLogs'],
@@ -45,7 +47,7 @@ module.exports = Appointments => {
             http_code: 200,
             message: 'Appointments list fetch success',
             data: {
-              appointments_list: _.groupBy(appointmentsRes, 'status')
+              appointments_list: _.groupBy(appointmentsRes, 'appointment_status')
             }
           };
         } else {
