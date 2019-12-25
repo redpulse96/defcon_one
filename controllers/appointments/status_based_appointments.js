@@ -23,7 +23,9 @@ module.exports = Appointments => {
             $between: [fromDate, toDate]
           }
         }, {
-          created_by: req.user.username,
+          created_by: {
+            $in: [req.user.username]
+          },
           appointment_date: {
             $between: [fromDate, toDate]
           }
