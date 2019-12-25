@@ -13,14 +13,20 @@ module.exports = Appointments => {
         data: {}
       });
     }
+    let fromDate = utils.validateKeys(() => moment(req.params.custom_from_date).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null);
+    let toDate = utils.validateKeys(() => moment(req.params.custom_to_date).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null);
     let filter = {
       where: {
         $or: [{
-          appointment_date: utils.validateKeys(() => moment(req.params.custom_date).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null),
-          assigned_to: req.user.username
+          assigned_to: req.user.username,
+          appointment_date: {
+            $between: [fromDate, toDate]
+          }
         }, {
-          appointment_date: utils.validateKeys(() => moment(req.params.custom_date).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null),
-          created_by: req.user.username
+          created_by: req.user.username,
+          appointment_date: {
+            $between: [fromDate, toDate]
+          }
         }]
       },
       include: [{
