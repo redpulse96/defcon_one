@@ -9,14 +9,7 @@ module.exports = Patients => {
 
   Patients.createPatient = async (req, res) => {
 
-    let validateDataError,
-      validateDataResult,
-      isNewPatientError,
-      isNewPatientResult,
-      createPatientError,
-      createPatientResult;
-
-    [validateDataError, validateDataResult] = await to(validateDataFunction(req));
+    let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
     log.info('---validateDataError---');
     log.info(validateDataError);
     log.info('---validateDataResult---');
@@ -29,7 +22,7 @@ module.exports = Patients => {
     let isNewPatientObj = {
       mobile_no: validateDataResult.data.mobile_no
     };
-    [isNewPatientError, isNewPatientResult] = await to(isNewPatientFunction(isNewPatientObj));
+    let [isNewPatientError, isNewPatientResult] = await to(isNewPatientFunction(isNewPatientObj));
     log.info('---isNewPatientError---');
     log.info(isNewPatientError);
     log.info('---isNewPatientResult---');
@@ -42,7 +35,7 @@ module.exports = Patients => {
     let createFunctionObj = {
       ...validateDataResult.data
     };
-    [createPatientError, createPatientResult] = await to(createPatientFunction(createFunctionObj));
+    let [createPatientError, createPatientResult] = await to(createPatientFunction(createFunctionObj));
     log.info('---createPatientError---');
     log.info(createPatientError);
     log.info('---createPatientResult---');
@@ -51,7 +44,7 @@ module.exports = Patients => {
     if (createPatientError) {
       return res.status(createPatientError.error_code || 500).send(createPatientError);
     }
-    return res.send(createPatientResult);
+    res.send(createPatientResult);
   }
 
   const validateDataFunction = data => {
@@ -118,6 +111,7 @@ module.exports = Patients => {
         created_by: utils.validateKeys(() => data.user.username, null, null),
         date_of_birth: moment(data.date_of_birth).format('YYYY-MM-DD')
       };
+      delete createObj['user'];
       models['Patients']
         .scope('activeScope')
         .findOrCreate({
