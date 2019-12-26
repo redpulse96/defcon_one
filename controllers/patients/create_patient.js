@@ -4,17 +4,17 @@ const moment = packageHelper.moment;
 const {
   to
 } = require('../utility/helper_function');
+const {
+  MANDATORY_PARAMS: {
+    CREATE_PATIENT
+  }
+} = require('../../public/javascripts/constants');
 
 module.exports = Patients => {
 
   Patients.createPatient = async (req, res) => {
 
     let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
-    log.info('---validateDataError---');
-    log.info(validateDataError);
-    log.info('---validateDataResult---');
-    log.info(validateDataResult);
-
     if (validateDataError) {
       return res.status(validateDataError.error_code || 500).send(validateDataError);
     }
@@ -22,12 +22,7 @@ module.exports = Patients => {
     let isNewPatientObj = {
       mobile_no: validateDataResult.data.mobile_no
     };
-    let [isNewPatientError, isNewPatientResult] = await to(isNewPatientFunction(isNewPatientObj));
-    log.info('---isNewPatientError---');
-    log.info(isNewPatientError);
-    log.info('---isNewPatientResult---');
-    log.info(isNewPatientResult);
-
+    let [isNewPatientError] = await to(isNewPatientFunction(isNewPatientObj));
     if (isNewPatientError) {
       return res.status(isNewPatientError.error_code || 500).send(isNewPatientError);
     }
@@ -36,11 +31,6 @@ module.exports = Patients => {
       ...validateDataResult.data
     };
     let [createPatientError, createPatientResult] = await to(createPatientFunction(createFunctionObj));
-    log.info('---createPatientError---');
-    log.info(createPatientError);
-    log.info('---createPatientResult---');
-    log.info(createPatientResult);
-
     if (createPatientError) {
       return res.status(createPatientError.error_code || 500).send(createPatientError);
     }
@@ -51,7 +41,7 @@ module.exports = Patients => {
     return new Promise((resolve, reject) => {
       let paramsCheck = {
         data: data.body,
-        mandatoryParams: ['patient_name', 'mobile_no', 'date_of_birth'],
+        mandatoryParams: CREATE_PATIENT,
         checkValType: [{
           key: 'patient_name',
           checkValue: 'STRING'

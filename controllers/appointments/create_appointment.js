@@ -1,22 +1,21 @@
 const log = require('../../config/log_config').logger('appointments_controller');
 const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs'];
-const utils = require('../utility/utils');
-const async = packageHelper.async;
 const moment = packageHelper.moment;
+const utils = require('../utility/utils');
 const {
   to
 } = require('../utility/helper_function');
+const {
+  MANDATORY_PARAMS: {
+    CREATE_APPOINTMENT
+  }
+} = require('../../public/javascripts/constants');
 
 module.exports = Appointments => {
 
   Appointments.createAppointment = async (req, res) => {
 
     let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
-    log.info('---validateDataError---');
-    log.info(validateDataError);
-    log.info('---validateDataResult---');
-    log.info(validateDataResult);
-
     if (validateDataError) {
       return res.status(validateDataError.error_code || 500).send(validateDataError);
     }
@@ -24,12 +23,7 @@ module.exports = Appointments => {
     let checkPatientExistanceObj = {
       ...validateDataResult.data
     };
-    let [checkPatientExistanceError, checkPatientExistanceResult] = await to(checkPatientExistanceFunction(checkPatientExistanceObj));
-    log.info('---checkPatientExistanceError---');
-    log.info(checkPatientExistanceError);
-    log.info('---checkPatientExistanceResult---');
-    log.info(checkPatientExistanceResult);
-
+    let [checkPatientExistanceError] = await to(checkPatientExistanceFunction(checkPatientExistanceObj));
     if (checkPatientExistanceError) {
       return res.status(checkPatientExistanceError.error_code || 500).send(checkPatientExistanceError);
     }
@@ -38,11 +32,6 @@ module.exports = Appointments => {
       ...validateDataResult.data
     };
     let [createNewAppointmentError, createNewAppointmentResult] = await to(createNewAppointmentFunction(createNewAppointmentObj));
-    log.info('---createNewAppointmentError---');
-    log.info(createNewAppointmentError);
-    log.info('---createNewAppointmentResult---');
-    log.info(createNewAppointmentResult);
-
     if (createNewAppointmentError) {
       return res.status(createNewAppointmentError.error_code || 500).send(createNewAppointmentError);
     }
@@ -51,12 +40,7 @@ module.exports = Appointments => {
       ...validateDataResult.data,
       ...createNewAppointmentResult.data.appointment
     };
-    let [createAppointmentLogError, createAppointmentLogResult] = await to(createAppointmentLogFunction(createNewAppointmentLogObj));
-    log.info('---createAppointmentLogError---');
-    log.info(createAppointmentLogError);
-    log.info('---createAppointmentLogResult---');
-    log.info(createAppointmentLogResult);
-
+    let [createAppointmentLogError] = await to(createAppointmentLogFunction(createNewAppointmentLogObj));
     if (createAppointmentLogError) {
       return res.status(createAppointmentLogError.error_code || 500).send(createAppointmentLogError);
     }
@@ -67,7 +51,7 @@ module.exports = Appointments => {
     return new Promise((resolve, reject) => {
       let paramsCheck = {
         data: data.body,
-        mandatoryParams: ['appointment_name', 'appointment_date', 'patient_id', 'appointment_status', 'from_time', 'to_time']
+        mandatoryParams: CREATE_APPOINTMENT
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(paramRes => {

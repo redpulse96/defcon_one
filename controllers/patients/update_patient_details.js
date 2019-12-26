@@ -3,6 +3,11 @@ const helperFunction = require('../utility/helper_function');
 const utils = require('../utility/utils');
 const _ = packageHelper.lodash;
 const async = packageHelper.async;
+const {
+  MANDATORY_PARAMS: {
+    UPDATE_PATIENT
+  }
+} = require('../../public/javascripts/constants');
 
 module.exports = Patients => {
 
@@ -23,7 +28,7 @@ module.exports = Patients => {
     function validateDataFunction(callback) {
       let paramsCheck = {
         data: req.body,
-        mandatoryParams: ['mobile_no', 'update_obj']
+        mandatoryParams: UPDATE_PATIENT
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(res => {

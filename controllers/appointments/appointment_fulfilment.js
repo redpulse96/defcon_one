@@ -5,7 +5,10 @@ const async = packageHelper.async;
 const moment = packageHelper.moment;
 const _ = packageHelper.lodash;
 const {
-  APPOINTMENT_STATUS_MATRIX
+  APPOINTMENT_STATUS_MATRIX,
+  MANDATORY_PARAMS: {
+    APPOINTMENT_FULFILMENT
+  }
 } = require('../../public/javascripts/constants');
 
 module.exports = Appointments => {
@@ -33,7 +36,7 @@ module.exports = Appointments => {
     function validateDataFunction(callback) {
       let paramsCheck = {
         data: req.body,
-        mandatoryParams: ['appointment_id', 'appointment_status']
+        mandatoryParams: APPOINTMENT_FULFILMENT
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(paramsRes => {
