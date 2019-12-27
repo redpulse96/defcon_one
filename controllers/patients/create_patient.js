@@ -16,7 +16,7 @@ module.exports = Patients => {
 
     let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
     if (validateDataError) {
-      return res.status(validateDataError.error_code || 500).send(validateDataError);
+      return utils.generateResponse(validateDataError)(res);
     }
 
     let isNewPatientObj = {
@@ -24,7 +24,7 @@ module.exports = Patients => {
     };
     let [isNewPatientError] = await to(isNewPatientFunction(isNewPatientObj));
     if (isNewPatientError) {
-      return res.status(isNewPatientError.error_code || 500).send(isNewPatientError);
+      return utils.generateResponse(isNewPatientError)(res);
     }
 
     let createFunctionObj = {
@@ -32,9 +32,9 @@ module.exports = Patients => {
     };
     let [createPatientError, createPatientResult] = await to(createPatientFunction(createFunctionObj));
     if (createPatientError) {
-      return res.status(createPatientError.error_code || 500).send(createPatientError);
+      return utils.generateResponse(createPatientError)(res);
     }
-    res.send(createPatientResult);
+    return utils.generateResponse(createPatientResult)(res);
   }
 
   const validateDataFunction = data => {

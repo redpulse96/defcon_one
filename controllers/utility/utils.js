@@ -160,16 +160,18 @@ module.exports = {
     switch (response.success) {
       case true:
         statusCode = httpStatus.OK;
+        !(response.message) && (response.message = 'Successfully executed');
         break;
       case false:
         statusCode = httpStatus[response.error_code];
+        !(response.message) && (response.message = 'Internal server error');
         break;
       default:
         statusCode = httpStatus.OK;
         break;
     }
     return res => {
-      return res.status(statusCode).send(response);
+      return res.status(statusCode || 500).send(response);
     }
   }
 }

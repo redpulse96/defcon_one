@@ -17,7 +17,7 @@ module.exports = Appointments => {
 
     let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
     if (validateDataError) {
-      return res.status(validateDataError.error_code || 500).send(validateDataError);
+      return utils.generateResponse(validateDataError)(res);
     }
 
     let checkPatientExistanceObj = {
@@ -25,7 +25,7 @@ module.exports = Appointments => {
     };
     let [checkPatientExistanceError] = await to(checkPatientExistanceFunction(checkPatientExistanceObj));
     if (checkPatientExistanceError) {
-      return res.status(checkPatientExistanceError.error_code || 500).send(checkPatientExistanceError);
+      return utils.generateResponse(checkPatientExistanceError)(res);
     }
 
     let createNewAppointmentObj = {
@@ -33,7 +33,7 @@ module.exports = Appointments => {
     };
     let [createNewAppointmentError, createNewAppointmentResult] = await to(createNewAppointmentFunction(createNewAppointmentObj));
     if (createNewAppointmentError) {
-      return res.status(createNewAppointmentError.error_code || 500).send(createNewAppointmentError);
+      return utils.generateResponse(createNewAppointmentError)(res);
     }
 
     let createNewAppointmentLogObj = {
@@ -42,9 +42,9 @@ module.exports = Appointments => {
     };
     let [createAppointmentLogError] = await to(createAppointmentLogFunction(createNewAppointmentLogObj));
     if (createAppointmentLogError) {
-      return res.status(createAppointmentLogError.error_code || 500).send(createAppointmentLogError);
+      return utils.generateResponse(createAppointmentLogError)(res);
     }
-    res.send(createNewAppointmentResult);
+    return utils.generateResponse(createNewAppointmentResult)(res);
   }
 
   const validateDataFunction = data => {
