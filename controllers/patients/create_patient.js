@@ -37,7 +37,7 @@ module.exports = Patients => {
     return utils.generateResponse(createPatientResult)(res);
   }
 
-  const validateDataFunction = data => {
+  function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
       let paramsCheck = {
         data: data.body,
@@ -64,7 +64,7 @@ module.exports = Patients => {
     });
   }
 
-  const isNewPatientFunction = data => {
+  function isNewPatientFunction(data) {
     return new Promise((resolve, reject) => {
       let where = {
         mobile_no: data.mobile_no
@@ -94,7 +94,7 @@ module.exports = Patients => {
     });
   }
 
-  const createPatientFunction = data => {
+  function createPatientFunction(data) {
     return new Promise((resolve, reject) => {
       let createObj = {
         ...data,

@@ -68,7 +68,7 @@ module.exports = Appointments => {
     return utils.generateResponse(fetchCurrentAppointmentResult)(res);
   }
 
-  const validateDataFunction = data => {
+  function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
       let paramsCheck = {
         data: data.body,
@@ -84,7 +84,7 @@ module.exports = Appointments => {
     });
   }
 
-  const fetchCurrentAppointmentFunction = data => {
+  function fetchCurrentAppointmentFunction(data) {
     return new Promise((resolve, reject) => {
 
       let whereObj = {
@@ -129,7 +129,7 @@ module.exports = Appointments => {
     });
   }
 
-  const checkStatusMatrixFunction = data => {
+  function checkStatusMatrixFunction(data) {
     return new Promise((resolve, reject) => {
       const statusMatrix = APPOINTMENT_STATUS_MATRIX;
       let currentStatus = data.appointment_detail.appointment_status;
@@ -150,7 +150,7 @@ module.exports = Appointments => {
     });
   }
 
-  const rescheduleAppointmentFunction = data => {
+  function rescheduleAppointmentFunction(data) {
     return new Promise((resolve, reject) => {
       if (data.appointment_status === 'rescheduled') {
         log.info('---APPOINTMENTResCHEDULING_REQUEST_RAISED---');
@@ -230,7 +230,7 @@ module.exports = Appointments => {
     });
   }
 
-  const updateAppointmentStatusFunction = data => {
+  function updateAppointmentStatusFunction(data) {
     return new Promise((resolve, reject) => {
       let updateObj = {
         ...data
@@ -279,7 +279,7 @@ module.exports = Appointments => {
     });
   }
 
-  const createAppointmentLogFunction = data => {
+  function createAppointmentLogFunction(data) {
     return new Promise((resolve, reject) => {
       let createLogObj = {
         ...data

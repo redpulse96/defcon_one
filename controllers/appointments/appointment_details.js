@@ -22,7 +22,7 @@ module.exports = Appointments => {
     }
   }
 
-  const fetchAppointmentDetailsFunction = (result, callback) => {
+  function fetchAppointmentDetailsFunction(result, callback) {
     const {
       validateData
     } = result;

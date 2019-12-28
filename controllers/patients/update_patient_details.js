@@ -45,7 +45,7 @@ module.exports = Patients => {
     return utils.generateResponse(returnPatientDetailsResult)(res);
   }
 
-  const validateDataFunction = data => {
+  function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
       let paramsCheck = {
         data: data.body,
@@ -61,7 +61,7 @@ module.exports = Patients => {
     });
   }
 
-  const checkUniqueMobileNoFunction = data => {
+  function checkUniqueMobileNoFunction(data) {
     return new Promise((resolve, reject) => {
       let filter = {
         where: {
@@ -107,7 +107,7 @@ module.exports = Patients => {
     });
   }
 
-  const updatePatientFunction = data => {
+  function updatePatientFunction(data) {
     return new Promise((resolve, reject) => {
       let filter = {
         where: {
@@ -153,7 +153,7 @@ module.exports = Patients => {
     });
   }
 
-  const returnPatientDetailsFunction = data => {
+  function returnPatientDetailsFunction(data) {
     return new Promise((resolve, reject) => {
       models['Patients']
         .scope('activeScope')
