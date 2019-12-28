@@ -10,7 +10,7 @@ const session = packageHelper.express_session;
 
 const {
   verifyToken,
-  ensureAuth,
+  // ensureAuth,
   attachUserToRequest
 } = require('./middleware/auth_middleware');
 

@@ -5,235 +5,235 @@ const {
   transports
 } = packageHelper.winston;
 
-generateLogger = (serviceName, level) => {
+const generateLogger = (serviceName, level) => {
   let levelName = level ? level : 'info';
   let generateLogObj = {};
 
   switch (levelName) {
-    case 'info':
-      generateLogObj = {
-        defaultMeta: {
+  case 'info':
+    generateLogObj = {
+      defaultMeta: {
+        level: 'info',
+        service: serviceName || 'defcon_one'
+      },
+      transports: [
+        new transports.Console({
           level: 'info',
-          service: serviceName || 'defcon_one'
-        },
-        transports: [
-          new transports.Console({
-            level: 'info',
-            format: format.combine(
-              format.timestamp({
-                format: 'YYYY-MM-DD HH:mm:ss'
-              }),
-              format.errors({
-                stack: true
-              }),
-              format.splat(),
-              format.json()
-            )
-          })
-        ]
-      };
-      break;
-    case 'error':
-      generateLogObj = {
-        defaultMeta: {
-          level: 'error',
-          service: serviceName || 'defcon_one'
-        },
-        format: format.combine(
-          format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss'
-          }),
-          format.errors({
-            stack: true
-          }),
-          format.errors({
-            stack: true
-          }),
-          format.splat(),
-          format.json()
-        ),
-        transports: [
-          new transports.Console({
-            level: 'info',
-            format: format.combine(
-              format.timestamp({
-                format: 'YYYY-MM-DD HH:mm:ss'
-              }),
-              format.errors({
-                stack: true
-              }),
-              format.splat(),
-              format.json()
-            )
-          })
-        ]
-      };
-      break;
-    case 'debug':
-      generateLogObj = {
-        defaultMeta: {
-          level: 'debug',
-          service: serviceName || 'defcon_one'
-        },
-        format: format.combine(
-          format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss'
-          }),
-          format.errors({
-            stack: true
-          }),
-          format.splat(),
-          format.json()
-        ),
-        transports: [
-          new transports.Console({
-            level: 'info',
-            format: format.combine(
-              format.timestamp({
-                format: 'YYYY-MM-DD HH:mm:ss'
-              }),
-              format.errors({
-                stack: true
-              }),
-              format.splat(),
-              format.json()
-            )
-          })
-        ]
-      };
-      break;
-    case 'warning':
-      generateLogObj = {
-        defaultMeta: {
-          level: 'warning',
-          service: serviceName || 'defcon_one'
-        },
-        format: format.combine(
-          format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss'
-          }),
-          format.errors({
-            stack: true
-          }),
-          format.splat(),
-          format.json()
-        ),
-        transports: [
-          new transports.Console({
-            level: 'info',
-            format: format.combine(
-              format.timestamp({
-                format: 'YYYY-MM-DD HH:mm:ss'
-              }),
-              format.errors({
-                stack: true
-              }),
-              format.splat(),
-              format.json()
-            )
-          })
-        ]
-      };
-      break;
-    case 'trace':
-      generateLogObj = {
-        defaultMeta: {
-          level: 'trace',
-          service: serviceName || 'defcon_one'
-        },
-        format: format.combine(
-          format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss'
-          }),
-          format.errors({
-            stack: true
-          }),
-          format.splat(),
-          format.json()
-        ),
-        transports: [
-          new transports.Console({
-            level: 'info',
-            format: format.combine(
-              format.timestamp({
-                format: 'YYYY-MM-DD HH:mm:ss'
-              }),
-              format.errors({
-                stack: true
-              }),
-              format.splat(),
-              format.json()
-            )
-          })
-        ]
-      };
-      break;
-    case 'crit':
-      generateLogObj = {
-        defaultMeta: {
-          level: 'crit',
-          service: serviceName || 'defcon_one'
-        },
-        format: format.combine(
-          format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss'
-          }),
-          format.errors({
-            stack: true
-          }),
-          format.splat(),
-          format.json()
-        ),
-        transports: [
-          new transports.Console({
-            level: 'info',
-            format: format.combine(
-              format.timestamp({
-                format: 'YYYY-MM-DD HH:mm:ss'
-              }),
-              format.errors({
-                stack: true
-              }),
-              format.splat(),
-              format.json()
-            )
-          })
-        ]
-      };
-      break;
-    default:
-      generateLogObj = {
-        defaultMeta: {
+          format: format.combine(
+            format.timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss'
+            }),
+            format.errors({
+              stack: true
+            }),
+            format.splat(),
+            format.json()
+          )
+        })
+      ]
+    };
+    break;
+  case 'error':
+    generateLogObj = {
+      defaultMeta: {
+        level: 'error',
+        service: serviceName || 'defcon_one'
+      },
+      format: format.combine(
+        format.timestamp({
+          format: 'YYYY-MM-DD HH:mm:ss'
+        }),
+        format.errors({
+          stack: true
+        }),
+        format.errors({
+          stack: true
+        }),
+        format.splat(),
+        format.json()
+      ),
+      transports: [
+        new transports.Console({
+          level: 'info',
+          format: format.combine(
+            format.timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss'
+            }),
+            format.errors({
+              stack: true
+            }),
+            format.splat(),
+            format.json()
+          )
+        })
+      ]
+    };
+    break;
+  case 'debug':
+    generateLogObj = {
+      defaultMeta: {
+        level: 'debug',
+        service: serviceName || 'defcon_one'
+      },
+      format: format.combine(
+        format.timestamp({
+          format: 'YYYY-MM-DD HH:mm:ss'
+        }),
+        format.errors({
+          stack: true
+        }),
+        format.splat(),
+        format.json()
+      ),
+      transports: [
+        new transports.Console({
+          level: 'info',
+          format: format.combine(
+            format.timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss'
+            }),
+            format.errors({
+              stack: true
+            }),
+            format.splat(),
+            format.json()
+          )
+        })
+      ]
+    };
+    break;
+  case 'warning':
+    generateLogObj = {
+      defaultMeta: {
+        level: 'warning',
+        service: serviceName || 'defcon_one'
+      },
+      format: format.combine(
+        format.timestamp({
+          format: 'YYYY-MM-DD HH:mm:ss'
+        }),
+        format.errors({
+          stack: true
+        }),
+        format.splat(),
+        format.json()
+      ),
+      transports: [
+        new transports.Console({
+          level: 'info',
+          format: format.combine(
+            format.timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss'
+            }),
+            format.errors({
+              stack: true
+            }),
+            format.splat(),
+            format.json()
+          )
+        })
+      ]
+    };
+    break;
+  case 'trace':
+    generateLogObj = {
+      defaultMeta: {
+        level: 'trace',
+        service: serviceName || 'defcon_one'
+      },
+      format: format.combine(
+        format.timestamp({
+          format: 'YYYY-MM-DD HH:mm:ss'
+        }),
+        format.errors({
+          stack: true
+        }),
+        format.splat(),
+        format.json()
+      ),
+      transports: [
+        new transports.Console({
+          level: 'info',
+          format: format.combine(
+            format.timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss'
+            }),
+            format.errors({
+              stack: true
+            }),
+            format.splat(),
+            format.json()
+          )
+        })
+      ]
+    };
+    break;
+  case 'crit':
+    generateLogObj = {
+      defaultMeta: {
+        level: 'crit',
+        service: serviceName || 'defcon_one'
+      },
+      format: format.combine(
+        format.timestamp({
+          format: 'YYYY-MM-DD HH:mm:ss'
+        }),
+        format.errors({
+          stack: true
+        }),
+        format.splat(),
+        format.json()
+      ),
+      transports: [
+        new transports.Console({
+          level: 'info',
+          format: format.combine(
+            format.timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss'
+            }),
+            format.errors({
+              stack: true
+            }),
+            format.splat(),
+            format.json()
+          )
+        })
+      ]
+    };
+    break;
+  default:
+    generateLogObj = {
+      defaultMeta: {
+        level: 'fatal',
+        service: serviceName || 'defcon_one'
+      },
+      format: format.combine(
+        format.timestamp({
+          format: 'YYYY-MM-DD HH:mm:ss'
+        }),
+        format.errors({
+          stack: true
+        }),
+        format.splat(),
+        format.json()
+      ),
+      transports: [
+        new transports.Console({
           level: 'fatal',
-          service: serviceName || 'defcon_one'
-        },
-        format: format.combine(
-          format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss'
-          }),
-          format.errors({
-            stack: true
-          }),
-          format.splat(),
-          format.json()
-        ),
-        transports: [
-          new transports.Console({
-            level: 'fatal',
-            format: format.combine(
-              format.timestamp({
-                format: 'YYYY-MM-DD HH:mm:ss'
-              }),
-              format.errors({
-                stack: true
-              }),
-              format.splat(),
-              format.json()
-            )
-          })
-        ]
-      };
-      break;
+          format: format.combine(
+            format.timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss'
+            }),
+            format.errors({
+              stack: true
+            }),
+            format.splat(),
+            format.json()
+          )
+        })
+      ]
+    };
+    break;
   }
   return createLogger(generateLogObj);
 }

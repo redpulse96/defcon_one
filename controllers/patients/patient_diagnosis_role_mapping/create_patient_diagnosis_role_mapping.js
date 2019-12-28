@@ -6,11 +6,11 @@ module.exports = PatientDiagnosisRoleMapping => {
 
   PatientDiagnosisRoleMapping.createPatientDiagnosisRoleMapping = (req, res) => {
     async.auto({
-        validateData: validateDataFunction,
-        createPatientDiagnosisRoleMapping: ['validateData', createPatientDiagnosisRoleMappingFunction]
-      })
-        .then(asyncAutoRes => res.send(asyncAutoRes))
-        .catch(asyncAutoErr => res.status(asyncAutoErr.error_code).send(asyncAutoErr));
+      validateData: validateDataFunction,
+      createPatientDiagnosisRoleMapping: ['validateData', createPatientDiagnosisRoleMappingFunction]
+    })
+      .then(asyncAutoRes => res.send(asyncAutoRes))
+      .catch(asyncAutoErr => res.status(asyncAutoErr.error_code).send(asyncAutoErr));
 
     function validateDataFunction(callback) {
       let paramsCheck = {
