@@ -9,6 +9,7 @@ module.exports = {
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly",
+    "models": "readonly",
     "modelNames": "false",
     "packageHelper": "readonly",
     "SERVER_PUBLIC_IP": "readonly"
@@ -19,7 +20,6 @@ module.exports = {
   },
   "rules": {
     "indent": ["error", 2],
-    "no-console": 2,
     "no-unused-vars": ["error", {
       "vars": "all",
       "args": "after-used",

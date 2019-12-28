@@ -7,18 +7,18 @@ let mongo_config = {};
 let env = 'dev';
 
 switch (packageHelper.NODE_ENV) {
-  case 'dev':
-    env = 'dev';
-    break;
-  case 'uat':
-    env = 'uat';
-    break;
-  case 'production':
-    env = 'production';
-    break;
-  default:
-    env = 'dev';
-    break;
+case 'dev':
+  env = 'dev';
+  break;
+case 'uat':
+  env = 'uat';
+  break;
+case 'production':
+  env = 'production';
+  break;
+default:
+  env = 'dev';
+  break;
 }
 
 mongo_config = {
