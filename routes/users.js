@@ -1,5 +1,11 @@
-const { registerUser } = require('../controllers/users');
-const { validateUser, generateToken, destroyToken } = require('../config/middleware/auth_middleware');
+const {
+  registerUser
+} = require('../controllers/users');
+const {
+  validateUser,
+  generateToken,
+  destroyToken
+} = require('../config/middleware/auth_middleware');
 
 const passport = packageHelper.passport;
 const express = packageHelper.express;

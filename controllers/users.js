@@ -3,36 +3,37 @@ const Users = require('../models/users');
 const utils = require('./utility/utils');
 const {
   DEFAULT_SALT,
-  DEFAULT_USERNAME
+  DEFAULT_USERNAME,
+  MANDATORY_PARAMS: {
+    REGISTER_USER
+  }
 } = require('../public/javascripts/constants');
 const FEAURE_RIGHTS = require('../public/javascripts/role_mapping');
 const bcrypt = packageHelper.bcrypt;
 
-Users.generateSalt = () => {
-  return new Promise((resolve, reject) => {
-    bcrypt.genSalt(DEFAULT_SALT, (err, salt) => {
-      if (err) {
-        log.error('---ERROR_WHILE_GENERATING_SALT---');
-        log.error(err);
-        return reject({
-          success: false,
-          message: 'Salt generation error',
-          data: {}
-        });
-      } else {
-        log.info('---SUCCESS_WHILE_GENERATING_SALT---');
-        log.info(salt);
-        return resolve({
-          success: true,
-          message: 'Salt generation success',
-          data: {
-            salt
-          }
-        });
-      }
-    });
+Users.generateSalt = new Promise((resolve, reject) => {
+  bcrypt.genSalt(DEFAULT_SALT, (err, salt) => {
+    if (err) {
+      log.error('---ERROR_WHILE_GENERATING_SALT---');
+      log.error(err);
+      return reject({
+        success: false,
+        message: 'Salt generation error',
+        data: {}
+      });
+    } else {
+      log.info('---SUCCESS_WHILE_GENERATING_SALT---');
+      log.info(salt);
+      return resolve({
+        success: true,
+        message: 'Salt generation success',
+        data: {
+          salt
+        }
+      });
+    }
   });
-}
+});
 
 Users.generateHash = (password, salt) => {
   return new Promise((resolve, reject) => {
@@ -73,7 +74,7 @@ const registerUser = (req, res) => {
   let newUser;
   let paramsObj = {
     data: req.body,
-    mandatoryParams: ['name', 'mobile_no', 'role_type', 'password']
+    mandatoryParams: REGISTER_USER
   };
   utils.hasMandatoryParams(paramsObj)
     .then(() => {

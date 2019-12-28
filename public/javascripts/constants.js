@@ -14,6 +14,7 @@ const APPOINTMENT_STATUS_MATRIX = {
 };
 
 const MANDATORY_PARAMS = {
+  REGISTER_USER: ['name', 'mobile_no', 'role_type', 'password'],
   CREATE_PATIENT: ['patient_name', 'mobile_no', 'date_of_birth'],
   UPDATE_PATIENT: ['mobile_no', 'update_obj'],
   CREATE_APPOINTMENT: ['appointment_name', 'appointment_date', 'patient_id', 'appointment_status', 'from_time', 'to_time'],
