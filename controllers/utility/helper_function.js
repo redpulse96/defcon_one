@@ -2,6 +2,13 @@ const log = require('../../config/log_config').logger('helper_function');
 
 module.exports = {
   to: promise => promise.then(data => ([null, data])).catch(err => ([err, null])),
+  objectFn: {
+    hasFunction: (obj, key) => {
+      let isExists;
+      obj[key] ? isExists = true : isExists = false;
+      return isExists;
+    }
+  },
   arrayFn: {
     /**
      * @param {Array} arr - Array of objects to map a key from

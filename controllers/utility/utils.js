@@ -1,6 +1,5 @@
 const log = require('../../config/log_config').logger('utils');
 const _ = packageHelper.lodash;
-const httpStatus = packageHelper.http_status_codes;
 const moment = packageHelper.moment;
 
 module.exports = {
@@ -159,15 +158,15 @@ module.exports = {
     let statusCode;
     switch (response.success) {
       case true:
-        statusCode = httpStatus.OK;
+        statusCode = 200;
         !(response.message) && (response.message = 'Successfully executed');
         break;
       case false:
-        statusCode = httpStatus[response.error_code];
+        statusCode = response['error_code'];
         !(response.message) && (response.message = 'Internal server error');
         break;
       default:
-        statusCode = httpStatus.OK;
+        statusCode = 200;
         break;
     }
     return res => {
