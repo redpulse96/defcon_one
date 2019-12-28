@@ -16,7 +16,7 @@ Roles.getRoles = (req, res) => {
     .then(modelRes => {
       log.info('---ROLESRes---');
       log.info(modelRes);
-      res.send({
+      return res.send({
         success: true,
         message: 'Roles fetch success',
         data: {
@@ -27,14 +27,13 @@ Roles.getRoles = (req, res) => {
     .catch(err => {
       log.error('---ROLES_ERR---');
       log.error(err);
-      res.send({
+      return res.send({
         success: false,
         message: 'Roles fetch failure',
         data: {
           roles: err
         }
       });
-      next(err);
     })
 }
 
