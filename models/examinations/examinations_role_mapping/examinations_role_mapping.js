@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   const ExaminationsRoleMapping = sequelize.define('examinations_role_mapping', {
     examination_role_mapping_id: {
@@ -57,7 +58,8 @@ module.exports = (sequelize, DataTypes) => {
         where: {
           is_active: true,
           is_archived: false
-        }
+        },
+        attributes: { exclude: ['is_active', 'is_archived', 'created_date', 'updated_date'] }
       }
     },
     sequelize,

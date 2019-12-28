@@ -1,79 +1,81 @@
 const log = require('../../../config/log_config').logger('patient_prescriptions_controller');
-const PatientPrescriptions = require(packageHelper.MODEL_CONFIG_DIR)['PatientPrescriptions'];
+const PatientPrescription = require(packageHelper.MODEL_CONFIG_DIR)['PatientPrescription'];
 const utils = require('../../utility/utils');
 
-PatientPrescriptions.fetchPatientPrescriptions = (req, res) => {
+PatientPrescription.fetchPatientPrescription = (req, res) => {
 
-  let whereObj = Object.assign({}, req.params, {
+  let whereObj = {
+    ...req.params,
     include: [{
-      model: models.PatientDiagnosisRoleMapping,
-      as: 'patient_diagnosis_role_mapping'
-    }, {
-      model: models.PatientExaminationsRoleMapping,
-      as: 'patient_examinations_role_mapping'
-    }, {
-      model: models.PatientInvestigationsRoleMapping,
-      as: 'patient_investigations_role_mapping'
-    }, {
-      model: models.PatientSymptomsRoleMapping,
-      as: 'patient_symptoms_role_mapping'
-    }, {
-      model: models.Roles,
-      as: 'role'
+      model: models['Appointments'],
+      as: 'appointment',
+      include: [{
+        model: models['PatientDiagnosisRoleMapping'],
+        as: 'patient_diagnosis_role_mapping'
+      }, {
+        model: models['PatientExaminationsRoleMapping'],
+        as: 'patient_examinations_role_mapping'
+      }, {
+        model: models['PatientInvestigationsRoleMapping'],
+        as: 'patient_investigations_role_mapping'
+      }, {
+        model: models['PatientSymptomsRoleMapping'],
+        as: 'patient_symptoms_role_mapping'
+      }]
     }]
-  });
-  models.PatientPrescriptions.findOne(whereObj)
-    .then(fetch_res => {
+  };
+  models['PatientPrescription'].findOne(whereObj)
+    .then(fetchRes => {
+      fetchRes = fetchRes.toJSON();
       log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
-      log.info(fetch_res);
+      log.info(fetchRes);
       return res.send({
         success: true,
-        message: 'PatientPrescriptions Role Mapping fetching success',
+        message: 'PatientPrescription fetching success',
         data: {
-          patient_prescription: fetch_res
+          patient_prescription: fetchRes
         }
       });
     })
-    .catch(fetch_err => {
+    .catch(fetchErr => {
       log.info('---PATIENT_PRESCRIPTION_FETCH_FAILURE---');
-      log.info(fetch_err);
-      return res.send({
+      log.info(fetchErr);
+      return res.status(500).send({
         success: false,
-        message: 'PatientPrescriptions Role Mapping fetching failure',
-        data: {
-          patient_prescription: fetch_err
-        }
+        message: 'Internal server error',
+        data: {}
       });
     });
 }
 
-PatientPrescriptions.createPatientPrescriptions = (req, res) => {
+PatientPrescription.createPatientPrescription = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
+  let createObj = {
+    ...req.body,
+    created_by: req.user.username
+  };
   createObj.reference_id = utils.GenerateUniqueID(10, 'A#vb');
-  models.PatientPrescriptions.create(createObj)
-    .then(create_res => {
+  models['PatientPrescription'].create(createObj)
+    .then(createRes => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
-      log.info(create_res);
+      log.info(createRes);
       return res.send({
         success: true,
-        message: 'PatientPrescriptions Role Mapping creation success',
+        message: 'PatientPrescription creation success',
         data: {
-          patient_prescription: create_res.toJSON()
+          patient_prescription: createRes.toJSON()
         }
       });
     })
-    .catch(create_err => {
+    .catch(createErr => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_FAILURE---');
-      log.info(create_err);
-      return res.send({
+      log.info(createErr);
+      return res.status(500).send({
         success: false,
-        message: 'PatientPrescriptions Role Mapping creation failure',
-        data: {
-          patient_prescription: create_err
-        }
+        message: 'Internal server error',
+        data: {}
       });
     });
 }
 
-module.exports = PatientPrescriptions;
+module.exports = PatientPrescription;

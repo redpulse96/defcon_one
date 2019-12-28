@@ -16,5 +16,5 @@ module.exports = {
   PatientSymptomsRoleMapping: '../models/patients/patient_symptoms_role_mapping/patient_symptoms_role_mapping.js',
   PatientPrescription: '../models/patients/patients_prescription/patient_prescription.js',
   Patients: '../models/patients/patients.js',
-  Roles: '../models/roles/roles.js',
+  Roles: '../models/roles/roles.js'
 }

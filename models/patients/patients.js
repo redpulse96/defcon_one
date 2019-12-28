@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     created_by: {
-      type: DataTypes.BIGINT(11),
+      type: DataTypes.STRING(50),
       defaultValue: null
     },
     is_active: {
@@ -81,12 +81,13 @@ module.exports = (sequelize, DataTypes) => {
       ]
     },
     scopes: {
-  activeScope: {
-      where: {
-        is_active: true,
-        is_archived: false
+      activeScope: {
+        where: {
+          is_active: true,
+          is_archived: false
+        }
       }
-    }},
+    },
     underscored: true,
     sequelize,
     modelName: 'patients',
@@ -95,14 +96,33 @@ module.exports = (sequelize, DataTypes) => {
   });
   Patients.associate = models => {
     // associations can be defined here
+    Patients.hasMany(models['Appointments'], {
+      as: 'appointments',
+      foreignKey: 'patient_id'
+    });
     Patients.hasMany(models['PatientPrescription'], {
       as: 'patient_prescription',
       onDelete: "CASCADE",
       foreignKey: 'patient_id'
     });
-    Patients.hasMany(models['Appointments'], {
-      as: 'appointments',
-      onDelete: "CASCADE",
+    Patients.hasMany(models['PatientSymptomsRoleMapping'], {
+      as: 'patient_symptoms_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'patient_id'
+    });
+    Patients.hasMany(models['PatientInvestigationsRoleMapping'], {
+      as: 'patient_investigations_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'patient_id'
+    });
+    Patients.hasMany(models['PatientExaminationsRoleMapping'], {
+      as: 'patient_examinations_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'patient_id'
+    });
+    Patients.hasMany(models['PatientDiagnosisRoleMapping'], {
+      as: 'patient_diagnosis_role_mapping',
+      onUpdate: "CASCADE",
       foreignKey: 'patient_id'
     });
   };

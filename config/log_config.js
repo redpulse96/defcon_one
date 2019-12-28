@@ -1,6 +1,9 @@
 const packageHelper = require('./package_helper');
-const { createLogger, format, transports } = packageHelper.winston;
-const _ = packageHelper.lodash;
+const {
+  createLogger,
+  format,
+  transports
+} = packageHelper.winston;
 
 generateLogger = (serviceName, level) => {
   let levelName = level ? level : 'info';
@@ -13,15 +16,9 @@ generateLogger = (serviceName, level) => {
           level: 'info',
           service: serviceName || 'defcon_one'
         },
-        format: format.combine(
-          format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss'
-          }),
-          format.splat(),
-          format.json()
-        ),
         transports: [
           new transports.Console({
+            level: 'info',
             format: format.combine(
               format.timestamp({
                 format: 'YYYY-MM-DD HH:mm:ss'
@@ -32,10 +29,6 @@ generateLogger = (serviceName, level) => {
               format.splat(),
               format.json()
             )
-          }),
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_info.log',
-            level: 'info'
           })
         ]
       };
@@ -53,13 +46,25 @@ generateLogger = (serviceName, level) => {
           format.errors({
             stack: true
           }),
+          format.errors({
+            stack: true
+          }),
           format.splat(),
           format.json()
         ),
         transports: [
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_error.log',
-            level: 'error'
+          new transports.Console({
+            level: 'info',
+            format: format.combine(
+              format.timestamp({
+                format: 'YYYY-MM-DD HH:mm:ss'
+              }),
+              format.errors({
+                stack: true
+              }),
+              format.splat(),
+              format.json()
+            )
           })
         ]
       };
@@ -82,6 +87,7 @@ generateLogger = (serviceName, level) => {
         ),
         transports: [
           new transports.Console({
+            level: 'info',
             format: format.combine(
               format.timestamp({
                 format: 'YYYY-MM-DD HH:mm:ss'
@@ -92,10 +98,6 @@ generateLogger = (serviceName, level) => {
               format.splat(),
               format.json()
             )
-          }),
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_debug.log',
-            level: 'debug'
           })
         ]
       };
@@ -118,6 +120,7 @@ generateLogger = (serviceName, level) => {
         ),
         transports: [
           new transports.Console({
+            level: 'info',
             format: format.combine(
               format.timestamp({
                 format: 'YYYY-MM-DD HH:mm:ss'
@@ -128,10 +131,6 @@ generateLogger = (serviceName, level) => {
               format.splat(),
               format.json()
             )
-          }),
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_warn.log',
-            level: 'warning'
           })
         ]
       };
@@ -154,6 +153,7 @@ generateLogger = (serviceName, level) => {
         ),
         transports: [
           new transports.Console({
+            level: 'info',
             format: format.combine(
               format.timestamp({
                 format: 'YYYY-MM-DD HH:mm:ss'
@@ -164,10 +164,6 @@ generateLogger = (serviceName, level) => {
               format.splat(),
               format.json()
             )
-          }),
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_trace.log',
-            level: 'trace'
           })
         ]
       };
@@ -189,9 +185,18 @@ generateLogger = (serviceName, level) => {
           format.json()
         ),
         transports: [
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_crit.log',
-            level: 'crit'
+          new transports.Console({
+            level: 'info',
+            format: format.combine(
+              format.timestamp({
+                format: 'YYYY-MM-DD HH:mm:ss'
+              }),
+              format.errors({
+                stack: true
+              }),
+              format.splat(),
+              format.json()
+            )
           })
         ]
       };
@@ -213,39 +218,8 @@ generateLogger = (serviceName, level) => {
           format.json()
         ),
         transports: [
-          new transports.File({
-            filename: packageHelper.LOGS_DIR + 'defcon_one_fatal.log',
-            level: 'fatal'
-          })
-        ]
-      };
-      break;
-  }
-  return createLogger(generateLogObj);
-}
-
-const logger = (serviceName) => {
-  const newLog = {
-    info: generateLogger(serviceName, 'info'),
-    error: generateLogger(serviceName, 'error'),
-    debug: generateLogger(serviceName, 'debug'),
-    warning: generateLogger(serviceName, 'warning')
-  };
-
-  let constructLog = (level) => {
-    let levelName = level ? level : 'info';
-
-    return (...args) => {
-      try {
-        newLog[levelName].log({
-          service: serviceName,
-          level: levelName,
-          message: _.concat(...args),
-          timestamp: new Date()
-        });
-
-        if (packageHelper.NODE_ENV !== 'production') {
-          newLog[levelName].add(new transports.Console({
+          new transports.Console({
+            level: 'fatal',
             format: format.combine(
               format.timestamp({
                 format: 'YYYY-MM-DD HH:mm:ss'
@@ -254,11 +228,36 @@ const logger = (serviceName) => {
                 stack: true
               }),
               format.splat(),
-              format.json(),
-              format.simple()
+              format.json()
             )
-          }));
-        }
+          })
+        ]
+      };
+      break;
+  }
+  return createLogger(generateLogObj);
+}
+
+const logger = serviceName => {
+  const newLog = {
+    info: generateLogger(serviceName, 'info'),
+    error: generateLogger(serviceName, 'error'),
+    trace: generateLogger(serviceName, 'trace'),
+    debug: generateLogger(serviceName, 'debug'),
+    warning: generateLogger(serviceName, 'warning')
+  };
+
+  const constructLog = level => {
+    let levelName = level ? level : 'info';
+
+    return (...args) => {
+      try {
+        newLog[levelName].log({
+          service: serviceName,
+          level: levelName,
+          message: args,
+          timestamp: new Date()
+        });
       } catch (e) {
         console.log('ERROR_IN_LOGS: ');
         console.dir(JSON.stringify(e));

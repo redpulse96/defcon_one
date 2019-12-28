@@ -14,7 +14,9 @@ AccessToken.generateAccessToken = data => {
         return resolve({
           success: true,
           message: 'login successfull',
-          data: res.toJSON()
+          data: {
+            access_token_res: res.toJSON()
+          }
         });
       })
       .catch(err => {
@@ -29,24 +31,24 @@ AccessToken.generateAccessToken = data => {
   });
 };
 
-AccessToken.getAccessToken = req => {
+AccessToken.getAccessToken = data => {
   return new Promise((resolve, reject) => {
     log.info('----AccessToken.getAccessToken---');
     let whereObj = {
       where: {
-        access_token: req.authorization
+        access_token: data.authorization
       }
     };
     models['AccessToken'].scope('activeScope').findOne(whereObj)
-      .then(model_res => {
-        log.info('---GET_ACCESS_TOKEN_RES---');
-        log.info(model_res);
-        if (model_res) {
+      .then(modelRes => {
+        log.info('---GET_ACCESS_TOKENRes---');
+        log.info(modelRes);
+        if (modelRes) {
           return resolve({
             success: true,
             message: 'AccessToken fetch success',
             data: {
-              access_token: model_res
+              access_token_res: modelRes
             }
           });
         } else {
@@ -92,7 +94,7 @@ AccessToken.clearToken = data => {
           success: true,
           message: 'access token destroyed successfully',
           data: res
-        })
+        });
       })
       .catch(err => {
         log.error('---ACCESS_TOKEN_DESTROYED_FAILURE---');
@@ -101,7 +103,7 @@ AccessToken.clearToken = data => {
           success: false,
           message: 'Something went wrong while destroying the access token',
           data: err
-        })
+        });
       });
   });
 };

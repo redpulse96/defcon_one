@@ -52,7 +52,8 @@ module.exports = (sequelize, DataTypes) => {
         where: {
           is_active: true,
           is_archived: false
-        }
+        },
+        attributes: { exclude: ['is_active', 'is_archived', 'created_date', 'updated_date'] }
       }
     },
     sequelize,
@@ -64,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Investigations.hasMany(models['InvestigationsRoleMapping'], {
       onDelete: "CASCADE",
-      foreignKey: 'investigations_role_mapping_id'
+      foreignKey: 'investigation_id'
     });
   };
 

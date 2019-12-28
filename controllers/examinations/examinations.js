@@ -3,27 +3,29 @@ const Examinations = require(packageHelper.MODEL_CONFIG_DIR)['Examinations'];
 
 Examinations.fetchExamination = (req, res) => {
 
-  let whereObj = Object.assign({}, req.params);
+  let whereObj = {
+    ...req.params
+  };
   models.Examinations.findOne(whereObj)
-    .then(fetch_res => {
+    .then(fetchRes => {
       log.info('---EXAMINATIONS_FETCH_SUCCESS---');
-      log.info(fetch_res);
+      log.info(fetchRes);
       return res.send({
         success: true,
         message: 'Examinations fetching success',
         data: {
-          symptom: fetch_res
+          symptom: fetchRes
         }
       });
     })
-    .catch(fetch_err => {
+    .catch(fetchErr => {
       log.info('---EXAMINATIONS_FETCH_FAILURE---');
-      log.info(fetch_err);
+      log.info(fetchErr);
       return res.send({
         success: false,
         message: 'Examinations fetching failure',
         data: {
-          symptom: fetch_err
+          symptom: fetchErr
         }
       });
     });
@@ -31,27 +33,29 @@ Examinations.fetchExamination = (req, res) => {
 
 Examinations.createExamination = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
+  let createObj = {
+    ...req.body
+  };
   models.Examinations.create(createObj)
-    .then(create_res => {
+    .then(createRes => {
       log.info('---EXAMINATIONS_CREATION_SUCCESS---');
-      log.info(create_res);
+      log.info(createRes);
       return res.send({
         success: true,
         message: 'Examination creation success',
         data: {
-          symptom: create_res
+          symptom: createRes
         }
       });
     })
-    .catch(create_err => {
+    .catch(createErr => {
       log.info('---EXAMINATIONS_CREATION_FAILURE---');
-      log.info(create_err);
+      log.info(createErr);
       return res.send({
         success: false,
         message: 'Examination creation failure',
         data: {
-          symptom: create_err
+          symptom: createErr
         }
       });
     });

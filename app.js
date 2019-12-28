@@ -2,10 +2,11 @@
 
 global.packageHelper = require('./config/package_helper');
 global.models = require('./config/datasources/index');
+global.Op = require('./config/datasources/operator_aliasing');
 
-const log = require('./config/log_config').logger('defcon_one:app');
 const app = require('./config/server');
 const debug = packageHelper.debug('defcon-one:server');
+const figlet = packageHelper.figlet;
 
 /**
  * Normalize a port into a number, string, or false.
@@ -36,9 +37,7 @@ app.set('ip', packageHelper.SERVER_HOST_IP);
  */
 const onError = error => {
   console.error('there was an error while connecting to the server');
-  log.error('there was an error while connecting to the server');
   console.error(error);
-  log.error(error);
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -51,12 +50,10 @@ const onError = error => {
   switch (error.code) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
-      log.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
     case 'EADDRINUSE':
       console.error(bind + ' is already in use');
-      log.error(bind + ' is already in use');
       process.exit(1);
       break;
     default:
@@ -74,11 +71,8 @@ const onListening = () => {
     'port ' + addr.port;
   debug('Listening on ' + bind);
 
-  console.log('Listening on ' + bind);
-  log.info('Listening on ' + bind);
-
   console.log('server is listening on ', bind);
-  log.info('server is listening on ', bind);
+  console.log(figlet.textSync('Defcon One Loaded'));
 }
 
 models.sequelize.authenticate()

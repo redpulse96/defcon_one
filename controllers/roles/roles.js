@@ -13,14 +13,14 @@ Roles.getRoles = (req, res) => {
     }]
   }
   models['Roles'].findAll(whereObj)
-    .then(model_res => {
-      log.info('---ROLES_RES---');
-      log.info(model_res);
+    .then(modelRes => {
+      log.info('---ROLESRes---');
+      log.info(modelRes);
       res.send({
         success: true,
         message: 'Roles fetch success',
         data: {
-          roles: model_res
+          roles: modelRes
         }
       });
     })

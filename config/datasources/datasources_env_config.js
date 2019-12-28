@@ -1,87 +1,48 @@
 const packageHelper = require('../package_helper');
 const datasources = require('./datasources');
+const operatorsAliases = require('./operator_aliasing');
 
 let mysql_config = {};
 let mongo_config = {};
+let env = 'dev';
 
 switch (packageHelper.NODE_ENV) {
   case 'dev':
-    mongo_config = {
-      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/Defcon_One_Auth?retryWrites=true&w=majority'
-    }
-    mysql_config = {
-      database: datasources['dev'].mysql.database,
-      username: datasources['dev'].mysql.username,
-      password: datasources['dev'].mysql.password,
-      host: datasources['dev'].mysql.host,
-      options: {
-        dialect: datasources['dev'].mysql.connector,
-        host: datasources['dev'].mysql.host,
-        port: datasources['dev'].mysql.port
-      }
-    };
+    env = 'dev';
     break;
   case 'uat':
-    mongo_config = {
-      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/Defcon_One_Auth?retryWrites=true&w=majority'
-    }
-    mysql_config = {
-      database: datasources['uat'].mysql.database,
-      username: datasources['uat'].mysql.username,
-      password: datasources['uat'].mysql.password,
-      host: datasources['uat'].mysql.host,
-      options: {
-        dialect: datasources['uat'].mysql.connector,
-        host: datasources['uat'].mysql.host,
-        port: datasources['uat'].mysql.port
-      }
-    };
+    env = 'uat';
     break;
   case 'production':
-    mongo_config = {
-      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/Defcon_One_Auth?retryWrites=true&w=majority'
-    }
-    mysql_config = {
-      database: datasources['production'].mysql.database,
-      username: datasources['production'].mysql.username,
-      password: datasources['production'].mysql.password,
-      host: datasources['production'].mysql.host,
-      options: {
-        dialect: datasources['production'].mysql.connector,
-        host: datasources['production'].mysql.host,
-        port: datasources['production'].mysql.port,
-        pool: {
-          max: 30,
-          min: 0,
-          acquire: 30000,
-          idle: 10000
-        }
-      }
-    };
+    env = 'production';
     break;
   default:
-    mongo_config = {
-      url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/Defcon_One_Auth?retryWrites=true&w=majority'
-    }
-    mysql_config = {
-      database: datasources['dev'].mysql.database,
-      username: datasources['dev'].mysql.username,
-      password: datasources['dev'].mysql.password,
-      host: datasources['dev'].mysql.host,
-      options: {
-        dialect: datasources['dev'].mysql.connector,
-        host: datasources['dev'].mysql.host,
-        port: datasources['dev'].mysql.port,
-        pool: {
-          max: 30,
-          min: 0,
-          acquire: 30000,
-          idle: 10000
-        }
-      }
-    };
+    env = 'dev';
     break;
 }
+
+mongo_config = {
+  url: datasources[env].mongo.url
+}
+mysql_config = {
+  database: datasources[env].mysql.database,
+  username: datasources[env].mysql.username,
+  password: datasources[env].mysql.password,
+  host: datasources[env].mysql.host,
+  options: {
+    dialect: datasources[env].mysql.connector,
+    host: datasources[env].mysql.host,
+    port: datasources[env].mysql.port,
+    operatorsAliases: operatorsAliases,
+    logging: false,
+    pool: {
+      max: 30,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
+    }
+  }
+};
 
 module.exports = {
   mysql: mysql_config,

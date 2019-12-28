@@ -21,14 +21,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT(11),
       allowNull: false
     },
-    status: {
+    appointment_status: {
       type: DataTypes.ENUM,
       values: ['closed', 'pending', 'rescheduled', 'operating'],
       allowNull: false
     },
     rescheduled_date: {
       type: DataTypes.DATEONLY,
-      defaultValue: 'CURRENT_TIMESTAMP',
+      defaultValue: null,
       allowNull: true
     },
     from_time: {
@@ -78,12 +78,13 @@ module.exports = (sequelize, DataTypes) => {
       ]
     },
     scopes: {
-  activeScope: {
-      where: {
-        is_active: true,
-        is_archived: false
+      activeScope: {
+        where: {
+          is_active: true,
+          is_archived: false
+        }
       }
-    }},
+    },
     underscored: true,
     sequelize,
     modelName: 'appointments',
@@ -96,6 +97,35 @@ module.exports = (sequelize, DataTypes) => {
       as: 'appointment_logs',
       onDelete: "CASCADE",
       foreignKey: 'appointment_id'
+    });
+    Appointments.hasMany(models['PatientPrescription'], {
+      as: 'patient_prescription',
+      onUpdate: "CASCADE",
+      foreignKey: 'appointment_id'
+    });
+    Appointments.hasMany(models['PatientSymptomsRoleMapping'], {
+      as: 'patient_symptoms_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'appointment_id'
+    });
+    Appointments.hasMany(models['PatientInvestigationsRoleMapping'], {
+      as: 'patient_investigations_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'appointment_id'
+    });
+    Appointments.hasMany(models['PatientExaminationsRoleMapping'], {
+      as: 'patient_examinations_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'appointment_id'
+    });
+    Appointments.hasMany(models['PatientDiagnosisRoleMapping'], {
+      as: 'patient_diagnosis_role_mapping',
+      onUpdate: "CASCADE",
+      foreignKey: 'appointment_id'
+    });
+    Appointments.belongsTo(models['Patients'], {
+      as: 'patient',
+      foreignKey: 'patient_id'
     });
   };
 

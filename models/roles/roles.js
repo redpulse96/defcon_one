@@ -82,6 +82,11 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "CASCADE",
       foreignKey: 'role_id'
     });
+    Roles.hasMany(models['InvestigationsRoleMapping'], {
+      as: 'investigations_role_mapping',
+      onDelete: "CASCADE",
+      foreignKey: 'role_id'
+    });
   };
 
   return Roles;

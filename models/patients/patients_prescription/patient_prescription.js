@@ -16,40 +16,12 @@ module.exports = (sequelize, DataTypes) => {
         key: 'patient_id'
       }
     },
-    patient_symptom_role_mapping_id: {
+    appointment_id: {
       type: DataTypes.BIGINT(11),
       allowNull: true,
-      onDelete: "CASCADE",
       references: {
-        model: 'PatientSymptomsRoleMapping',
-        key: 'patient_symptom_role_mapping_id'
-      }
-    },
-    patient_examination_role_mapping_id: {
-      type: DataTypes.BIGINT(11),
-      allowNull: true,
-      onDelete: "CASCADE",
-      references: {
-        model: 'PatientExaminationsRoleMapping',
-        key: 'patient_examination_role_mapping_id'
-      }
-    },
-    patient_investigation_role_mapping_id: {
-      type: DataTypes.BIGINT(11),
-      allowNull: true,
-      onDelete: "CASCADE",
-      references: {
-        model: 'PatientInvestigationsRoleMapping',
-        key: 'patient_investigation_role_mapping_id'
-      }
-    },
-    patient_diagnosis_role_mapping_id: {
-      type: DataTypes.BIGINT(11),
-      allowNull: true,
-      onDelete: "CASCADE",
-      references: {
-        model: 'PatientDiagnosisRoleMapping',
-        key: 'patient_diagnosis_role_mapping_id'
+        model: 'Appointments',
+        key: 'appointment_id'
       }
     },
     reference_id: {
@@ -59,6 +31,14 @@ module.exports = (sequelize, DataTypes) => {
     medicine_id: {
       type: DataTypes.BIGINT(11),
       allowNull: true
+    },
+    created_by: {
+      type: DataTypes.STRING(50),
+      defaultValue: null
+    },
+    doctor_remarks: {
+      type: DataTypes.STRING(100),
+      defaultValue: null
     },
     is_active: {
       type: DataTypes.BOOLEAN,
@@ -88,12 +68,13 @@ module.exports = (sequelize, DataTypes) => {
       ]
     },
     scopes: {
-  activeScope: {
-      where: {
-        is_active: true,
-        is_archived: false
+      activeScope: {
+        where: {
+          is_active: true,
+          is_archived: false
+        }
       }
-    }},
+    },
     underscored: true,
     sequelize,
     modelName: 'patient_prescription',
@@ -102,21 +83,13 @@ module.exports = (sequelize, DataTypes) => {
   });
   PatientPrescription.associate = models => {
     // associations can be defined here
-    PatientPrescription.belongsTo(models['PatientSymptomsRoleMapping'], {
-      as: 'patient_symptoms_role_mapping',
-      foreignKey: 'patient_symptom_role_mapping_id'
+    PatientPrescription.belongsTo(models['Appointments'], {
+      as: 'appointment',
+      foreignKey: 'appointment_id'
     });
-    PatientPrescription.belongsTo(models['PatientInvestigationsRoleMapping'], {
-      as: 'patient_investigations_role_mapping',
-      foreignKey: 'patient_investigation_role_mapping_id'
-    });
-    PatientPrescription.belongsTo(models['PatientExaminationsRoleMapping'], {
-      as: 'patient_examinations_role_mapping',
-      foreignKey: 'patient_examination_role_mapping_id'
-    });
-    PatientPrescription.belongsTo(models['PatientDiagnosisRoleMapping'], {
-      as: 'patient_diagnosis_role_mapping',
-      foreignKey: 'patient_diagnosis_role_mapping_id'
+    PatientPrescription.belongsTo(models['Patients'], {
+      as: 'patients',
+      foreignKey: 'patient_id'
     });
   };
 

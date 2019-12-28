@@ -1,5 +1,6 @@
 const log = require('../../config/log_config').logger('utils');
 const _ = packageHelper.lodash;
+const moment = packageHelper.moment;
 
 module.exports = {
   /**
@@ -22,13 +23,14 @@ module.exports = {
   /**
    * @param {String} data - function to run within try/catch for safe exception handling
    * @param {Array} mandatoryParams - array of keys that are checked against the data
-   * isOptional will by default false and an error alert will be sent to slack. If passed as true, the functionality remains same but no alert will be sent to slack
    */
-  hasMandatoryParams: (paramObj) => {
+  hasMandatoryParams: paramObj => {
     return new Promise((resolve, reject) => {
       if (paramObj.mandatoryParams && paramObj.mandatoryParams.length) {
         let reqParams = Object.keys(paramObj.data);
         if (!_.difference(paramObj.mandatoryParams, reqParams).length) {
+          log.info('All keys are present');
+          log.info(paramObj);
           return resolve({
             success: true,
             message: 'All mandatory keys are present',
@@ -88,20 +90,49 @@ module.exports = {
                 });
               }
               break;
+            case 'DATE':
+              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD')) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            case 'DATETIME':
+              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD hh:mm:ss')) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
             default:
               return resolve({
                 success: true,
-                error_code: 400,
                 message: 'Value type matches successfully',
-                data: val
+                data: data
               });
           }
+        });
+        resolve({
+          success: true,
+          message: 'Value type matches successfully',
+          data: data
+        });
+      } else {
+        return resolve({
+          success: true,
+          message: 'Value type matches successfully',
+          data: data
         });
       }
     });
   },
   /**
-   *
    * @param {Function} fn - function to run within try/catch for safe exception handling
    * @param {any} defaultVal - default value to return in case of exception
    * @param {Callback} cb  - callback to invoke with error-first as argument in case of exception
@@ -118,6 +149,28 @@ module.exports = {
         return cb(e);
       else
         return defaultVal;
+    }
+  },
+  /**
+   * @param {Object} response - Object with the response details
+   */
+  generateResponse: response => {
+    let statusCode;
+    switch (response.success) {
+      case true:
+        statusCode = 200;
+        !(response.message) && (response.message = 'Successfully executed');
+        break;
+      case false:
+        statusCode = response['error_code'];
+        !(response.message) && (response.message = 'Internal server error');
+        break;
+      default:
+        statusCode = 200;
+        break;
+    }
+    return res => {
+      return res.status(statusCode || 500).send(response);
     }
   }
 }

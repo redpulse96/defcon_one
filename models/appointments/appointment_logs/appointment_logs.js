@@ -12,8 +12,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT(11),
       allowNull: false
     },
-    status: {
+    appointment_status: {
       type: DataTypes.STRING(50),
+      allowNull: true
+    },
+    doctor_remarks: {
+      type: DataTypes.STRING(100),
+      defaultValue: null,
       allowNull: true
     },
     is_active: {
@@ -44,12 +49,13 @@ module.exports = (sequelize, DataTypes) => {
       ]
     },
     scopes: {
-  activeScope: {
-      where: {
-        is_active: true,
-        is_archived: false
+      activeScope: {
+        where: {
+          is_active: true,
+          is_archived: false
+        }
       }
-    }},
+    },
     underscored: true,
     sequelize,
     modelName: 'appointment_logs',
