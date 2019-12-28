@@ -1,3 +1,4 @@
+const log = require('./log_config')('passport');
 const Users = require('../models/users');
 
 const localStrategy = packageHelper.passport_local.Strategy;
@@ -10,8 +11,8 @@ module.exports = passport => {
     }, (username, password, done) => {
       // Match user
       Users.findOne({
-          username
-        })
+        username
+      })
         .then(userResult => {
           if (userResult.username) {
             // Match password
