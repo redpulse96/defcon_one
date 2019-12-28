@@ -1,0 +1,12 @@
+name: CI
+
+on: [commit]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ESLint Action
+      uses: hallee/eslint-action@1.0.1
