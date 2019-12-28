@@ -1,6 +1,6 @@
 name: CI
 
-on: [commit]
+on: [push]
 
 jobs:
   build:
@@ -9,4 +9,4 @@ jobs:
 
     steps:
       - name: ESLint Action
-      uses: hallee/eslint-action@1.0.1
+        uses: hallee/eslint-action@1.0.1
