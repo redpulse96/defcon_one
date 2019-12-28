@@ -13,13 +13,22 @@ module.exports = Appointments => {
         data: {}
       });
     }
-    let filter = Object.assign({}, {
+    let [fromDate, toDate] = [utils.validateKeys(() => moment(req.params.custom_from_date).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null), utils.validateKeys(() => moment(req.params.custom_to_date).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null)];
+    let filter = {
       where: {
-        created_by: {
-          $in: [req.user.username]
-        },
-        assigned_to: req.user.username,
-        appointment_date: utils.validateKeys(() => moment(req.params.custom_date).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null)
+        $or: [{
+          assigned_to: req.user.username,
+          appointment_date: {
+            $between: [fromDate, toDate]
+          }
+        }, {
+          created_by: {
+            $in: [req.user.username]
+          },
+          appointment_date: {
+            $between: [fromDate, toDate]
+          }
+        }]
       },
       include: [{
         model: models['AppointmentLogs'],
@@ -28,22 +37,24 @@ module.exports = Appointments => {
       order: [
         ['appointment_date', 'ASC']
       ]
-    });
+    };
     if (req.user.parent) {
       filter.where.created_by.$in.push(req.user.parent);
     }
-    models['Appointments'].scope('activeScope').findAll(filter)
-      .then(appointments_res => {
+    models['Appointments']
+      .scope('activeScope')
+      .findAll(filter)
+      .then(appointmentsRes => {
         let response;
         log.info('---APPOINTMENT_LIST---');
-        log.info(appointments_res);
-        if (appointments_res) {
+        log.info(appointmentsRes);
+        if (appointmentsRes) {
           response = {
             success: true,
             http_code: 200,
             message: 'Appointments list fetch success',
             data: {
-              appointments_list: _.groupBy(appointments_res, 'status')
+              appointments_list: _.groupBy(appointmentsRes, 'appointment_status')
             }
           };
         } else {
@@ -56,10 +67,10 @@ module.exports = Appointments => {
         }
         res.status(response.http_code).send(response);
       })
-      .catch(appointments_err => {
+      .catch(appointmentsErr => {
         log.info('---APPOINTMENT_LIST_ERROR---');
-        log.info(appointments_err);
-        res.status(500).send({
+        log.info(appointmentsErr);
+        return res.status(500).send({
           success: false,
           message: 'Internal server error',
           data: {}

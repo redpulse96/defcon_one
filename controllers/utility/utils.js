@@ -150,5 +150,27 @@ module.exports = {
       else
         return defaultVal;
     }
+  },
+  /**
+   * @param {Object} response - Object with the response details
+   */
+  generateResponse: response => {
+    let statusCode;
+    switch (response.success) {
+      case true:
+        statusCode = 200;
+        !(response.message) && (response.message = 'Successfully executed');
+        break;
+      case false:
+        statusCode = response['error_code'];
+        !(response.message) && (response.message = 'Internal server error');
+        break;
+      default:
+        statusCode = 200;
+        break;
+    }
+    return res => {
+      return res.status(statusCode || 500).send(response);
+    }
   }
 }

@@ -9,8 +9,12 @@ module.exports = PatientSymptomsRoleMapping => {
       validateData: validateDataFunction,
       createPatientSymptomsRoleMapping: ['validateData', createPatientSymptomsRoleMappingFunction]
     })
-      .then(async_auto_res => res.send(async_auto_res.createPatientSymptomsRoleMapping))
-      .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
+      .then(asyncAutoRes => {
+        return res.send(asyncAutoRes.createPatientSymptomsRoleMapping);
+      })
+      .catch(asyncAutoErr => {
+        return res.status(asyncAutoErr.error_code).send(asyncAutoErr);
+      });
 
     function validateDataFunction(callback) {
       let paramsCheck = {
@@ -18,33 +22,42 @@ module.exports = PatientSymptomsRoleMapping => {
         mandatoryParams: 'patientSymptomsRoleMappings'
       }
       utils.hasMandatoryParams(paramsCheck)
-        .then(param_res => callback(null, param_res))
-        .catch(param_err => callback(param_err));
-    }
-
-    function createPatientSymptomsRoleMappingFunction(results, callback) {
-      let createArray = req.body.patientSymptomsRoleMappings;
-      models['PatientSymptomsRoleMapping'].bulkCreate(createArray, { returning: true })
-        .then(create_res => {
-          log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
-          log.info(create_res);
-          return callback(null, {
-            success: true,
-            message: 'Patient Symptoms Role Mapping creation success',
-            data: {
-              patient_symptoms_role_mapping: create_res
-            }
-          });
+        .then(paramRes => {
+          return callback(null, paramRes);
         })
-        .catch(create_err => {
-          log.error('---PATIENT_PRESCRIPTION_CREATION_FAILURE---');
-          log.error(create_err);
-          return callback({
-            success: false,
-            message: 'Patient Symptoms Role Mapping creation failure',
-            data: {}
-          });
+        .catch(paramErr => {
+          return callback(paramErr);
         });
     }
+  }
+
+  const createPatientSymptomsRoleMappingFunction = (result, callback) => {
+    const {
+      validateData
+    } = result;
+    let createArray = validateData.data.patientSymptomsRoleMappings;
+    models['PatientSymptomsRoleMapping'].bulkCreate(createArray, {
+      returning: true
+    })
+      .then(createRes => {
+        log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
+        log.info(createRes);
+        return callback(null, {
+          success: true,
+          message: 'Patient Symptoms Role Mapping creation success',
+          data: {
+            patient_symptoms_role_mapping: createRes
+          }
+        });
+      })
+      .catch(createErr => {
+        log.error('---PATIENT_PRESCRIPTION_CREATION_FAILURE---');
+        log.error(createErr);
+        return callback({
+          success: false,
+          message: 'Patient Symptoms Role Mapping creation failure',
+          data: {}
+        });
+      });
   }
 }

@@ -8,8 +8,8 @@ module.exports = Appointments => {
       validateData: validateDataFunction,
       fetchAppointmentDetails: ['validateData', fetchAppointmentDetailsFunction]
     })
-    .then(async_auto_res => res.send(async_auto_res))
-    .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
+      .then(asyncAutoRes => res.send(asyncAutoRes.fetchAppointmentDetails))
+      .catch(asyncAutoErr => res.status(asyncAutoErr.error_code).send(asyncAutoErr));
 
     function validateDataFunction(callback) {
       let paramsCheck = {
@@ -17,51 +17,54 @@ module.exports = Appointments => {
         mandatoryParams: ['appointment_id']
       }
       utils.hasMandatoryParams(paramsCheck)
-        .then(params_res => callback(null, params_res))
-        .catch(params_err => callback(params_err));
+        .then(paramsRes => callback(null, paramsRes))
+        .catch(paramsErr => callback(paramsErr));
     }
+  }
 
-    function fetchAppointmentDetailsFunction(results, callback) {
-      const { validateData } = results;
-      let filter = {
-        where: {
-          appointment_id: validateData.data.appointment_id,
-          is_active: true,
-          is_archived: false
-        },
-        include: [{
-          model: models['AppointmentLogs'],
-          as: 'appointment_logs'
-        }, {
-          model: models['Patients'],
-          as: 'patient'
-        }, {
-          model: models['PatientPrescription'],
-          as: 'patient_prescription'
-        }, {
-          model: models['PatientDiagnosisRoleMapping'],
-          as: 'patient_diagnosis_role_mapping'
-        }, {
-          model: models['PatientExaminationsRoleMapping'],
-          as: 'patient_examinations_role_mapping'
-        }, {
-          model: models['PatientInvestigationsRoleMapping'],
-          as: 'patient_investigations_role_mapping'
-        }, {
-          model: models['PatientSymptomsRoleMapping'],
-          as: 'patient_symptoms_role_mapping'
-        }]
-      };
-      models['Appointments'].findOne(filter)
-      .then(appointment_details => {
+  const fetchAppointmentDetailsFunction = (result, callback) => {
+    const {
+      validateData
+    } = result;
+    let filter = {
+      where: {
+        appointment_id: validateData.data.appointment_id,
+        is_active: true,
+        is_archived: false
+      },
+      include: [{
+        model: models['AppointmentLogs'],
+        as: 'appointment_logs'
+      }, {
+        model: models['Patients'],
+        as: 'patient'
+      }, {
+        model: models['PatientPrescription'],
+        as: 'patient_prescription'
+      }, {
+        model: models['PatientDiagnosisRoleMapping'],
+        as: 'patient_diagnosis_role_mapping'
+      }, {
+        model: models['PatientExaminationsRoleMapping'],
+        as: 'patient_examinations_role_mapping'
+      }, {
+        model: models['PatientInvestigationsRoleMapping'],
+        as: 'patient_investigations_role_mapping'
+      }, {
+        model: models['PatientSymptomsRoleMapping'],
+        as: 'patient_symptoms_role_mapping'
+      }]
+    };
+    models['Appointments'].findOne(filter)
+      .then(appointmentDetails => {
         log.info('---APPOINTMENT_DETAILS---');
-        log.info(appointment_details);
-        if (appointment_details) {
+        log.info(appointmentDetails);
+        if (appointmentDetails) {
           return callback(null, {
             success: true,
             message: 'Appointment details fetched',
             data: {
-              appointment_details
+              appointmentDetails
             }
           });
         } else {
@@ -73,9 +76,9 @@ module.exports = Appointments => {
           });
         }
       })
-      .catch(appointment_details_err => {
+      .catch(appointmentDetailsErr => {
         log.error('---appointment_details_err---');
-        log.error(JSON.stringify(appointment_details_err));
+        log.error(JSON.stringify(appointmentDetailsErr));
         return callback({
           success: false,
           error_code: 500,
@@ -83,6 +86,5 @@ module.exports = Appointments => {
           data: {}
         });
       });
-    }
   }
 }

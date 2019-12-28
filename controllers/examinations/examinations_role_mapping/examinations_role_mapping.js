@@ -3,7 +3,8 @@ const ExaminationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['Examina
 
 ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
 
-  let whereObj = Object.assign({}, req.params, {
+  let whereObj = {
+    ...req.params,
     where: {
       role_id: req.user.role_id
     },
@@ -14,27 +15,27 @@ ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
       model: models['Roles'],
       as: 'role'
     }]
-  });
+  };
   models['ExaminationsRoleMapping'].scope('activeScope').findAll(whereObj)
-    .then(fetch_res => {
+    .then(fetchRes => {
       log.info('---ExaminationsRoleMapping_FETCH_SUCCESS---');
-      log.info(fetch_res);
+      log.info(fetchRes);
       return res.send({
         success: true,
         message: 'examinations Role Mapping fetching success',
         data: {
-          examinations_role_mapping: fetch_res
+          examinations_role_mapping: fetchRes
         }
       });
     })
-    .catch(fetch_err => {
+    .catch(fetchErr => {
       log.info('---ExaminationsRoleMapping_FETCH_FAILURE---');
-      log.info(fetch_err);
+      log.info(fetchErr);
       return res.status(500).send({
         success: false,
         message: 'examinations Role Mapping fetching failure',
         data: {
-          examinations_role_mapping: fetch_err
+          examinations_role_mapping: fetchErr
         }
       });
     });
@@ -42,27 +43,29 @@ ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
 
 ExaminationsRoleMapping.createExaminationsRoleMapping = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
+  let createObj = {
+    ...req.body
+  };
   models.ExaminationsRoleMapping.create(createObj)
-    .then(create_res => {
+    .then(createRes => {
       log.info('---ExaminationsRoleMapping_CREATION_SUCCESS---');
-      log.info(create_res);
+      log.info(createRes);
       return res.send({
         success: true,
         message: 'examinations Role Mapping creation success',
         data: {
-          examinations_role_mapping: create_res.toJSON()
+          examinations_role_mapping: createRes.toJSON()
         }
       });
     })
-    .catch(create_err => {
+    .catch(createErr => {
       log.info('---ExaminationsRoleMapping_CREATION_FAILURE---');
-      log.info(create_err);
+      log.info(createErr);
       return res.send({
         success: false,
         message: 'examinations Role Mapping creation failure',
         data: {
-          examinations_role_mapping: create_err
+          examinations_role_mapping: createErr
         }
       });
     });

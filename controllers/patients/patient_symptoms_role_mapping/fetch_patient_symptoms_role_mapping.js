@@ -3,7 +3,8 @@ const log = require('../../../config/log_config').logger('patient_symptoms_role_
 module.exports = PatientSymptomsRoleMapping => {
 
   PatientSymptomsRoleMapping.fetchPatientSymptomsRoleMapping = (req, res) => {
-    let whereObj = Object.assign({}, req.params, {
+    let whereObj = {
+      ...req.params,
       include: [{
         model: models.SymptomsRoleMapping,
         as: 'symptoms_role_mapping'
@@ -11,22 +12,22 @@ module.exports = PatientSymptomsRoleMapping => {
         model: models.Roles,
         as: 'role'
       }]
-    });
+    };
     models.PatientSymptomsRoleMapping.findOne(whereObj)
-      .then(fetch_res => {
+      .then(fetchRes => {
         log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
-        log.info(fetch_res);
+        log.info(fetchRes);
         return res.send({
           success: true,
           message: 'Patient Symptoms Role Mapping fetching success',
           data: {
-            patient_symptoms_role_mapping: fetch_res
+            patient_symptoms_role_mapping: fetchRes
           }
         });
       })
-      .catch(fetch_err => {
+      .catch(fetchErr => {
         log.info('---PATIENT_PRESCRIPTION_FETCH_FAILURE---');
-        log.info(fetch_err);
+        log.info(fetchErr);
         return res.send({
           success: false,
           message: 'Patient Symptoms Role Mapping fetching failure',

@@ -3,7 +3,8 @@ const SymptomsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['SymptomsRol
 
 SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
 
-  let whereObj = Object.assign({}, req.params, {
+  let whereObj = {
+    ...req.params,
     where: {
       role_id: req.user.role_id
     },
@@ -14,27 +15,27 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
       model: models['Roles'],
       as: 'role'
     }]
-  });
+  };
   models['SymptomsRoleMapping'].scope('activeScope').findAll(whereObj)
-    .then(fetch_res => {
+    .then(fetchRes => {
       log.info('---SRM_FETCH_SUCCESS---');
-      log.info(fetch_res);
+      log.info(fetchRes);
       return res.send({
         success: true,
         message: 'Symptoms Role Mapping fetching success',
         data: {
-          symptoms_role_mapping: fetch_res
+          symptoms_role_mapping: fetchRes
         }
       });
     })
-    .catch(fetch_err => {
+    .catch(fetchErr => {
       log.info('---SRM_FETCH_FAILURE---');
-      log.info(fetch_err);
+      log.info(fetchErr);
       return res.status(500).send({
         success: false,
         message: 'Symptoms Role Mapping fetching failure',
         data: {
-          symptoms_role_mapping: fetch_err
+          symptoms_role_mapping: fetchErr
         }
       });
     });
@@ -42,27 +43,29 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
 
 SymptomsRoleMapping.createSymptomsRoleMapping = (req, res) => {
 
-  let createObj = Object.assign({}, req.body);
+  let createObj = {
+    ...req.body
+  };
   models.SymptomsRoleMapping.create(createObj)
-    .then(create_res => {
+    .then(createRes => {
       log.info('---SRM_CREATION_SUCCESS---');
-      log.info(create_res);
+      log.info(createRes);
       return res.send({
         success: true,
         message: 'Symptoms Role Mapping creation success',
         data: {
-          symptoms_role_mapping: create_res.toJSON()
+          symptoms_role_mapping: createRes.toJSON()
         }
       });
     })
-    .catch(create_err => {
+    .catch(createErr => {
       log.info('---SRM_CREATION_FAILURE---');
-      log.info(create_err);
+      log.info(createErr);
       return res.send({
         success: false,
         message: 'Symptoms Role Mapping creation failure',
         data: {
-          symptoms_role_mapping: create_err
+          symptoms_role_mapping: createErr
         }
       });
     });

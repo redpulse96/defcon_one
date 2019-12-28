@@ -1,112 +1,155 @@
 const log = require('../../config/log_config').logger('appointments_controller');
 const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs'];
-const utils = require('../utility/utils');
-const async = packageHelper.async;
 const moment = packageHelper.moment;
+const utils = require('../utility/utils');
+const {
+  to
+} = require('../utility/helper_function');
+const {
+  MANDATORY_PARAMS: {
+    CREATE_APPOINTMENT
+  }
+} = require('../../public/javascripts/constants');
 
 module.exports = Appointments => {
 
-  Appointments.createAppointment = (req, res) => {
-    async.auto({
-      validateData: validateDataFunction,
-      checkPatientExistance: ['validateData', checkPatientExistanceFunction],
-      createNewAppointment: ['validateData', 'checkPatientExistance', createNewAppointmentFunction],
-      createAppointmentLog: ['createNewAppointment', createAppointmentLogFunction]
-    })
-    .then(async_auto_res => res.send(async_auto_res.createNewAppointment))
-    .catch(async_auto_err => res.status(async_auto_err.error_code).send(async_auto_err));
+  Appointments.createAppointment = async (req, res) => {
 
-    function validateDataFunction(callback) {
+    let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
+    if (validateDataError) {
+      return utils.generateResponse(validateDataError)(res);
+    }
+
+    let checkPatientExistanceObj = {
+      ...validateDataResult.data
+    };
+    let [checkPatientExistanceError] = await to(checkPatientExistanceFunction(checkPatientExistanceObj));
+    if (checkPatientExistanceError) {
+      return utils.generateResponse(checkPatientExistanceError)(res);
+    }
+
+    let createNewAppointmentObj = {
+      ...validateDataResult.data
+    };
+    let [createNewAppointmentError, createNewAppointmentResult] = await to(createNewAppointmentFunction(createNewAppointmentObj));
+    if (createNewAppointmentError) {
+      return utils.generateResponse(createNewAppointmentError)(res);
+    }
+
+    let createNewAppointmentLogObj = {
+      ...validateDataResult.data,
+      ...createNewAppointmentResult.data.appointment
+    };
+    let [createAppointmentLogError] = await to(createAppointmentLogFunction(createNewAppointmentLogObj));
+    if (createAppointmentLogError) {
+      return utils.generateResponse(createAppointmentLogError)(res);
+    }
+    return utils.generateResponse(createNewAppointmentResult)(res);
+  }
+
+  const validateDataFunction = data => {
+    return new Promise((resolve, reject) => {
       let paramsCheck = {
-        data: req.body,
-        mandatoryParams: ['appointment_name', 'appointment_date', 'patient_id', 'appointment_status', 'from_time', 'to_time']
+        data: data.body,
+        mandatoryParams: CREATE_APPOINTMENT
       }
       utils.hasMandatoryParams(paramsCheck)
-        .then(res => callback(null, res))
-        .catch(err => callback(err));
-    }
+        .then(paramRes => {
+          paramRes.data.user = data.user;
+          resolve(paramRes);
+        })
+        .catch(paramErr => {
+          reject(paramErr);
+        });
+    });
+  }
 
-    function checkPatientExistanceFunction(results, callback) {
-      const { validateData } = results;
+  const checkPatientExistanceFunction = data => {
+    return new Promise((resolve, reject) => {
       let filterPatientObj = {
         where: {
-          patient_id: validateData.data.patient_id
+          patient_id: data.patient_id
         }
       };
-      models['Patients'].scope('activeScope').findOne(filterPatientObj)
-      .then(patient_res => {
-        log.info('---patient_res---');
-        log.info(patient_res);
-        if (patient_res) {
-          return callback(null, {
-            success: true,
-            message: 'Patient exists',
-            data: {
-              patient_details: patient_res
-            }
-          });
-        } else {
-          return callback({
+      models['Patients']
+        .scope('activeScope')
+        .findOne(filterPatientObj)
+        .then(patientRes => {
+          log.info('---patientRes---');
+          log.info(patientRes);
+          if (patientRes) {
+            return resolve({
+              success: true,
+              message: 'Patient exists',
+              data: {
+                patient_details: patientRes
+              }
+            });
+          } else {
+            return reject({
+              success: false,
+              error_code: 400,
+              message: 'Patient does not exist',
+              data: {}
+            });
+          }
+        })
+        .catch(patientErr => {
+          log.error('---patientErr---');
+          log.error(patientErr);
+          return reject({
             success: false,
-            error_code: 400,
+            error_code: 500,
             message: 'Patient does not exist',
             data: {}
-          });
-        }
-      })
-      .catch(patient_err => {
-        log.error('---patient_err---');
-        log.error(patient_err);
-        return callback({
-          success: false,
-          error_code: 500,
-          message: 'Patient does not exist',
-          data: {}
-        })
-      });
-    }
+          })
+        });
+    });
+  }
 
-    function createNewAppointmentFunction(results, callback) {
-      const { validateData } = results;
-      const createObj = Object.assign({}, validateData.data, { created_by: req.user.username });
-      createObj.appointment_date = moment(createObj.appointment_date).format('YYYY-MM-DD');
-      createObj.from_time = moment(createObj.from_time).format('hh:mm:ss');
-      createObj.to_time = moment(createObj.to_time).format('hh:mm:ss');
-      // createObj.to_time = moment(createObj.to_time).format();
-
-      models['Appointments'].create(createObj)
-        .then(create_res => {
+  const createNewAppointmentFunction = data => {
+    return new Promise((resolve, reject) => {
+      let createObj = {
+        ...data,
+        appointment_date: moment(data.appointment_date).format('YYYY-MM-DD'),
+        from_time: moment(data.from_time, 'HH:mm:ss').format('HH:mm:ss'),
+        to_time: moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss'),
+        created_by: data.user.username
+      };
+      models['Appointments']
+        .create(createObj)
+        .then(createRes => {
           log.info('---APPOINTMENTS_CREATION_SUCCESS---');
-          log.info(create_res);
-          return callback(null, {
+          log.info(createRes);
+          return resolve({
             success: true,
             message: 'Appointment creation success',
             data: {
-              appointment: create_res
+              appointment: createRes.toJSON()
             }
           });
         })
-        .catch(create_err => {
+        .catch(createErr => {
           log.error('---APPOINTMENTS_CREATION_FAILURE---');
-          log.error(create_err);
-          return callback({
+          log.error(createErr);
+          return reject({
             success: false,
             error_code: 500,
             message: 'Appointment creation failure',
             data: {}
           });
         });
-    }
+    });
+  }
 
-    function createAppointmentLogFunction(results, callback) {
-      const { validateData, createNewAppointment } = results;
-      const logObj = Object.assign({}, {
-        appointment_id: createNewAppointment.data.appointment.appointment_id,
-        status: createNewAppointment.data.appointment.status
-      }, validateData.data);
+  const createAppointmentLogFunction = data => {
+    return new Promise((resolve, reject) => {
+      let logObj = {
+        ...data
+      };
       AppointmentLogs.createAppointmentLogs(logObj)
-        .then(log_res => callback(null, log_res))
-        .catch(log_err => callback(log_err));
-    }
+        .then(logRes => resolve(logRes))
+        .catch(logErr => reject(logErr));
+    });
   }
 }

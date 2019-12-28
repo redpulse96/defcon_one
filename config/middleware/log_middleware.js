@@ -1,18 +1,12 @@
 const log = require('../log_config').logger('log_middleware');
 
-const apiLogger = (req, res, next) => {
-  log.info('<<<<===============API_PATH===============>>>>');
-  log.info(req.path);
-  log.info('<<<<===============API_METHOD===============>>>>');
+module.exports = (req, res, next) => {
+  log.info(`req.path:: ${req.path}==================>`);
+  log.info('<==================REQ_METHOD==================>');
   log.info(req.method);
-  log.info('<<<<===============API_HEADERS===============>>>>');
+  log.info('<==================REQ_HEADERS==================>');
   log.info(req.headers);
-  log.info('<<<<===============START_API_PAYLOAD===============>>>>');
-  log.info(req.body || req.params);
-  log.info('<<<<===============END_API_PAYLOAD===============>>>>');
+  log.info('<==================START_REQ_PAYLOAD', req.body || req.params, 'END_REQ_PAYLOAD==================>');
+  log.info(`<==================${req.path}`);
   next();
-}
-
-module.exports = {
-  apiLogger
 }
