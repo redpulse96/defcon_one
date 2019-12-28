@@ -162,27 +162,29 @@ module.exports = Appointments => {
             data: {}
           });
         } else {
+          let [fromDate, toDate] = [utils.validateKeys(() => moment(data.from_time).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null), utils.validateKeys(() => moment(data.to_time).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null)];
           let filter = {
             where: {
-              rescheduled_date: data.rescheduled_date,
-              $and: [{
-                $or: [{
+              $or: [{
+                appointment_date: data.rescheduled_date,
+                $and: [{
                   from_time: {
-                    $gte: data.from_time
+                    $gte: fromDate
                   }
                 }, {
-                  from_time: {
-                    $lte: data.from_time
+                  to_time: {
+                    $lte: toDate
                   }
-                }],
+                }]
               }, {
-                $or: [{
-                  to_time: {
-                    $gte: data.to_time
+                rescheduled_date: data.rescheduled_date,
+                $and: [{
+                  from_time: {
+                    $gte: fromDate
                   }
                 }, {
                   to_time: {
-                    $lte: data.to_time
+                    $lte: toDate
                   }
                 }]
               }]

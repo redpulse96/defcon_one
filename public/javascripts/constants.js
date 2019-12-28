@@ -18,6 +18,7 @@ const MANDATORY_PARAMS = {
   CREATE_PATIENT: ['patient_name', 'mobile_no', 'date_of_birth'],
   UPDATE_PATIENT: ['mobile_no', 'update_obj'],
   CREATE_APPOINTMENT: ['appointment_name', 'appointment_date', 'patient_id', 'appointment_status', 'from_time', 'to_time'],
+  APPOINTMENT_DETAIL: ['appointment_id'],
   APPOINTMENT_FULFILMENT: ['appointment_id', 'appointment_status']
 }
 
