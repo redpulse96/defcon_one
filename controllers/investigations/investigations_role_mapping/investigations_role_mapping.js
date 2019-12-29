@@ -4,8 +4,8 @@ const InvestigationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['Inves
 InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
 
   let whereObj = {
-    ...req.params,
     where: {
+      ...req.params,
       role_id: req.user.role_id
     },
     include: [{
@@ -16,7 +16,8 @@ InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
       as: 'role'
     }]
   };
-  models['InvestigationsRoleMapping'].scope('activeScope').findAll(whereObj)
+  models['InvestigationsRoleMapping']
+    .scope('activeScope').findAll(whereObj)
     .then(fetchRes => {
       log.info('---InvestigationsRoleMapping_FETCH_SUCCESS---');
       log.info(fetchRes);
