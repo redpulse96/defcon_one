@@ -3,6 +3,7 @@ const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs
 const moment = packageHelper.moment;
 const utils = require('../utility/utils');
 const {
+  APPOINTMENT_STATUS,
   APPOINTMENT_STATUS_MATRIX,
   MANDATORY_PARAMS: {
     APPOINTMENT_FULFILMENT
@@ -68,7 +69,7 @@ module.exports = Appointments => {
     return utils.generateResponse(fetchCurrentAppointmentResult)(res);
   }
 
-  const validateDataFunction = data => {
+  function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
       let paramsCheck = {
         data: data.body,
@@ -84,9 +85,8 @@ module.exports = Appointments => {
     });
   }
 
-  const fetchCurrentAppointmentFunction = data => {
+  function fetchCurrentAppointmentFunction(data) {
     return new Promise((resolve, reject) => {
-
       let whereObj = {
         where: {
           appointment_id: data.appointment_id,
@@ -129,7 +129,7 @@ module.exports = Appointments => {
     });
   }
 
-  const checkStatusMatrixFunction = data => {
+  function checkStatusMatrixFunction(data) {
     return new Promise((resolve, reject) => {
       const statusMatrix = APPOINTMENT_STATUS_MATRIX;
       let currentStatus = data.appointment_detail.appointment_status;
@@ -150,11 +150,11 @@ module.exports = Appointments => {
     });
   }
 
-  const rescheduleAppointmentFunction = data => {
+  function rescheduleAppointmentFunction(data) {
     return new Promise((resolve, reject) => {
-      if (data.appointment_status === 'rescheduled') {
+      if (data.appointment_status === APPOINTMENT_STATUS.RESCHEDULED) {
         log.info('---APPOINTMENTResCHEDULING_REQUEST_RAISED---');
-        if (!(objectFn.hasFunction(data, 'rescheduled_date') || objectFn.hasFunction(data, 'from_time') || objectFn.hasFunction(data, 'to_time'))) {
+        if (!(objectFn.hasFn(data, 'rescheduled_date') || objectFn.hasFn(data, 'from_time') || objectFn.hasFn(data, 'to_time'))) {
           return reject({
             success: false,
             error_code: 400,
@@ -162,27 +162,29 @@ module.exports = Appointments => {
             data: {}
           });
         } else {
+          let [fromDate, toDate] = [utils.validateKeys(() => moment(data.from_time).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null), utils.validateKeys(() => moment(data.to_time).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null)];
           let filter = {
             where: {
-              rescheduled_date: data.rescheduled_date,
-              $and: [{
-                $or: [{
+              $or: [{
+                appointment_date: data.rescheduled_date,
+                $and: [{
                   from_time: {
-                    $gte: data.from_time
+                    $gte: fromDate
                   }
                 }, {
-                  from_time: {
-                    $lte: data.from_time
+                  to_time: {
+                    $lte: toDate
                   }
-                }],
+                }]
               }, {
-                $or: [{
-                  to_time: {
-                    $gte: data.to_time
+                rescheduled_date: data.rescheduled_date,
+                $and: [{
+                  from_time: {
+                    $gte: fromDate
                   }
                 }, {
                   to_time: {
-                    $lte: data.to_time
+                    $lte: toDate
                   }
                 }]
               }]
@@ -230,7 +232,7 @@ module.exports = Appointments => {
     });
   }
 
-  const updateAppointmentStatusFunction = data => {
+  function updateAppointmentStatusFunction(data) {
     return new Promise((resolve, reject) => {
       let updateObj = {
         ...data
@@ -279,7 +281,7 @@ module.exports = Appointments => {
     });
   }
 
-  const createAppointmentLogFunction = data => {
+  function createAppointmentLogFunction(data) {
     return new Promise((resolve, reject) => {
       let createLogObj = {
         ...data

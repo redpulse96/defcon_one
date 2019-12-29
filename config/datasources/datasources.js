@@ -15,12 +15,12 @@ module.exports = {
       url: 'mongodb+srv://admin:Daressalam@defconone-ak0ki.mongodb.net/Defcon_One_Auth?retryWrites=true&w=majority'
     }
   },
-  // THIS WILL BE CONFIGURED ON THE SERVER
+  // This will be configured on the server
   uat: {
     mysql: {},
     mongo: {}
   },
-  // THIS WILL BE CONFIGURED ON THE SERVER
+  // This will be configured on the server
   production: {
     mysql: {},
     mongo: {}

@@ -19,7 +19,7 @@ module.exports = PatientSymptomsRoleMapping => {
     function validateDataFunction(callback) {
       let paramsCheck = {
         data: req.body,
-        mandatoryParams: 'patientSymptomsRoleMappings'
+        mandatoryParams: ['patientSymptomsRoleMappings']
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(paramRes => {
