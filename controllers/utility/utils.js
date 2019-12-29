@@ -1,6 +1,9 @@
 const log = require('../../config/log_config').logger('utils');
 const _ = packageHelper.lodash;
 const moment = packageHelper.moment;
+const {
+  arrayFn
+} = require('./helper_function');
 
 module.exports = {
   /**
@@ -28,7 +31,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       if (paramObj.mandatoryParams && paramObj.mandatoryParams.length) {
         let reqParams = Object.keys(paramObj.data);
-        if (!_.difference(paramObj.mandatoryParams, reqParams).length) {
+        if (!arrayFn.differFn(paramObj.mandatoryParams, reqParams).length) {
           log.info('All keys are present');
           log.info(paramObj);
           return resolve({
@@ -38,84 +41,84 @@ module.exports = {
           });
         } else {
           log.error('---INSUFFICIENT_PARAMETERS---');
-          log.error(_.difference(paramObj.mandatoryParams, reqParams));
+          log.error(arrayFn.differFn(paramObj.mandatoryParams, reqParams));
           return reject({
             success: false,
             error_code: 400,
             message: 'Insufficient parameters',
-            data: _.difference(paramObj.mandatoryParams, reqParams)
+            data: arrayFn.differFn(paramObj.mandatoryParams, reqParams)
           });
         }
       }
       if (paramObj.checkValType && paramObj.checkValType.length) {
         paramObj.checkValType.forEach(val => {
           switch (val.checkValue.toUpperCase().trim()) {
-          case 'ARRAY':
-            if (!_.isArray(paramObj.data[val.key])) {
-              return reject({
-                success: false,
-                error_code: 400,
-                message: 'Value type does not match',
-                data: val
+            case 'ARRAY':
+              if (!_.isArray(paramObj.data[val.key])) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            case 'STRING':
+              if (!_.isString(paramObj.data[val.key])) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            case 'NUMBER':
+              if (!_.isNumber(paramObj.data[val.key])) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break
+            case 'BOOLEAN':
+              if (!_.isBoolean(paramObj.data[val.key])) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            case 'DATE':
+              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD')) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            case 'DATETIME':
+              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD hh:mm:ss')) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            default:
+              return resolve({
+                success: true,
+                message: 'Value type matches successfully',
+                data: paramObj.data
               });
-            }
-            break;
-          case 'STRING':
-            if (!_.isString(paramObj.data[val.key])) {
-              return reject({
-                success: false,
-                error_code: 400,
-                message: 'Value type does not match',
-                data: val
-              });
-            }
-            break;
-          case 'NUMBER':
-            if (!_.isNumber(paramObj.data[val.key])) {
-              return reject({
-                success: false,
-                error_code: 400,
-                message: 'Value type does not match',
-                data: val
-              });
-            }
-            break
-          case 'BOOLEAN':
-            if (!_.isBoolean(paramObj.data[val.key])) {
-              return reject({
-                success: false,
-                error_code: 400,
-                message: 'Value type does not match',
-                data: val
-              });
-            }
-            break;
-          case 'DATE':
-            if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD')) {
-              return reject({
-                success: false,
-                error_code: 400,
-                message: 'Value type does not match',
-                data: val
-              });
-            }
-            break;
-          case 'DATETIME':
-            if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD hh:mm:ss')) {
-              return reject({
-                success: false,
-                error_code: 400,
-                message: 'Value type does not match',
-                data: val
-              });
-            }
-            break;
-          default:
-            return resolve({
-              success: true,
-              message: 'Value type matches successfully',
-              data: paramObj.data
-            });
           }
         });
         resolve({
@@ -157,17 +160,17 @@ module.exports = {
   generateResponse: response => {
     let statusCode;
     switch (response.success) {
-    case true:
-      statusCode = 200;
-      !(response.message) && (response.message = 'Successfully executed');
-      break;
-    case false:
-      statusCode = response['error_code'];
-      !(response.message) && (response.message = 'Internal server error');
-      break;
-    default:
-      statusCode = 200;
-      break;
+      case true:
+        statusCode = 200;
+        !(response.message) && (response.message = 'Successfully executed');
+        break;
+      case false:
+        statusCode = response['error_code'];
+        !(response.message) && (response.message = 'Internal server error');
+        break;
+      default:
+        statusCode = 200;
+        break;
     }
     return res => {
       return res.status(statusCode || 500).send(response);
