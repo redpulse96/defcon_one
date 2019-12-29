@@ -56,7 +56,7 @@ module.exports = Appointments => {
             http_code: 200,
             message: 'Appointments list fetch success',
             data: {
-              appointments_list: arrayFn.groupByFunction(appointmentsRes, 'appointment_status')
+              appointments_list: arrayFn.groupByFn(appointmentsRes, 'appointment_status')
             }
           };
         } else {

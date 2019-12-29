@@ -3,6 +3,7 @@ const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs
 const moment = packageHelper.moment;
 const utils = require('../utility/utils');
 const {
+  APPOINTMENT_STATUS,
   APPOINTMENT_STATUS_MATRIX,
   MANDATORY_PARAMS: {
     APPOINTMENT_FULFILMENT
@@ -86,7 +87,6 @@ module.exports = Appointments => {
 
   function fetchCurrentAppointmentFunction(data) {
     return new Promise((resolve, reject) => {
-
       let whereObj = {
         where: {
           appointment_id: data.appointment_id,
@@ -152,9 +152,9 @@ module.exports = Appointments => {
 
   function rescheduleAppointmentFunction(data) {
     return new Promise((resolve, reject) => {
-      if (data.appointment_status === 'rescheduled') {
+      if (data.appointment_status === APPOINTMENT_STATUS.RESCHEDULED) {
         log.info('---APPOINTMENTResCHEDULING_REQUEST_RAISED---');
-        if (!(objectFn.hasFunction(data, 'rescheduled_date') || objectFn.hasFunction(data, 'from_time') || objectFn.hasFunction(data, 'to_time'))) {
+        if (!(objectFn.hasFn(data, 'rescheduled_date') || objectFn.hasFn(data, 'from_time') || objectFn.hasFn(data, 'to_time'))) {
           return reject({
             success: false,
             error_code: 400,

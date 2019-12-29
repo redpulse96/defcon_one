@@ -6,10 +6,17 @@ const TWILIO = {
 const DEFAULT_USERNAME = '@emr.in';
 const DEFAULT_SALT = 10;
 
+const APPOINTMENT_STATUS = {
+  PENDING: 'pending',
+  OPERATING: 'operating',
+  RESCHEDULED: 'rescheduled',
+  CLOSED: 'closed'
+};
+
 const APPOINTMENT_STATUS_MATRIX = {
-  'pending': ['operating', 'rescheduled', 'closed'],
-  'operating': ['closed', 'rescheduled'],
-  'rescheduled': ['pending', 'closed'],
+  'pending': [APPOINTMENT_STATUS.OPERATING, APPOINTMENT_STATUS.RESCHEDULED, APPOINTMENT_STATUS.CLOSED],
+  'operating': [APPOINTMENT_STATUS.CLOSED, APPOINTMENT_STATUS.RESCHEDULED],
+  'rescheduled': [APPOINTMENT_STATUS.PENDING, APPOINTMENT_STATUS.CLOSED],
   'closed': []
 };
 
@@ -30,5 +37,6 @@ exports.SECRET_KEY = SECRET_KEY;
 exports.TWILIO = TWILIO;
 exports.DEFAULT_USERNAME = DEFAULT_USERNAME;
 exports.DEFAULT_SALT = DEFAULT_SALT;
+exports.APPOINTMENT_STATUS = APPOINTMENT_STATUS;
 exports.APPOINTMENT_STATUS_MATRIX = APPOINTMENT_STATUS_MATRIX;
 exports.MANDATORY_PARAMS = MANDATORY_PARAMS;
