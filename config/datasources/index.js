@@ -1,10 +1,10 @@
 'use strict';
 
 const path = packageHelper.path;
-const Sequelize = packageHelper.sequelize;
 const mongoose = packageHelper.mongoose;
+const Sequelize = packageHelper.sequelize;
 
-const modelConfig = require('./model_config');
+const model_config = require('./model_config');
 const mysql_config = require('./datasources_env_config')['mysql'];
 const mongo_config = require('./datasources_env_config')['mongo'];
 
@@ -20,11 +20,10 @@ mongoose.connect(mongo_config.url, {
   })
   .catch(err => console.error(err));
 
-delete modelConfig['Users'];
-for (const model_index in modelConfig) {
-  const elem = modelConfig[model_index];
+for (const model_key in model_config) {
+  const elem = model_config[model_key];
   const model = sequelize['import'](path.join(packageHelper.DIRNAME, elem));
-  db[model_index] = model;
+  db[model_key] = model;
 }
 
 for (const db_key in db) {

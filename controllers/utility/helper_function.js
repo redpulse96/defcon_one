@@ -14,11 +14,9 @@ module.exports = {
      */
     mergeFn: (parent_obj, child_obj) => {
       let res_obj = {
-        ...parent_obj
+        ...parent_obj,
+        ...child_obj
       };
-      for (const child_key in child_obj) {
-        res_obj[child_key] ? res_obj[child_key] = child_obj[child_key] : null;
-      }
       return res_obj;
     }
   },
