@@ -41,9 +41,20 @@ module.exports = {
     groupByFn: (arr, key) => {
       let res_obj = {};
       arr.forEach(v => {
-        !(res_obj[v[key]]) ? res_obj[v[key]] = [v] : res_obj[v[key]].push(v);
+        !(res_obj[v[key]]) ? (res_obj[v[key]] = [v]) : res_obj[v[key]].push(v);
       });
       return res_obj;
+    },
+    /**
+     * @param {Array} main_arr - Array of key elements
+     * @param {Array} chk_arr - Array of key elements
+     */
+    differFn: (main_arr, chk_arr) => {
+      let res_arr = [];
+      chk_arr.forEach(x => {
+        (main_arr.indexOf(x) < 0) && res_arr.push(x);
+      });
+      return res_arr;
     }
   }
 }

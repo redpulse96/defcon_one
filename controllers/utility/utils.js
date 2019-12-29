@@ -1,6 +1,9 @@
 const log = require('../../config/log_config').logger('utils');
 const _ = packageHelper.lodash;
 const moment = packageHelper.moment;
+const {
+  arrayFn
+} = require('./helper_function');
 
 module.exports = {
   /**
@@ -28,7 +31,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       if (paramObj.mandatoryParams && paramObj.mandatoryParams.length) {
         let reqParams = Object.keys(paramObj.data);
-        if (!_.difference(paramObj.mandatoryParams, reqParams).length) {
+        if (!arrayFn.differFn(paramObj.mandatoryParams, reqParams).length) {
           log.info('All keys are present');
           log.info(paramObj);
           return resolve({
@@ -38,12 +41,12 @@ module.exports = {
           });
         } else {
           log.error('---INSUFFICIENT_PARAMETERS---');
-          log.error(_.difference(paramObj.mandatoryParams, reqParams));
+          log.error(arrayFn.differFn(paramObj.mandatoryParams, reqParams));
           return reject({
             success: false,
             error_code: 400,
             message: 'Insufficient parameters',
-            data: _.difference(paramObj.mandatoryParams, reqParams)
+            data: arrayFn.differFn(paramObj.mandatoryParams, reqParams)
           });
         }
       }
