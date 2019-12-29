@@ -12,7 +12,7 @@ module.exports = {
      * @param {Object} parent_obj - Array of objects to group
      * @param {Object} child_obj - Array of objects to group
      */
-    hasFn: (parent_obj, child_obj) => {
+    mergeFn: (parent_obj, child_obj) => {
       let res_obj = {
         ...parent_obj
       };
