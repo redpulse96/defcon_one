@@ -4,8 +4,8 @@ const DiagnosisRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['DiagnosisR
 DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
 
   let whereObj = {
-    ...req.params,
     where: {
+      ...req.params,
       role_id: req.user.role_id
     },
     include: [{
@@ -16,7 +16,8 @@ DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
       as: 'role'
     }]
   };
-  models['DiagnosisRoleMapping'].scope('activeScope').findAll(whereObj)
+  models['DiagnosisRoleMapping']
+    .scope('activeScope').findAll(whereObj)
     .then(fetchRes => {
       log.info('---DiagnosisRoleMapping_FETCH_SUCCESS---');
       log.info(fetchRes);

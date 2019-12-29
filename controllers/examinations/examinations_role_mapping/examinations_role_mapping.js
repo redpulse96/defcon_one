@@ -4,8 +4,8 @@ const ExaminationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['Examina
 ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
 
   let whereObj = {
-    ...req.params,
     where: {
+      ...req.params,
       role_id: req.user.role_id
     },
     include: [{
@@ -16,7 +16,8 @@ ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
       as: 'role'
     }]
   };
-  models['ExaminationsRoleMapping'].scope('activeScope').findAll(whereObj)
+  models['ExaminationsRoleMapping']
+    .scope('activeScope').findAll(whereObj)
     .then(fetchRes => {
       log.info('---ExaminationsRoleMapping_FETCH_SUCCESS---');
       log.info(fetchRes);
