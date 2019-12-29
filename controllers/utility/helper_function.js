@@ -4,22 +4,22 @@ module.exports = {
   to: promise => promise.then(data => ([null, data])).catch(err => ([err, null])),
   objectFn: {
     hasFn: (obj, key) => {
-      let isExists;
-      obj[key] ? isExists = true : isExists = false;
-      return isExists;
+      let is_exists;
+      obj[key] ? is_exists = true : is_exists = false;
+      return is_exists;
     },
     /**
-     * @param {Object} parentObj - Array of objects to group
-     * @param {Object} childObj - Array of objects to group
+     * @param {Object} parent_obj - Array of objects to group
+     * @param {Object} child_obj - Array of objects to group
      */
-    hasFn: (parentObj, childObj) => {
-      let rsltObj = {
-        ...parentObj
+    hasFn: (parent_obj, child_obj) => {
+      let res_obj = {
+        ...parent_obj
       };
-      for (const child_key in childObj) {
-        rsltObj[child_key] ? rsltObj[child_key] = childObj[child_key] : null;
+      for (const child_key in child_obj) {
+        res_obj[child_key] ? res_obj[child_key] = child_obj[child_key] : null;
       }
-      return rsltObj;
+      return res_obj;
     }
   },
   arrayFn: {
@@ -28,24 +28,24 @@ module.exports = {
      * @param {String} key - The attribute whose values are returned as an array
      */
     mapFn: (arr, key) => {
-      log.info('---mapFn---');
+      log.info('---mapFunction---');
       log.info(arr);
-      let retArray = [];
+      let res_array = [];
       arr.forEach(v => {
-        v[key] && retArray.push(v[key]);
+        v[key] && res_array.push(v[key]);
       });
-      return retArray;
+      return res_array;
     },
     /**
      * @param {Array} arr - Array of objects to group
      * @param {String} key - The attribute to group the list by
      */
     groupByFn: (arr, key) => {
-      let resObj = {};
+      let res_obj = {};
       arr.forEach(v => {
-        !(resObj[v[key]]) ? resObj[v[key]] = [v] : resObj[v[key]].push(v);
+        !(res_obj[v[key]]) ? res_obj[v[key]] = [v] : res_obj[v[key]].push(v);
       });
-      return resObj;
+      return res_obj;
     }
   }
 }
