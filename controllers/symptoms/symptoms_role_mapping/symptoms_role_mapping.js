@@ -4,8 +4,8 @@ const SymptomsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['SymptomsRol
 SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
 
   let whereObj = {
-    ...req.params,
     where: {
+      ...req.params,
       role_id: req.user.role_id
     },
     include: [{
@@ -16,7 +16,8 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
       as: 'role'
     }]
   };
-  models['SymptomsRoleMapping'].scope('activeScope').findAll(whereObj)
+  models['SymptomsRoleMapping']
+    .scope('activeScope').findAll(whereObj)
     .then(fetchRes => {
       log.info('---SRM_FETCH_SUCCESS---');
       log.info(fetchRes);
