@@ -11,29 +11,31 @@ const {
 const FEAURE_RIGHTS = require('../public/javascripts/role_mapping');
 const bcrypt = packageHelper.bcrypt;
 
-Users.generateSalt = new Promise((resolve, reject) => {
-  bcrypt.genSalt(DEFAULT_SALT, (err, salt) => {
-    if (err) {
-      log.error('---ERROR_WHILE_GENERATING_SALT---');
-      log.error(err);
-      return reject({
-        success: false,
-        message: 'Salt generation error',
-        data: {}
-      });
-    } else {
-      log.info('---SUCCESS_WHILE_GENERATING_SALT---');
-      log.info(salt);
-      return resolve({
-        success: true,
-        message: 'Salt generation success',
-        data: {
-          salt
-        }
-      });
-    }
+Users.generateSalt = () => {
+  new Promise((resolve, reject) => {
+    bcrypt.genSalt(DEFAULT_SALT, (err, salt) => {
+      if (err) {
+        log.error('---ERROR_WHILE_GENERATING_SALT---');
+        log.error(err);
+        return reject({
+          success: false,
+          message: 'Salt generation error',
+          data: {}
+        });
+      } else {
+        log.info('---SUCCESS_WHILE_GENERATING_SALT---');
+        log.info(salt);
+        return resolve({
+          success: true,
+          message: 'Salt generation success',
+          data: {
+            salt
+          }
+        });
+      }
+    });
   });
-});
+}
 
 Users.generateHash = (password, salt) => {
   return new Promise((resolve, reject) => {
