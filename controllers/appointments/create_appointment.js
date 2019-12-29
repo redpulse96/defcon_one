@@ -47,7 +47,7 @@ module.exports = Appointments => {
     return utils.generateResponse(createNewAppointmentResult)(res);
   }
 
-  const validateDataFunction = data => {
+  function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
       let paramsCheck = {
         data: data.body,
