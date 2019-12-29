@@ -1,4 +1,4 @@
-const log = require('./log_config')('passport');
+const log = require('./log_config').logger('passport');
 const Users = require('../models/users');
 
 const localStrategy = packageHelper.passport_local.Strategy;

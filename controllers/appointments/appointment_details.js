@@ -1,6 +1,11 @@
 const log = require('../../config/log_config').logger('appointments_controller');
 const utils = require('../utility/utils');
 const async = packageHelper.async;
+const {
+  MANDATORY_PARAMS: {
+    APPOINTMENT_DETAIL
+  }
+} = require('../../public/javascripts/constants');
 
 module.exports = Appointments => {
   Appointments.appointmentDetails = (req, res) => {
@@ -8,13 +13,17 @@ module.exports = Appointments => {
       validateData: validateDataFunction,
       fetchAppointmentDetails: ['validateData', fetchAppointmentDetailsFunction]
     })
-      .then(asyncAutoRes => res.send(asyncAutoRes.fetchAppointmentDetails))
-      .catch(asyncAutoErr => res.status(asyncAutoErr.error_code).send(asyncAutoErr));
+      .then(asyncAutoRes => {
+        return res.send(asyncAutoRes.fetchAppointmentDetails);
+      })
+      .catch(asyncAutoErr => {
+        return res.status(asyncAutoErr.error_code).send(asyncAutoErr);
+      });
 
     function validateDataFunction(callback) {
       let paramsCheck = {
         data: req.params,
-        mandatoryParams: ['appointment_id']
+        mandatoryParams: APPOINTMENT_DETAIL
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(paramsRes => callback(null, paramsRes))
@@ -22,7 +31,7 @@ module.exports = Appointments => {
     }
   }
 
-  const fetchAppointmentDetailsFunction = (result, callback) => {
+  function fetchAppointmentDetailsFunction(result, callback) {
     const {
       validateData
     } = result;

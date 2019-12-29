@@ -21,17 +21,17 @@ mongoose.connect(mongo_config.url, {
   .catch(err => console.error(err));
 
 delete modelConfig['Users'];
-for (let model_index = 0; model_index < Object.keys(modelConfig).length; model_index++) {
-  const elem = Object.keys(modelConfig)[model_index];
-  const model = sequelize['import'](path.join(packageHelper.DIRNAME, modelConfig[elem]));
-  db[elem] = model;
+for (const model_index in modelConfig) {
+  const elem = modelConfig[model_index];
+  const model = sequelize['import'](path.join(packageHelper.DIRNAME, elem));
+  db[model_index] = model;
 }
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
+for (const db_key in db) {
+  if (db[db_key].associate) {
+    db[db_key].associate(db);
   }
-});
+}
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

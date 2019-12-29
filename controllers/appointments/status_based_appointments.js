@@ -1,7 +1,9 @@
 const log = require('../../config/log_config').logger('appointments_controller');
 const utils = require('../utility/utils');
-const _ = packageHelper.lodash;
 const moment = packageHelper.moment;
+const {
+  arrayFn
+} = require('../utility/helper_function');
 
 module.exports = Appointments => {
 
@@ -54,7 +56,7 @@ module.exports = Appointments => {
             http_code: 200,
             message: 'Appointments list fetch success',
             data: {
-              appointments_list: _.groupBy(appointmentsRes, 'appointment_status')
+              appointments_list: arrayFn.groupByFn(appointmentsRes, 'appointment_status')
             }
           };
         } else {

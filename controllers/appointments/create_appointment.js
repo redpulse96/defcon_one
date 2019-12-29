@@ -64,7 +64,7 @@ module.exports = Appointments => {
     });
   }
 
-  const checkPatientExistanceFunction = data => {
+  function checkPatientExistanceFunction(data) {
     return new Promise((resolve, reject) => {
       let filterPatientObj = {
         where: {
@@ -107,7 +107,7 @@ module.exports = Appointments => {
     });
   }
 
-  const createNewAppointmentFunction = data => {
+  function createNewAppointmentFunction(data) {
     return new Promise((resolve, reject) => {
       let createObj = {
         ...data,
@@ -142,14 +142,18 @@ module.exports = Appointments => {
     });
   }
 
-  const createAppointmentLogFunction = data => {
+  function createAppointmentLogFunction(data) {
     return new Promise((resolve, reject) => {
       let logObj = {
         ...data
       };
       AppointmentLogs.createAppointmentLogs(logObj)
-        .then(logRes => resolve(logRes))
-        .catch(logErr => reject(logErr));
+        .then(logRes => {
+          return resolve(logRes);
+        })
+        .catch(logErr => {
+          return reject(logErr);
+        });
     });
   }
 }
