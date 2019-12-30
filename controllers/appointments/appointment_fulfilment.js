@@ -287,8 +287,12 @@ module.exports = Appointments => {
         ...data
       };
       AppointmentLogs.createAppointmentLogs(createLogObj)
-        .then(createLogRes => resolve(createLogRes))
-        .catch(createLogErr => reject(createLogErr));
+        .then(createLogRes => {
+          return resolve(createLogRes);
+        })
+        .catch(createLogErr => {
+          return reject(createLogErr);
+        });
     });
   }
 }

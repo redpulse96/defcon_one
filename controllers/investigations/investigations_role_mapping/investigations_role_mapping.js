@@ -35,9 +35,7 @@ InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
       return res.status(500).send({
         success: false,
         message: 'Investigations Role Mapping fetching failure',
-        data: {
-          investigations_role_mapping: fetchErr
-        }
+        data: {}
       });
     });
 }
@@ -65,9 +63,7 @@ InvestigationsRoleMapping.createInvestigationsRoleMapping = (req, res) => {
       return res.send({
         success: false,
         message: 'Patient investigations Role Mapping creation failure',
-        data: {
-          investigations_role_mapping: createErr
-        }
+        data: {}
       });
     });
 }

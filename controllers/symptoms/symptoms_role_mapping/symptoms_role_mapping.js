@@ -35,9 +35,7 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
       return res.status(500).send({
         success: false,
         message: 'Symptoms Role Mapping fetching failure',
-        data: {
-          symptoms_role_mapping: fetchErr
-        }
+        data: {}
       });
     });
 }
@@ -65,9 +63,7 @@ SymptomsRoleMapping.createSymptomsRoleMapping = (req, res) => {
       return res.send({
         success: false,
         message: 'Symptoms Role Mapping creation failure',
-        data: {
-          symptoms_role_mapping: createErr
-        }
+        data: {}
       });
     });
 }
