@@ -6,7 +6,7 @@ const {
 
 module.exports = PatientInvestigationsRoleMapping => {
 
-  PatientInvestigationsRoleMapping.createPatientInvestigationsRoleMapping = (req, res) => {
+  PatientInvestigationsRoleMapping.createPatientInvestigationsRoleMapping = async (req, res) => {
 
     let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
     if (validateDataError) {
