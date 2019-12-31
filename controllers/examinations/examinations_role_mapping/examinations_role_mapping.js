@@ -2,7 +2,6 @@ const log = require('../../../config/log_config').logger('examinations_role_mapp
 const ExaminationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['ExaminationsRoleMapping'];
 
 ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
-
   let whereObj = {
     where: {
       ...req.params,
@@ -35,15 +34,12 @@ ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
       return res.status(500).send({
         success: false,
         message: 'examinations Role Mapping fetching failure',
-        data: {
-          examinations_role_mapping: fetchErr
-        }
+        data: {}
       });
     });
 }
 
 ExaminationsRoleMapping.createExaminationsRoleMapping = (req, res) => {
-
   let createObj = {
     ...req.body
   };
@@ -65,9 +61,7 @@ ExaminationsRoleMapping.createExaminationsRoleMapping = (req, res) => {
       return res.send({
         success: false,
         message: 'examinations Role Mapping creation failure',
-        data: {
-          examinations_role_mapping: createErr
-        }
+        data: {}
       });
     });
 }

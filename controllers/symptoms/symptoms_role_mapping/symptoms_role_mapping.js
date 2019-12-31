@@ -2,7 +2,6 @@ const log = require('../../../config/log_config').logger('symptoms_controller');
 const SymptomsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['SymptomsRoleMapping'];
 
 SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
-
   let whereObj = {
     where: {
       ...req.params,
@@ -35,15 +34,12 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
       return res.status(500).send({
         success: false,
         message: 'Symptoms Role Mapping fetching failure',
-        data: {
-          symptoms_role_mapping: fetchErr
-        }
+        data: {}
       });
     });
 }
 
 SymptomsRoleMapping.createSymptomsRoleMapping = (req, res) => {
-
   let createObj = {
     ...req.body
   };
@@ -65,9 +61,7 @@ SymptomsRoleMapping.createSymptomsRoleMapping = (req, res) => {
       return res.send({
         success: false,
         message: 'Symptoms Role Mapping creation failure',
-        data: {
-          symptoms_role_mapping: createErr
-        }
+        data: {}
       });
     });
 }

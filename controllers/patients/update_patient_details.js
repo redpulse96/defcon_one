@@ -79,7 +79,7 @@ module.exports = Patients => {
         .then(patientRes => {
           log.info('---patientRes---');
           log.info(patientRes);
-          if (patientRes && !(arrayFn.mapFn(patientRes, 'mobile_no').indexOf(utils.validateKeys(() => data.update_obj.mobile_no, null, null)) > -1)) {
+          if (patientRes && !(arrayFn.map(patientRes, 'mobile_no').indexOf(utils.validateKeys(() => data.update_obj.mobile_no, null, null)) > -1)) {
             return resolve({
               success: true,
               message: 'The mobile_no can be updated',

@@ -31,7 +31,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       if (paramObj.mandatoryParams && paramObj.mandatoryParams.length) {
         let reqParams = Object.keys(paramObj.data);
-        if (!arrayFn.differFn(paramObj.mandatoryParams, reqParams).length) {
+        if (!arrayFn.differ(paramObj.mandatoryParams, reqParams).length) {
           log.info('All keys are present');
           log.info(paramObj);
           return resolve({
@@ -41,12 +41,12 @@ module.exports = {
           });
         } else {
           log.error('---INSUFFICIENT_PARAMETERS---');
-          log.error(arrayFn.differFn(paramObj.mandatoryParams, reqParams));
+          log.error(arrayFn.differ(paramObj.mandatoryParams, reqParams));
           return reject({
             success: false,
             error_code: 400,
             message: 'Insufficient parameters',
-            data: arrayFn.differFn(paramObj.mandatoryParams, reqParams)
+            data: arrayFn.differ(paramObj.mandatoryParams, reqParams)
           });
         }
       }
