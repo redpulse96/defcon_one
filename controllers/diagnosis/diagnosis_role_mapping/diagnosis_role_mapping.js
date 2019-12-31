@@ -2,7 +2,6 @@ const log = require('../../../config/log_config').logger('diagnosis_role_mapping
 const DiagnosisRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['DiagnosisRoleMapping'];
 
 DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
-
   let whereObj = {
     where: {
       ...req.params,
@@ -41,7 +40,6 @@ DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
 }
 
 DiagnosisRoleMapping.createDiagnosisRoleMapping = (req, res) => {
-
   let createObj = {
     ...req.body
   };

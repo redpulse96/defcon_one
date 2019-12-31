@@ -2,7 +2,6 @@ const log = require('../../../config/log_config').logger('investigations_role_ma
 const InvestigationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['InvestigationsRoleMapping'];
 
 InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
-
   let whereObj = {
     where: {
       ...req.params,
@@ -41,7 +40,6 @@ InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
 }
 
 InvestigationsRoleMapping.createInvestigationsRoleMapping = (req, res) => {
-
   let createObj = {
     ...req.body
   };

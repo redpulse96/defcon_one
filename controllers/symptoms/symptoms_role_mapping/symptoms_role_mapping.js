@@ -2,7 +2,6 @@ const log = require('../../../config/log_config').logger('symptoms_controller');
 const SymptomsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['SymptomsRoleMapping'];
 
 SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
-
   let whereObj = {
     where: {
       ...req.params,
@@ -41,7 +40,6 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
 }
 
 SymptomsRoleMapping.createSymptomsRoleMapping = (req, res) => {
-
   let createObj = {
     ...req.body
   };

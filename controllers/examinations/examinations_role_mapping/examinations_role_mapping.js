@@ -2,7 +2,6 @@ const log = require('../../../config/log_config').logger('examinations_role_mapp
 const ExaminationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['ExaminationsRoleMapping'];
 
 ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
-
   let whereObj = {
     where: {
       ...req.params,
@@ -41,7 +40,6 @@ ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
 }
 
 ExaminationsRoleMapping.createExaminationsRoleMapping = (req, res) => {
-
   let createObj = {
     ...req.body
   };
