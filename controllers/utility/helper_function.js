@@ -13,7 +13,7 @@ module.exports = {
      * @param {Object} obj - Object to check the presence of the key
      * @param {String} key - Key to be checked if present in the object
      */
-    hasFn: (obj, key) => {
+    has: (obj, key) => {
       let is_exists;
       obj[key] ? is_exists = true : is_exists = false;
       return is_exists;
@@ -22,7 +22,7 @@ module.exports = {
      * @param {Object} parent_obj - Parent object to be merged
      * @param {Object} child_obj - Child object to be merged
      */
-    mergeFn: (parent_obj, child_obj) => {
+    merge: (parent_obj, child_obj) => {
       let res_obj = {
         ...parent_obj,
         ...child_obj
@@ -38,7 +38,7 @@ module.exports = {
      * @param {Array} arr - Array of objects to map a key from
      * @param {String} key - The attribute whose values are returned as an array
      */
-    mapFn: (arr, key) => {
+    map: (arr, key) => {
       log.info('---mapFunction---');
       log.info(arr);
       let res_array = [];
@@ -51,7 +51,7 @@ module.exports = {
      * @param {Array} arr - Array of objects to group
      * @param {String} key - The attribute to group the list by
      */
-    groupByFn: (arr, key) => {
+    groupBy: (arr, key) => {
       let res_obj = {};
       arr.forEach(v => {
         !(res_obj[v[key]]) ? (res_obj[v[key]] = [v]) : res_obj[v[key]].push(v);
@@ -62,7 +62,7 @@ module.exports = {
      * @param {Array} main_arr - Array of key elements
      * @param {Array} chk_arr - Array of key elements
      */
-    differFn: (main_arr, chk_arr) => {
+    differ: (main_arr, chk_arr) => {
       let res_arr = [];
       chk_arr.forEach(x => {
         (main_arr.indexOf(x) < 0) && res_arr.push(x);

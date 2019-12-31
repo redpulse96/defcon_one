@@ -2,7 +2,6 @@ const log = require('../../../config/log_config').logger('diagnosis_role_mapping
 const DiagnosisRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['DiagnosisRoleMapping'];
 
 DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
-
   let whereObj = {
     where: {
       ...req.params,
@@ -35,15 +34,12 @@ DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
       return res.send({
         success: false,
         message: 'diagnosis Role Mapping fetching failure',
-        data: {
-          diagnosis_role_mapping: fetchErr
-        }
+        data: {}
       });
     });
 }
 
 DiagnosisRoleMapping.createDiagnosisRoleMapping = (req, res) => {
-
   let createObj = {
     ...req.body
   };
@@ -65,9 +61,7 @@ DiagnosisRoleMapping.createDiagnosisRoleMapping = (req, res) => {
       return res.send({
         success: false,
         message: 'diagnosis Role Mapping creation failure',
-        data: {
-          diagnosis_role_mapping: createErr
-        }
+        data: {}
       });
     });
 }

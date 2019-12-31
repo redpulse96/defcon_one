@@ -2,7 +2,6 @@ const log = require('../../../config/log_config').logger('investigations_role_ma
 const InvestigationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['InvestigationsRoleMapping'];
 
 InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
-
   let whereObj = {
     where: {
       ...req.params,
@@ -35,15 +34,12 @@ InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
       return res.status(500).send({
         success: false,
         message: 'Investigations Role Mapping fetching failure',
-        data: {
-          investigations_role_mapping: fetchErr
-        }
+        data: {}
       });
     });
 }
 
 InvestigationsRoleMapping.createInvestigationsRoleMapping = (req, res) => {
-
   let createObj = {
     ...req.body
   };
@@ -65,9 +61,7 @@ InvestigationsRoleMapping.createInvestigationsRoleMapping = (req, res) => {
       return res.send({
         success: false,
         message: 'Patient investigations Role Mapping creation failure',
-        data: {
-          investigations_role_mapping: createErr
-        }
+        data: {}
       });
     });
 }
