@@ -31,6 +31,7 @@ InvestigationsRoleMapping.fetchInvestigationsRoleMapping = (req, res) => {
     .catch(fetchErr => {
       log.info('---InvestigationsRoleMapping_FETCH_FAILURE---');
       log.info(fetchErr);
+      return utils.generateResponse(IRM_FETCH_ERROR)(res);
       return res.status(500).send({
         success: false,
         message: 'Investigations Role Mapping fetching failure',
@@ -58,6 +59,7 @@ InvestigationsRoleMapping.createInvestigationsRoleMapping = (req, res) => {
     .catch(createErr => {
       log.info('---InvestigationsRoleMapping_CREATION_FAILURE---');
       log.info(createErr);
+      return utils.generateResponse(IRM_CREATE_ERROR)(res);
       return res.send({
         success: false,
         message: 'Patient investigations Role Mapping creation failure',

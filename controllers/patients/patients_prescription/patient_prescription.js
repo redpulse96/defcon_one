@@ -40,6 +40,7 @@ PatientPrescription.fetchPatientPrescription = (req, res) => {
     .catch(fetchErr => {
       log.info('---PATIENT_PRESCRIPTION_FETCH_FAILURE---');
       log.info(fetchErr);
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
       return res.status(500).send({
         success: false,
         message: 'Internal server error',
@@ -70,6 +71,7 @@ PatientPrescription.createPatientPrescription = (req, res) => {
     .catch(createErr => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_FAILURE---');
       log.info(createErr);
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
       return res.status(500).send({
         success: false,
         message: 'Internal server error',

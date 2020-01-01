@@ -43,6 +43,7 @@ app.use(packageHelper.bodyParser.urlencoded({
 // Passport session
 require('./passport')(passport);
 app.use(session({
+  key: 'defcon_one_id',
   secret: SECRET_KEY,
   resave: true,
   session: true,
@@ -56,6 +57,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Cookie parser
 app.use(packageHelper.cookieParser());
 app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNAME, '../public')));
 
@@ -66,6 +68,7 @@ app.use('/api', cors(corsOptions), apiLogger, verifyToken, attachUserToRequest, 
 // catch 404 and forward to error handler 
 app.use((err, res) => {
   console.error('---Route_not_found---');
+  return utils.generateResponse(PAGE_NOT_FOUND)(res);
   res.status(404).send({
     success: false,
     message: packageHelper.createError(404).message || 'Not found',
@@ -80,6 +83,7 @@ app.use((err, req, res) => {
   res.locals.error = req.app.get('env') === 'dev' ? err : {};
 
   // render the error page
+  return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
   res.status(err.status || 500).send({
     success: false,
     message: err.message || 'Internal server error',

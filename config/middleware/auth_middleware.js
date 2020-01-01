@@ -10,6 +10,16 @@ const {
 } = require('../../public/javascripts/constants');
 
 module.exports = {
+  sessionCheckerFunction: (req, res) => {
+    if (req.session.user && req.cookies.defcon_one_sid) {
+      next();
+    } else {
+      next();
+    }
+  },
+  setCookieFunction: (req, res) => {
+
+  },
   generateToken: (req, res) => {
     if (req.user) {
       jwt.sign({
@@ -18,6 +28,7 @@ module.exports = {
         if (err) {
           log.error('---GENERATETOKEN_ERROR---');
           log.error(err);
+          return utils.generateResponse(PERMISSION_DENIED)(res);
           return res.status(403).send({
             success: false,
             message: 'Permission denied',
@@ -46,6 +57,7 @@ module.exports = {
       });
     } else {
       log.error('---USER_DOES_NOT_EXIST---');
+      return utils.generateResponse(PERMISSION_DENIED)(res);
       utils.generateResponse({
         error_code: 403,
         success: false,
@@ -75,6 +87,7 @@ module.exports = {
               req.authenticated = true;
               return next();
             } else {
+              return utils.generateResponse(INCORRECT_USERNAME)(res);
               return res.status(403).send({
                 success: false,
                 message: 'Incorrect username or password',
@@ -84,6 +97,7 @@ module.exports = {
           });
         } else {
           log.info('---INVALID_USER---');
+          return utils.generateResponse(INCORRECT_USERNAME)(res);
           return res.status(403).send({
             success: false,
             message: 'Invalid username or password',
@@ -94,6 +108,7 @@ module.exports = {
       .catch(user_error => {
         log.error('---USER_ERROR---');
         log.error(user_error);
+        return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
         return res.status(500).send({
           success: false,
           message: 'Internal server error',
@@ -107,6 +122,7 @@ module.exports = {
     if (req.isAuthenticated()) {
       return next();
     } else {
+      return utils.generateResponse(PERMISSION_DENIED)(res);
       res.status(500).send({
         success: false,
         message: 'Permission denied',
@@ -130,6 +146,7 @@ module.exports = {
           req.username = tokenRes.data.access_token_res.username;
           jwt.verify(req.token, SECRET_KEY + req.username, (err, authData) => {
             if (err) {
+              return utils.generateResponse(PERMISSION_DENIED)(res);
               return res.status(403).send({
                 success: false,
                 message: 'Permission denied',
@@ -145,6 +162,7 @@ module.exports = {
         .catch(tokenErr => {
           log.info('---token_err---');
           log.info(tokenErr);
+          return utils.generateResponse(PERMISSION_DENIED)(res);
           return res.status(403).send({
             success: false,
             message: 'Permission denied',
@@ -152,7 +170,8 @@ module.exports = {
           });
         });
     } else {
-      //FORBIDDEN
+      // FORBIDDEN
+      return utils.generateResponse(PERMISSION_DENIED)(res);
       return res.status(403).send({
         success: false,
         message: 'Permission denied',
@@ -182,6 +201,7 @@ module.exports = {
                 req.user.role_id = roleDetails.role_id;
                 next();
               } else {
+                return utils.generateResponse(PERMISSION_DENIED)(res);
                 return res.status(400).send({
                   success: false,
                   message: 'Permission denied',
@@ -192,6 +212,7 @@ module.exports = {
             .catch(userError => {
               log.error('---userError---');
               log.error(userError);
+              return utils.generateResponse(PERMISSION_DENIED)(res);
               return res.status(400).send({
                 success: false,
                 message: 'Permission denied',
@@ -199,6 +220,7 @@ module.exports = {
               });
             });
         } else {
+          return utils.generateResponse(PERMISSION_DENIED)(res);
           return res.status(400).send({
             success: false,
             message: 'Permission denied',
@@ -209,6 +231,7 @@ module.exports = {
       .catch(userError => {
         log.error('---userError---');
         log.error(userError);
+        return utils.generateResponse(PERMISSION_DENIED)(res);
         return res.status(400).send({
           success: false,
           message: 'Permission denied',
@@ -230,6 +253,7 @@ module.exports = {
       .catch(tokenErr => {
         log.info('---token_err---');
         log.info(tokenErr);
+        return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
         return res.status(500).send({
           success: false,
           message: 'Internal server error',

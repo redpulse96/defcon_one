@@ -40,13 +40,14 @@ module.exports = {
             data: paramObj.data
           });
         } else {
+          let resData = arrayFn.differ(paramObj.mandatoryParams, reqParams);
           log.error('---INSUFFICIENT_PARAMETERS---');
-          log.error(arrayFn.differ(paramObj.mandatoryParams, reqParams));
+          log.error(resData);
           return reject({
             success: false,
             error_code: 400,
             message: 'Insufficient parameters',
-            data: arrayFn.differ(paramObj.mandatoryParams, reqParams)
+            data: resData
           });
         }
       }
@@ -163,10 +164,12 @@ module.exports = {
       case true:
         statusCode = 200;
         !(response.message) && (response.message = 'Successfully executed');
+        response.data && (response.data = eval(response.data));
         break;
       case false:
         statusCode = response['error_code'];
         !(response.message) && (response.message = 'Internal server error');
+        response.data && (response.data = eval(response.data));
         break;
       default:
         statusCode = 200;

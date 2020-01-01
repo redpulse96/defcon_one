@@ -87,6 +87,7 @@ module.exports = Patients => {
             }
           });
         } else {
+          return utils.generateResponse(PATIENT_NOT_EXISTS)(res);
           return res.status(502).send({
             success: false,
             message: 'Patient does not exist',
@@ -97,6 +98,7 @@ module.exports = Patients => {
       .catch(fetchErr => {
         log.error('---PATIENTS_FETCH_FAILURE---');
         log.error(fetchErr);
+        return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
         return res.status(500).send({
           success: false,
           message: 'Internal server error',

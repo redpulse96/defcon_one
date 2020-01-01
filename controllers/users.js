@@ -91,6 +91,7 @@ const registerUser = (req, res) => {
       if (existingUser) {
         log.info('---USER_ALREADY_EXISTS---');
         log.info(existingUser);
+        return utils.generateResponse(USER_EXISTS)(res);
         return res.status(400).send({
           success: false,
           message: 'User already exists',
@@ -128,6 +129,7 @@ const registerUser = (req, res) => {
     .catch(createdUserError => {
       log.error('---CREATED_USER_ERROR---');
       log.error(createdUserError);
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
       return res.status(500).send({
         success: false,
         message: 'Internal server error',
@@ -137,6 +139,7 @@ const registerUser = (req, res) => {
     .catch(hashErr => {
       log.error('---PASSOWRD_HASEHED_ERROR---');
       log.error(hashErr);
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
       return res.status(500).send({
         success: false,
         message: 'Internal server error',
@@ -146,6 +149,7 @@ const registerUser = (req, res) => {
     .catch(saltErr => {
       log.error('---PASSOWRD_SALT_ERROR---');
       log.error(saltErr);
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
       return res.status(500).send({
         success: false,
         message: 'Internal server error',
@@ -155,6 +159,7 @@ const registerUser = (req, res) => {
     .catch((catchErr) => {
       log.error('---catchErr---');
       log.error(catchErr);
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
       return res.status(500).send({
         success: false,
         message: 'Internal server error',
@@ -164,6 +169,7 @@ const registerUser = (req, res) => {
     .catch(paramError => {
       log.error('---INSUFFICIENT_PARAMETERS---');
       log.error(paramError);
+      return utils.generateResponse(INSUFFICIENT_PARAMS)(res);
       return res.status(paramError.error_code).send(paramError);
     });
 }

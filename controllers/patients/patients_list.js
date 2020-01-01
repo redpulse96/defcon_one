@@ -27,6 +27,7 @@ module.exports = Patients => {
             }
           });
         } else {
+          return utils.generateResponse(PATIENT_NOT_EXISTS)(res);
           return res.status(500).send({
             success: false,
             message: 'No patients fetched',
@@ -37,6 +38,7 @@ module.exports = Patients => {
       .catch(patientsErr => {
         log.info('---LIST_OF_patientsErrOR---');
         log.info(patientsErr);
+        return utils.generateResponse(PATIENT_NOT_EXISTS)(res);
         return res.status(500).send({
           success: false,
           message: 'Patients list fetch failure',
