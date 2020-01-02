@@ -15,13 +15,13 @@ const {
 } = require('../response_config');
 
 module.exports = {
-  sessionCheckerFunction: (req, res) => {
-    if (req.session.user && req.cookies.defcon_one_sid) {
-      next();
-    } else {
-      next();
-    }
-  },
+  // sessionCheckerFunction: (req, res) => {
+  //   if (req.session.user && req.cookies.defcon_one_sid) {
+  //     next();
+  //   } else {
+  //     next();
+  //   }
+  // },
   generateToken: (req, res) => {
     if (req.user) {
       jwt.sign({

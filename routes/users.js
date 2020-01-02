@@ -4,7 +4,7 @@ const {
 const {
   validateUser,
   generateToken,
-  setCookieFunction,
+  // setCookieFunction,
   destroyToken
 } = require('../config/middleware/auth_middleware');
 
