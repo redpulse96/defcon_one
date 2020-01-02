@@ -3,7 +3,6 @@ const mongoose = packageHelper.mongoose;
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    type: String,
     lowercase: true,
     required: [true, "cannot be blank"],
     match: [/^[a-zA-Z]+$/, 'is invalid'],

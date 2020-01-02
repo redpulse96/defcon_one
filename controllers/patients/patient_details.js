@@ -1,4 +1,5 @@
 const log = require('../../config/log_config').logger('patients_controller');
+const utils = require('../utility/utils');
 const {
   PATIENT_NOT_EXISTS,
   INTERNAL_SERVER_ERROR

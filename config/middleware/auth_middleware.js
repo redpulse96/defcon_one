@@ -22,9 +22,6 @@ module.exports = {
       next();
     }
   },
-  setCookieFunction: (req, res) => {
-
-  },
   generateToken: (req, res) => {
     if (req.user) {
       jwt.sign({
