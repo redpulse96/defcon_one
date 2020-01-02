@@ -31,7 +31,6 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
     .catch(fetchErr => {
       log.info('---SRM_FETCH_FAILURE---');
       log.info(fetchErr);
-      return utils.generateResponse(SRM_FETCH_ERROR)(res);
       return res.status(500).send({
         success: false,
         message: 'Symptoms Role Mapping fetching failure',

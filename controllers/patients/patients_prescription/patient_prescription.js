@@ -1,6 +1,9 @@
 const log = require('../../../config/log_config').logger('patient_prescriptions_controller');
 const PatientPrescription = require(packageHelper.MODEL_CONFIG_DIR)['PatientPrescription'];
 const utils = require('../../utility/utils');
+const {
+  INTERNAL_SERVER_ERROR
+} = require('../../../config/response_config');
 
 PatientPrescription.fetchPatientPrescription = (req, res) => {
 
@@ -41,11 +44,6 @@ PatientPrescription.fetchPatientPrescription = (req, res) => {
       log.info('---PATIENT_PRESCRIPTION_FETCH_FAILURE---');
       log.info(fetchErr);
       return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
-      return res.status(500).send({
-        success: false,
-        message: 'Internal server error',
-        data: {}
-      });
     });
 }
 
@@ -72,11 +70,6 @@ PatientPrescription.createPatientPrescription = (req, res) => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_FAILURE---');
       log.info(createErr);
       return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
-      return res.status(500).send({
-        success: false,
-        message: 'Internal server error',
-        data: {}
-      });
     });
 }
 

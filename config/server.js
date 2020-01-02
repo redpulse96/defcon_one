@@ -18,6 +18,11 @@ const {
   SECRET_KEY
 } = require('../public/javascripts/constants');
 
+const {
+  INTERNAL_SERVER_ERROR,
+  PAGE_NOT_FOUND
+} = require('./response_config');
+
 const corsOptions = {
   "origin": /localhost:3000/,
   "methods": "GET,POST",
@@ -69,11 +74,6 @@ app.use('/api', cors(corsOptions), apiLogger, verifyToken, attachUserToRequest, 
 app.use((err, res) => {
   console.error('---Route_not_found---');
   return utils.generateResponse(PAGE_NOT_FOUND)(res);
-  res.status(404).send({
-    success: false,
-    message: packageHelper.createError(404).message || 'Not found',
-    data: {}
-  });
 });
 
 // error handler
@@ -84,11 +84,6 @@ app.use((err, req, res) => {
 
   // render the error page
   return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
-  res.status(err.status || 500).send({
-    success: false,
-    message: err.message || 'Internal server error',
-    data: {}
-  });
 });
 
 module.exports = app;

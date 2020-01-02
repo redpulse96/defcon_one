@@ -1,5 +1,8 @@
 const log = require('../../config/log_config').logger('patients_controller');
 const utils = require('../utility/utils');
+const {
+  PATIENT_NOT_EXISTS
+} = require('../../config/response_config');
 
 module.exports = Patients => {
 
@@ -28,22 +31,12 @@ module.exports = Patients => {
           });
         } else {
           return utils.generateResponse(PATIENT_NOT_EXISTS)(res);
-          return res.status(500).send({
-            success: false,
-            message: 'No patients fetched',
-            data: {}
-          });
         }
       })
       .catch(patientsErr => {
         log.info('---LIST_OF_patientsErrOR---');
         log.info(patientsErr);
         return utils.generateResponse(PATIENT_NOT_EXISTS)(res);
-        return res.status(500).send({
-          success: false,
-          message: 'Patients list fetch failure',
-          data: {}
-        });
       });
   }
 }

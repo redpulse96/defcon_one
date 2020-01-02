@@ -1,4 +1,8 @@
 const log = require('../../config/log_config').logger('patients_controller');
+const {
+  PATIENT_NOT_EXISTS,
+  INTERNAL_SERVER_ERROR
+} = require('../../config/response_config');
 
 module.exports = Patients => {
 
@@ -88,22 +92,12 @@ module.exports = Patients => {
           });
         } else {
           return utils.generateResponse(PATIENT_NOT_EXISTS)(res);
-          return res.status(502).send({
-            success: false,
-            message: 'Patient does not exist',
-            data: {}
-          });
         }
       })
       .catch(fetchErr => {
         log.error('---PATIENTS_FETCH_FAILURE---');
         log.error(fetchErr);
         return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
-        return res.status(500).send({
-          success: false,
-          message: 'Internal server error',
-          data: {}
-        });
       });
   }
 }
