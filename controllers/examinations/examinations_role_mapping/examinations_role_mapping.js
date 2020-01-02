@@ -31,6 +31,7 @@ ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
     .catch(fetchErr => {
       log.info('---ExaminationsRoleMapping_FETCH_FAILURE---');
       log.info(fetchErr);
+      // return utils.generateResponse(ERM_FETCH_ERROR)(res);
       return res.status(500).send({
         success: false,
         message: 'examinations Role Mapping fetching failure',
@@ -58,6 +59,7 @@ ExaminationsRoleMapping.createExaminationsRoleMapping = (req, res) => {
     .catch(createErr => {
       log.info('---ExaminationsRoleMapping_CREATION_FAILURE---');
       log.info(createErr);
+      // return utils.generateResponse(ERM_CREATE_ERROR)(res);
       return res.send({
         success: false,
         message: 'examinations Role Mapping creation failure',

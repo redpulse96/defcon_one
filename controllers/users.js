@@ -8,6 +8,11 @@ const {
     REGISTER_USER
   }
 } = require('../public/javascripts/constants');
+const {
+  INSUFFICIENT_PARAMS,
+  INTERNAL_SERVER_ERROR,
+  USER_EXISTS
+} = require('../config/response_config');
 const FEAURE_RIGHTS = require('../public/javascripts/role_mapping');
 const bcrypt = packageHelper.bcrypt;
 
@@ -91,11 +96,7 @@ const registerUser = (req, res) => {
       if (existingUser) {
         log.info('---USER_ALREADY_EXISTS---');
         log.info(existingUser);
-        return res.status(400).send({
-          success: false,
-          message: 'User already exists',
-          data: {}
-        });
+        return utils.generateResponse(USER_EXISTS)(res);
       } else {
         newUser = new Users({
           ...req.body,
@@ -128,43 +129,27 @@ const registerUser = (req, res) => {
     .catch(createdUserError => {
       log.error('---CREATED_USER_ERROR---');
       log.error(createdUserError);
-      return res.status(500).send({
-        success: false,
-        message: 'Internal server error',
-        data: {}
-      });
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
     })
     .catch(hashErr => {
       log.error('---PASSOWRD_HASEHED_ERROR---');
       log.error(hashErr);
-      return res.status(500).send({
-        success: false,
-        message: 'Internal server error',
-        data: {}
-      });
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
     })
     .catch(saltErr => {
       log.error('---PASSOWRD_SALT_ERROR---');
       log.error(saltErr);
-      return res.status(500).send({
-        success: false,
-        message: 'Internal server error',
-        data: {}
-      });
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
     })
     .catch((catchErr) => {
       log.error('---catchErr---');
       log.error(catchErr);
-      return res.status(500).send({
-        success: false,
-        message: 'Internal server error',
-        data: {}
-      });
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
     })
     .catch(paramError => {
       log.error('---INSUFFICIENT_PARAMETERS---');
       log.error(paramError);
-      return res.status(paramError.error_code).send(paramError);
+      return utils.generateResponse(INSUFFICIENT_PARAMS)(res);
     });
 }
 

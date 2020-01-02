@@ -40,85 +40,86 @@ module.exports = {
             data: paramObj.data
           });
         } else {
+          let resData = arrayFn.differ(paramObj.mandatoryParams, reqParams);
           log.error('---INSUFFICIENT_PARAMETERS---');
-          log.error(arrayFn.differ(paramObj.mandatoryParams, reqParams));
+          log.error(resData);
           return reject({
             success: false,
             error_code: 400,
             message: 'Insufficient parameters',
-            data: arrayFn.differ(paramObj.mandatoryParams, reqParams)
+            data: resData
           });
         }
       }
       if (paramObj.checkValType && paramObj.checkValType.length) {
         paramObj.checkValType.forEach(val => {
           switch (val.checkValue.toUpperCase().trim()) {
-            case 'ARRAY':
-              if (!_.isArray(paramObj.data[val.key])) {
-                return reject({
-                  success: false,
-                  error_code: 400,
-                  message: 'Value type does not match',
-                  data: val
-                });
-              }
-              break;
-            case 'STRING':
-              if (!_.isString(paramObj.data[val.key])) {
-                return reject({
-                  success: false,
-                  error_code: 400,
-                  message: 'Value type does not match',
-                  data: val
-                });
-              }
-              break;
-            case 'NUMBER':
-              if (!_.isNumber(paramObj.data[val.key])) {
-                return reject({
-                  success: false,
-                  error_code: 400,
-                  message: 'Value type does not match',
-                  data: val
-                });
-              }
-              break
-            case 'BOOLEAN':
-              if (!_.isBoolean(paramObj.data[val.key])) {
-                return reject({
-                  success: false,
-                  error_code: 400,
-                  message: 'Value type does not match',
-                  data: val
-                });
-              }
-              break;
-            case 'DATE':
-              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD')) {
-                return reject({
-                  success: false,
-                  error_code: 400,
-                  message: 'Value type does not match',
-                  data: val
-                });
-              }
-              break;
-            case 'DATETIME':
-              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD hh:mm:ss')) {
-                return reject({
-                  success: false,
-                  error_code: 400,
-                  message: 'Value type does not match',
-                  data: val
-                });
-              }
-              break;
-            default:
-              return resolve({
-                success: true,
-                message: 'Value type matches successfully',
-                data: paramObj.data
+          case 'ARRAY':
+            if (!_.isArray(paramObj.data[val.key])) {
+              return reject({
+                success: false,
+                error_code: 400,
+                message: 'Value type does not match',
+                data: val
               });
+            }
+            break;
+          case 'STRING':
+            if (!_.isString(paramObj.data[val.key])) {
+              return reject({
+                success: false,
+                error_code: 400,
+                message: 'Value type does not match',
+                data: val
+              });
+            }
+            break;
+          case 'NUMBER':
+            if (!_.isNumber(paramObj.data[val.key])) {
+              return reject({
+                success: false,
+                error_code: 400,
+                message: 'Value type does not match',
+                data: val
+              });
+            }
+            break
+          case 'BOOLEAN':
+            if (!_.isBoolean(paramObj.data[val.key])) {
+              return reject({
+                success: false,
+                error_code: 400,
+                message: 'Value type does not match',
+                data: val
+              });
+            }
+            break;
+          case 'DATE':
+            if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD')) {
+              return reject({
+                success: false,
+                error_code: 400,
+                message: 'Value type does not match',
+                data: val
+              });
+            }
+            break;
+          case 'DATETIME':
+            if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD hh:mm:ss')) {
+              return reject({
+                success: false,
+                error_code: 400,
+                message: 'Value type does not match',
+                data: val
+              });
+            }
+            break;
+          default:
+            return resolve({
+              success: true,
+              message: 'Value type matches successfully',
+              data: paramObj.data
+            });
           }
         });
         resolve({
@@ -160,17 +161,19 @@ module.exports = {
   generateResponse: response => {
     let statusCode;
     switch (response.success) {
-      case true:
-        statusCode = 200;
-        !(response.message) && (response.message = 'Successfully executed');
-        break;
-      case false:
-        statusCode = response['error_code'];
-        !(response.message) && (response.message = 'Internal server error');
-        break;
-      default:
-        statusCode = 200;
-        break;
+    case true:
+      statusCode = 200;
+      !(response.message) && (response.message = 'Successfully executed');
+      response.data && (response.data = eval(response.data));
+      break;
+    case false:
+      statusCode = response['error_code'];
+      !(response.message) && (response.message = 'Internal server error');
+      response.data && (response.data = eval(response.data));
+      break;
+    default:
+      statusCode = 200;
+      break;
     }
     return res => {
       return res.status(statusCode || 500).send(response);

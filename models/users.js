@@ -3,11 +3,17 @@ const mongoose = packageHelper.mongoose;
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    lowercase: true,
+    required: [true, "cannot be blank"],
+    match: [/^[a-zA-Z]+$/, 'is invalid'],
+    index: true
   },
   username: {
     type: String,
-    required: true
+    lowercase: true,
+    required: [true, "cannot be blank"],
+    match: [/\S+@\S+\.\S+/, 'is invalid'],
+    index: true
   },
   mobile_no: {
     type: Number,
@@ -37,6 +43,8 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+}, {
+  timestamps: true
 });
 
 const Users = mongoose.model('users', UserSchema);

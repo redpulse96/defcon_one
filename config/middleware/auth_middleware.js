@@ -8,8 +8,20 @@ const {
   SECRET_KEY,
   DEFAULT_USERNAME
 } = require('../../public/javascripts/constants');
+const {
+  PERMISSION_DENIED,
+  INCORRECT_USERNAME,
+  INTERNAL_SERVER_ERROR
+} = require('../response_config');
 
 module.exports = {
+  // sessionCheckerFunction: (req, res) => {
+  //   if (req.session.user && req.cookies.defcon_one_sid) {
+  //     next();
+  //   } else {
+  //     next();
+  //   }
+  // },
   generateToken: (req, res) => {
     if (req.user) {
       jwt.sign({
@@ -18,11 +30,7 @@ module.exports = {
         if (err) {
           log.error('---GENERATETOKEN_ERROR---');
           log.error(err);
-          return res.status(403).send({
-            success: false,
-            message: 'Permission denied',
-            data: {}
-          });
+          return utils.generateResponse(PERMISSION_DENIED)(res);
         } else {
           let dataObj = {
             access_token: token,
@@ -34,24 +42,17 @@ module.exports = {
               log.info(token);
               accessTokenRes.data.access_token_res.user_details = req.user;
               utils.generateResponse(accessTokenRes)(res);
-              // return res.send(accessTokenRes);
             })
             .catch(accessTokenErr => {
               log.info('---TOKEN_GENERATTION_FAILURE---');
               log.info(accessTokenErr);
               utils.generateResponse(accessTokenErr)(res);
-              // return res.send(accessTokenErr);
             });
         }
       });
     } else {
       log.error('---USER_DOES_NOT_EXIST---');
-      utils.generateResponse({
-        error_code: 403,
-        success: false,
-        message: 'Permission denied',
-        data: {}
-      })(res);
+      return utils.generateResponse(PERMISSION_DENIED)(res);
     }
   },
 
@@ -75,30 +76,18 @@ module.exports = {
               req.authenticated = true;
               return next();
             } else {
-              return res.status(403).send({
-                success: false,
-                message: 'Incorrect username or password',
-                data: {}
-              });
+              return utils.generateResponse(INCORRECT_USERNAME)(res);
             }
           });
         } else {
           log.info('---INVALID_USER---');
-          return res.status(403).send({
-            success: false,
-            message: 'Invalid username or password',
-            data: {}
-          });
+          return utils.generateResponse(INCORRECT_USERNAME)(res);
         }
       })
       .catch(user_error => {
         log.error('---USER_ERROR---');
         log.error(user_error);
-        return res.status(500).send({
-          success: false,
-          message: 'Internal server error',
-          data: {}
-        });
+        return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
       });
   },
 
@@ -107,11 +96,7 @@ module.exports = {
     if (req.isAuthenticated()) {
       return next();
     } else {
-      res.status(500).send({
-        success: false,
-        message: 'Permission denied',
-        data: {}
-      });
+      return utils.generateResponse(PERMISSION_DENIED)(res);
     }
   },
 
@@ -130,11 +115,7 @@ module.exports = {
           req.username = tokenRes.data.access_token_res.username;
           jwt.verify(req.token, SECRET_KEY + req.username, (err, authData) => {
             if (err) {
-              return res.status(403).send({
-                success: false,
-                message: 'Permission denied',
-                data: err
-              });
+              return utils.generateResponse(PERMISSION_DENIED)(res);
             } else {
               log.info('---TOKEN_VERIFIED---');
               log.info(authData);
@@ -145,19 +126,11 @@ module.exports = {
         .catch(tokenErr => {
           log.info('---token_err---');
           log.info(tokenErr);
-          return res.status(403).send({
-            success: false,
-            message: 'Permission denied',
-            data: {}
-          });
+          return utils.generateResponse(PERMISSION_DENIED)(res);
         });
     } else {
-      //FORBIDDEN
-      return res.status(403).send({
-        success: false,
-        message: 'Permission denied',
-        data: {}
-      });
+      // FORBIDDEN
+      return utils.generateResponse(PERMISSION_DENIED)(res);
     }
   },
 
@@ -182,38 +155,22 @@ module.exports = {
                 req.user.role_id = roleDetails.role_id;
                 next();
               } else {
-                return res.status(400).send({
-                  success: false,
-                  message: 'Permission denied',
-                  data: {}
-                });
+                return utils.generateResponse(PERMISSION_DENIED)(res);
               }
             })
             .catch(userError => {
               log.error('---userError---');
               log.error(userError);
-              return res.status(400).send({
-                success: false,
-                message: 'Permission denied',
-                data: {}
-              });
+              return utils.generateResponse(PERMISSION_DENIED)(res);
             });
         } else {
-          return res.status(400).send({
-            success: false,
-            message: 'Permission denied',
-            data: {}
-          });
+          return utils.generateResponse(PERMISSION_DENIED)(res);
         }
       })
       .catch(userError => {
         log.error('---userError---');
         log.error(userError);
-        return res.status(400).send({
-          success: false,
-          message: 'Permission denied',
-          data: {}
-        });
+        return utils.generateResponse(PERMISSION_DENIED)(res);
       });
   },
 
@@ -230,11 +187,7 @@ module.exports = {
       .catch(tokenErr => {
         log.info('---token_err---');
         log.info(tokenErr);
-        return res.status(500).send({
-          success: false,
-          message: 'Internal server error',
-          data: {}
-        });
+        return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
       });
   }
 }
