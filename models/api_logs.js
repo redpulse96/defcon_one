@@ -1,39 +1,31 @@
 const mongoose = packageHelper.mongoose;
 
-const apiLogs = new mongoose.Schema({
-  apiName: {
+const apiLogsSchema = new mongoose.Schema({
+  api_path: {
     type: String,
     required: true
   },
-  apiHash: {
+  api_origin: {
+    type: String,
+  },
+  api_hash: {
+    type: String
+  },
+  api_method: {
     type: String,
     required: true
   },
-  password: {
-    type: String,
+  api_header: {
+    type: Object,
     required: true
   },
-  role_type: {
-    type: String,
+  api_payload: {
+    type: Object,
     required: true
-  },
-  feature_rights: {
-    type: Array,
-    required: false
-  },
-  is_active: {
-    type: Boolean,
-    default: true
-  },
-  is_archived: {
-    type: Boolean,
-    default: false
-  },
-  date: {
-    type: Date,
-    default: Date.now
   }
+}, {
+  timestamps: true
 });
 
-const Users = mongoose.model('users', apiLogs);
+const Users = mongoose.model('api_logs', apiLogsSchema);
 module.exports = Users;
