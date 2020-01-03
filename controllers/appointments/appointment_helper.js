@@ -1,5 +1,5 @@
 const log = require('../../config/log_config').logger('appointments_helper');
-const moment = package_helper.moment;
+const moment = packageHelper.moment;
 const {
   objectFn
 } = require('../utility/helper_function');
