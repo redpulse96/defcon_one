@@ -116,28 +116,12 @@ module.exports = Appointments => {
         to_time: moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss'),
         created_by: data.user.username
       };
-      models['Appointments']
-        .create(createObj)
+      Appointments.createAppointments(createObj)
         .then(createRes => {
-          log.info('---APPOINTMENTS_CREATION_SUCCESS---');
-          log.info(createRes);
-          return resolve({
-            success: true,
-            message: 'Appointment creation success',
-            data: {
-              appointment: createRes.toJSON()
-            }
-          });
+          return resolve(createRes);
         })
         .catch(createErr => {
-          log.error('---APPOINTMENTS_CREATION_FAILURE---');
-          log.error(createErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Appointment creation failure',
-            data: {}
-          });
+          return reject(createErr);
         });
     });
   }

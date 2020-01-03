@@ -105,26 +105,6 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "CASCADE",
       foreignKey: 'patient_id'
     });
-    Patients.hasMany(models['PatientSymptomsRoleMapping'], {
-      as: 'patient_symptoms_role_mapping',
-      onUpdate: "CASCADE",
-      foreignKey: 'patient_id'
-    });
-    Patients.hasMany(models['PatientInvestigationsRoleMapping'], {
-      as: 'patient_investigations_role_mapping',
-      onUpdate: "CASCADE",
-      foreignKey: 'patient_id'
-    });
-    Patients.hasMany(models['PatientExaminationsRoleMapping'], {
-      as: 'patient_examinations_role_mapping',
-      onUpdate: "CASCADE",
-      foreignKey: 'patient_id'
-    });
-    Patients.hasMany(models['PatientDiagnosisRoleMapping'], {
-      as: 'patient_diagnosis_role_mapping',
-      onUpdate: "CASCADE",
-      foreignKey: 'patient_id'
-    });
   };
 
   return Patients;

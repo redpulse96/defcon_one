@@ -61,17 +61,17 @@ module.exports = Appointments => {
           model: models['PatientPrescription'],
           as: 'patient_prescription'
         }, {
-          model: models['PatientDiagnosisRoleMapping'],
-          as: 'patient_diagnosis_role_mapping'
+          model: models['AppointmentDiagnosisRoleMapping'],
+          as: 'appointment_diagnosis_role_mapping'
         }, {
-          model: models['PatientExaminationsRoleMapping'],
-          as: 'patient_examinations_role_mapping'
+          model: models['AppointmentExaminationsRoleMapping'],
+          as: 'appointment_examinations_role_mapping'
         }, {
-          model: models['PatientInvestigationsRoleMapping'],
-          as: 'patient_investigations_role_mapping'
+          model: models['AppointmentInvestigationsRoleMapping'],
+          as: 'appointment_investigations_role_mapping'
         }, {
-          model: models['PatientSymptomsRoleMapping'],
-          as: 'patient_symptoms_role_mapping'
+          model: models['AppointmentSymptomsRoleMapping'],
+          as: 'appointment_symptoms_role_mapping'
         }]
       };
       models['Appointments'].findOne(filter)

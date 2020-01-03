@@ -1,5 +1,6 @@
 const Appointments = require(packageHelper.MODEL_CONFIG_DIR)['Appointments'];
 
+require('./appointment_helper')(Appointments);
 require('./appointment_details')(Appointments);
 require('./appointment_fulfilment')(Appointments);
 require('./create_appointment')(Appointments);

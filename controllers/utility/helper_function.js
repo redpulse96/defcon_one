@@ -28,6 +28,18 @@ module.exports = {
         ...child_obj
       };
       return res_obj;
+    },
+    /**
+     * @param {Object} obj - Object filtered where null || undefined values are omitted
+     */
+    compact: obj => {
+      let res_obj = {
+        ...obj
+      }
+      for (const key in res_obj) {
+        !(res_obj[key]) ? (delete res_obj[key]) : res_obj[key] = obj[key];
+      }
+      return res_obj;
     }
   },
   /**

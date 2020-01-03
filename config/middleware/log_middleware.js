@@ -12,22 +12,20 @@ module.exports = (req, res, next) => {
 
   // Save the api context
   let createObj = {
-    api_hash: '',
-    api_header: req.headers,
-    api_method: req.method,
-    api_origin: req.origin,
-    api_path: req.path,
-    api_payload: JSON.stringify(req.params ? req.params : req.body ? req.body : {})
+    api_header: req.headers ? req.headers : {},
+    api_method: req.method ? req.method : '',
+    api_origin: req.origin ? req.origin : '',
+    api_path: req.path ? req.path : '',
+    api_payload: req.params ? req.params : req.body ? req.body : {}
   };
   ApiLogs.insertApiLogs(createObj)
     .then(ApiLogsRes => {
       log.info('LOGS SAVED');
       log.info(ApiLogsRes);
-      next();
     })
     .catch(ApiLogsErr => {
       log.fatal('LOGS ARE NOT BEING SAVED');
       log.fatal(ApiLogsErr);
-      next();
     });
+  return next();
 }

@@ -1,28 +1,19 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const PatientSymptomsRoleMapping = sequelize.define('patient_symptoms_role_mapping', {
-    patient_symptom_role_mapping_id: {
+  const AppointmentDiagnosisRoleMapping = sequelize.define('appointment_diagnosis_role_mapping', {
+    appointment_diagnosis_role_mapping_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
       autoIncrement: true,
       defaultValue: null
     },
-    patient_id: {
-      type: DataTypes.BIGINT(11),
-      allowNull: true,
-      onDelete: "CASCADE",
-      references: {
-        model: 'Patients',
-        key: 'patient_id'
-      }
-    },
-    symptom_role_mapping_id: {
+    diagnosis_role_mapping_id: {
       type: DataTypes.BIGINT(11),
       allowNull: false,
       onDelete: "CASCADE",
       references: {
-        model: 'SymptomsRoleMapping',
-        key: 'symptom_role_mapping_id'
+        model: 'DiagnosisRoleMapping',
+        key: 'diagnosis_role_mapping_id'
       }
     },
     appointment_id: {
@@ -70,25 +61,21 @@ module.exports = (sequelize, DataTypes) => {
     },
     underscored: true,
     sequelize,
-    modelName: 'patient_symptoms_role_mapping',
+    modelName: 'appointment_diagnosis_role_mapping',
     freezeTableName: true,
     timestamps: false
   });
-  PatientSymptomsRoleMapping.associate = models => {
+  AppointmentDiagnosisRoleMapping.associate = models => {
     // associations can be defined here
-    PatientSymptomsRoleMapping.belongsTo(models['Patients'], {
-      as: 'patient',
-      foreignKey: 'patient_id'
+    AppointmentDiagnosisRoleMapping.belongsTo(models['DiagnosisRoleMapping'], {
+      as: 'diagnosis_role_mapping',
+      foreignKey: 'diagnosis_role_mapping_id'
     });
-    PatientSymptomsRoleMapping.belongsTo(models['SymptomsRoleMapping'], {
-      as: 'symptoms_role_mapping',
-      foreignKey: 'symptom_role_mapping_id'
-    });
-    PatientSymptomsRoleMapping.belongsTo(models['Appointments'], {
+    AppointmentDiagnosisRoleMapping.belongsTo(models['Appointments'], {
       as: 'appointment',
       foreignKey: 'appointment_id'
     });
   };
 
-  return PatientSymptomsRoleMapping;
+  return AppointmentDiagnosisRoleMapping;
 };

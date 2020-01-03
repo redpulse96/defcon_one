@@ -1,8 +1,8 @@
-const log = require('../../../config/log_config').logger('patient_examinations_role_mappings_controller');
+const log = require('../../../config/log_config').logger('appointment_examinations_role_mappings_controller');
 
-module.exports = PatientExaminationsRoleMapping => {
+module.exports = AppointmentExaminationsRoleMapping => {
 
-  PatientExaminationsRoleMapping.fetchPatientExaminationsRoleMapping = (req, res) => {
+  AppointmentExaminationsRoleMapping.fetchAppointmentExaminationsRoleMapping = (req, res) => {
     let whereObj = {
       ...req.params,
       include: [{
@@ -13,7 +13,7 @@ module.exports = PatientExaminationsRoleMapping => {
         as: 'role'
       }]
     };
-    models['PatientExaminationsRoleMapping'].findOne(whereObj)
+    models['AppointmentExaminationsRoleMapping'].findOne(whereObj)
       .then(fetchRes => {
         log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
         log.info(fetchRes);
@@ -21,7 +21,7 @@ module.exports = PatientExaminationsRoleMapping => {
           success: true,
           message: 'Patient Examinations Role Mapping fetching success',
           data: {
-            patient_examinations_role_mapping: fetchRes
+            appointment_examinations_role_mapping: fetchRes
           }
         });
       })
@@ -32,7 +32,7 @@ module.exports = PatientExaminationsRoleMapping => {
           success: false,
           message: 'Patient Examinations Role Mapping fetching failure',
           data: {
-            patient_examinations_role_mapping: fetchErr
+            appointment_examinations_role_mapping: fetchErr
           }
         });
       });

@@ -114,8 +114,8 @@ CREATE TABLE IF NOT EXISTS `patients` (
   `updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS `patient_symptoms_role_mapping` (
-  `patient_symptom_role_mapping_id` bigInt(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS `appointment_symptoms_role_mapping` (
+  `appointment_symptom_role_mapping_id` bigInt(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `patient_id` bigInt(11) NOT NULL,
   `symptom_role_mapping_id` bigInt(11) NOT NULL,
   `appointment_id` bigint(11) DEFAULT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `patient_symptoms_role_mapping` (
   `updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS `patient_examinations_role_mapping` (
+CREATE TABLE IF NOT EXISTS `appointment_examinations_role_mapping` (
   `patient_examination_role_mapping_id` bigInt(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `patient_id` bigInt(11) NOT NULL,
   `examination_role_mapping_id` bigInt(11) NOT NULL,
@@ -136,8 +136,8 @@ CREATE TABLE IF NOT EXISTS `patient_examinations_role_mapping` (
   `updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS `patient_investigations_role_mapping` (
-  `patient_investigation_role_mapping_id` bigInt(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS `appointment_investigations_role_mapping` (
+  `appointment_investigation_role_mapping_id` bigInt(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `patient_id` bigInt(11) NOT NULL,
   `investigation_role_mapping_id` bigInt(11) NOT NULL,
   `appointment_id` bigint(11) DEFAULT NULL,
@@ -147,8 +147,8 @@ CREATE TABLE IF NOT EXISTS `patient_investigations_role_mapping` (
   `updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS `patient_diagnosis_role_mapping` (
-  `patient_diagnosis_role_mapping_id` bigInt(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS `appointment_diagnosis_role_mapping` (
+  `appointment_diagnosis_role_mapping_id` bigInt(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `patient_id` bigInt(11) NOT NULL,
   `diagnosis_role_mapping_id` bigInt(11) NOT NULL,
   `appointment_id` bigint(11) DEFAULT NULL,
@@ -203,34 +203,34 @@ ALTER TABLE `investigations_role_mapping` ADD FOREIGN KEY (`role_id`) REFERENCES
 
 ALTER TABLE `examinations_role_mapping` ADD FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE `patient_symptoms_role_mapping` ADD FOREIGN KEY (`symptom_role_mapping_id`) REFERENCES `symptoms_role_mapping` (`symptom_role_mapping_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `appointment_symptoms_role_mapping` ADD FOREIGN KEY (`symptom_role_mapping_id`) REFERENCES `symptoms_role_mapping` (`symptom_role_mapping_id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE `patient_diagnosis_role_mapping` ADD FOREIGN KEY (`diagnosis_role_mapping_id`) REFERENCES `diagnosis_role_mapping` (`diagnosis_role_mapping_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `appointment_diagnosis_role_mapping` ADD FOREIGN KEY (`diagnosis_role_mapping_id`) REFERENCES `diagnosis_role_mapping` (`diagnosis_role_mapping_id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE `patient_investigations_role_mapping` ADD FOREIGN KEY (`investigation_role_mapping_id`) REFERENCES `investigations_role_mapping` (`investigation_role_mapping_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `appointment_investigations_role_mapping` ADD FOREIGN KEY (`investigation_role_mapping_id`) REFERENCES `investigations_role_mapping` (`investigation_role_mapping_id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE `patient_examinations_role_mapping` ADD FOREIGN KEY (`examination_role_mapping_id`) REFERENCES `examinations_role_mapping` (`examination_role_mapping_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `appointment_examinations_role_mapping` ADD FOREIGN KEY (`examination_role_mapping_id`) REFERENCES `examinations_role_mapping` (`examination_role_mapping_id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE `patient_prescription` ADD FOREIGN KEY (`patient_id`) REFERENCES `patients` (`patient_id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE `patient_prescription` ADD FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`);
 
-ALTER TABLE `appointments` ADD FOREIGN KEY (`appointment_id`) REFERENCES `patient_examinations_role_mapping` (`appointment_id`) ON UPDATE CASCADE ON DELETE RESTRICT;
+ALTER TABLE `appointments` ADD FOREIGN KEY (`appointment_id`) REFERENCES `appointment_examinations_role_mapping` (`appointment_id`) ON UPDATE CASCADE ON DELETE RESTRICT;
 
-ALTER TABLE `appointments` ADD FOREIGN KEY (`appointment_id`) REFERENCES `patient_symptoms_role_mapping` (`appointment_id`) ON UPDATE CASCADE ON DELETE RESTRICT;
+ALTER TABLE `appointments` ADD FOREIGN KEY (`appointment_id`) REFERENCES `appointment_symptoms_role_mapping` (`appointment_id`) ON UPDATE CASCADE ON DELETE RESTRICT;
 
-ALTER TABLE `appointments` ADD FOREIGN KEY (`appointment_id`) REFERENCES `patient_diagnosis_role_mapping` (`appointment_id`) ON UPDATE CASCADE ON DELETE RESTRICT;
+ALTER TABLE `appointments` ADD FOREIGN KEY (`appointment_id`) REFERENCES `appointment_diagnosis_role_mapping` (`appointment_id`) ON UPDATE CASCADE ON DELETE RESTRICT;
 
-ALTER TABLE `appointments` ADD FOREIGN KEY (`appointment_id`) REFERENCES `patient_investigations_role_mapping` (`appointment_id`) ON UPDATE CASCADE ON DELETE RESTRICT;
+ALTER TABLE `appointments` ADD FOREIGN KEY (`appointment_id`) REFERENCES `appointment_investigations_role_mapping` (`appointment_id`) ON UPDATE CASCADE ON DELETE RESTRICT;
 
-ALTER TABLE `patient_examinations_role_mapping` ADD FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`);
+ALTER TABLE `appointment_examinations_role_mapping` ADD FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`);
 
-ALTER TABLE `patient_symptoms_role_mapping` ADD FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`);
+ALTER TABLE `appointment_symptoms_role_mapping` ADD FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`);
 
-ALTER TABLE `patient_diagnosis_role_mapping` ADD FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`);
+ALTER TABLE `appointment_diagnosis_role_mapping` ADD FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`);
 
-ALTER TABLE `patient_investigations_role_mapping` ADD FOREIGN KEY (`investigation_role_mapping_id`) REFERENCES `investigations_role_mapping` (`investigation_role_mapping_id`);
+ALTER TABLE `appointment_investigations_role_mapping` ADD FOREIGN KEY (`investigation_role_mapping_id`) REFERENCES `investigations_role_mapping` (`investigation_role_mapping_id`);
 
-ALTER TABLE `patient_investigations_role_mapping` ADD FOREIGN KEY (`investigation_role_mapping_id`) REFERENCES `investigations_role_mapping` (`investigation_role_mapping_id`);
+ALTER TABLE `appointment_investigations_role_mapping` ADD FOREIGN KEY (`investigation_role_mapping_id`) REFERENCES `investigations_role_mapping` (`investigation_role_mapping_id`);
 
-ALTER TABLE `patient_investigations_role_mapping` ADD FOREIGN KEY (`investigation_role_mapping_id`) REFERENCES `investigations_role_mapping` (`investigation_role_mapping_id`);
+ALTER TABLE `appointment_investigations_role_mapping` ADD FOREIGN KEY (`investigation_role_mapping_id`) REFERENCES `investigations_role_mapping` (`investigation_role_mapping_id`);

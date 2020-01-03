@@ -103,23 +103,23 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: "CASCADE",
       foreignKey: 'appointment_id'
     });
-    Appointments.hasMany(models['PatientSymptomsRoleMapping'], {
-      as: 'patient_symptoms_role_mapping',
+    Appointments.hasMany(models['AppointmentSymptomsRoleMapping'], {
+      as: 'appointment_symptoms_role_mapping',
       onUpdate: "CASCADE",
       foreignKey: 'appointment_id'
     });
-    Appointments.hasMany(models['PatientInvestigationsRoleMapping'], {
-      as: 'patient_investigations_role_mapping',
+    Appointments.hasMany(models['AppointmentInvestigationsRoleMapping'], {
+      as: 'appointment_investigations_role_mapping',
       onUpdate: "CASCADE",
       foreignKey: 'appointment_id'
     });
-    Appointments.hasMany(models['PatientExaminationsRoleMapping'], {
-      as: 'patient_examinations_role_mapping',
+    Appointments.hasMany(models['AppointmentExaminationsRoleMapping'], {
+      as: 'appointment_examinations_role_mapping',
       onUpdate: "CASCADE",
       foreignKey: 'appointment_id'
     });
-    Appointments.hasMany(models['PatientDiagnosisRoleMapping'], {
-      as: 'patient_diagnosis_role_mapping',
+    Appointments.hasMany(models['AppointmentDiagnosisRoleMapping'], {
+      as: 'appointment_diagnosis_role_mapping',
       onUpdate: "CASCADE",
       foreignKey: 'appointment_id'
     });

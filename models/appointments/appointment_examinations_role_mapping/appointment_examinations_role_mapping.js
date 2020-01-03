@@ -1,20 +1,11 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const PatientExaminationsRoleMapping = sequelize.define('patient_examinations_role_mapping', {
+  const AppointmentExaminationsRoleMapping = sequelize.define('appointment_examinations_role_mapping', {
     patient_examination_role_mapping_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
       autoIncrement: true,
       defaultValue: null
-    },
-    patient_id: {
-      type: DataTypes.BIGINT(11),
-      allowNull: true,
-      onDelete: "CASCADE",
-      references: {
-        model: 'Patients',
-        key: 'patient_id'
-      }
     },
     examination_role_mapping_id: {
       type: DataTypes.BIGINT(11),
@@ -70,25 +61,21 @@ module.exports = (sequelize, DataTypes) => {
     },
     underscored: true,
     sequelize,
-    modelName: 'patient_examinations_role_mapping',
+    modelName: 'appointment_examinations_role_mapping',
     freezeTableName: true,
     timestamps: false
   });
-  PatientExaminationsRoleMapping.associate = models => {
+  AppointmentExaminationsRoleMapping.associate = models => {
     // associations can be defined here
-    PatientExaminationsRoleMapping.belongsTo(models['Patients'], {
-      as: 'patient',
-      foreignKey: 'patient_id'
-    });
-    PatientExaminationsRoleMapping.belongsTo(models['ExaminationsRoleMapping'], {
+    AppointmentExaminationsRoleMapping.belongsTo(models['ExaminationsRoleMapping'], {
       as: 'examinations_role_mapping',
       foreignKey: 'examination_role_mapping_id'
     });
-    PatientExaminationsRoleMapping.belongsTo(models['Appointments'], {
+    AppointmentExaminationsRoleMapping.belongsTo(models['Appointments'], {
       as: 'appointment',
       foreignKey: 'appointment_id'
     });
   };
 
-  return PatientExaminationsRoleMapping;
+  return AppointmentExaminationsRoleMapping;
 };

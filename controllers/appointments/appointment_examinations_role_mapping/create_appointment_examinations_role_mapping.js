@@ -1,33 +1,33 @@
-const log = require('../../../config/log_config').logger('patient_examinations_role_mappings_controller');
+const log = require('../../../config/log_config').logger('appointment_examinations_role_mappings_controller');
 const utils = require('../../utility/utils');
 const {
   to
 } = require('../../utility/helper_function');
 
-module.exports = PatientExaminationsRoleMapping => {
+module.exports = AppointmentExaminationsRoleMapping => {
 
-  PatientExaminationsRoleMapping.createPatientExaminationsRoleMapping = async (req, res) => {
+  AppointmentExaminationsRoleMapping.createAppointmentExaminationsRoleMapping = async (req, res) => {
 
     let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
     if (validateDataError) {
       return utils.generateResponse(validateDataError)(res);
     }
 
-    let createPatientExaminationsRoleMappingObj = {
+    let createAppointmentExaminationsRoleMappingObj = {
       ...validateDataResult.data
     };
-    let [createPatientExaminationsRoleMappingError, createPatientExaminationsRoleMappingResult] = await to(createPatientExaminationsRoleMappingFunction(createPatientExaminationsRoleMappingObj));
-    if (createPatientExaminationsRoleMappingError) {
-      return utils.generateResponse(createPatientExaminationsRoleMappingError)(res);
+    let [createAppointmentExaminationsRoleMappingError, createAppointmentExaminationsRoleMappingResult] = await to(createAppointmentExaminationsRoleMappingFunction(createAppointmentExaminationsRoleMappingObj));
+    if (createAppointmentExaminationsRoleMappingError) {
+      return utils.generateResponse(createAppointmentExaminationsRoleMappingError)(res);
     }
-    return utils.generateResponse(createPatientExaminationsRoleMappingResult)(res);
+    return utils.generateResponse(createAppointmentExaminationsRoleMappingResult)(res);
   }
 
   function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
       let paramsCheck = {
         data: data.body,
-        mandatoryParams: ['patientExaminationsRoleMappings']
+        mandatoryParams: ['AppointmentExaminationsRoleMappings']
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(paramRes => {
@@ -39,26 +39,26 @@ module.exports = PatientExaminationsRoleMapping => {
     });
   }
 
-  const createPatientExaminationsRoleMappingFunction = data => {
+  const createAppointmentExaminationsRoleMappingFunction = data => {
     return new Promise((resolve, reject) => {
-      let createArray = data.patientExaminationsRoleMappings;
-      models['PatientExaminationsRoleMapping']
+      let createArray = data.AppointmentExaminationsRoleMappings;
+      models['AppointmentExaminationsRoleMapping']
         .bulkCreate(createArray, {
           returning: true
         })
         .then(createRes => {
-          log.info('---PATIENT_Examinations_CREATION_SUCCESS---');
+          log.info('---appointment_examinations_CREATION_SUCCESS---');
           log.info(createRes);
           return resolve({
             success: true,
             message: 'Patient Examinations Role Mapping creation success',
             data: {
-              patient_Examinations_role_mapping: createRes
+              appointment_examinations_role_mapping: createRes
             }
           });
         })
         .catch(createErr => {
-          log.error('---PATIENT_Examinations_CREATION_FAILURE---');
+          log.error('---appointment_examinations_CREATION_FAILURE---');
           log.error(createErr);
           return reject({
             success: false,

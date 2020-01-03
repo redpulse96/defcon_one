@@ -1,33 +1,33 @@
-const log = require('../../../config/log_config').logger('patient_diagnosis_role_mappings_controller');
+const log = require('../../../config/log_config').logger('appointment_diagnosis_role_mappings_controller');
 const utils = require('../../utility/utils');
 const {
   to
 } = require('../../utility/helper_function');
 
-module.exports = PatientDiagnosisRoleMapping => {
+module.exports = AppointmentDiagnosisRoleMapping => {
 
-  PatientDiagnosisRoleMapping.createPatientDiagnosisRoleMapping = async (req, res) => {
+  AppointmentDiagnosisRoleMapping.createAppointmentDiagnosisRoleMapping = async (req, res) => {
 
     let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
     if (validateDataError) {
       return utils.generateResponse(validateDataError)(res);
     }
 
-    let createPatientDiagnosisRoleMappingObj = {
+    let createAppointmentDiagnosisRoleMappingObj = {
       ...validateDataResult.data
     };
-    let [createPatientDiagnosisRoleMappingError, createPatientDiagnosisRoleMappingResult] = await to(createPatientDiagnosisRoleMappingFunction(createPatientDiagnosisRoleMappingObj));
-    if (createPatientDiagnosisRoleMappingError) {
-      return utils.generateResponse(createPatientDiagnosisRoleMappingError)(res);
+    let [createAppointmentDiagnosisRoleMappingError, createAppointmentDiagnosisRoleMappingResult] = await to(createAppointmentDiagnosisRoleMappingFunction(createAppointmentDiagnosisRoleMappingObj));
+    if (createAppointmentDiagnosisRoleMappingError) {
+      return utils.generateResponse(createAppointmentDiagnosisRoleMappingError)(res);
     }
-    return utils.generateResponse(createPatientDiagnosisRoleMappingResult)(res);
+    return utils.generateResponse(createAppointmentDiagnosisRoleMappingResult)(res);
   }
 
   function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
       let paramsCheck = {
         data: data.body,
-        mandatoryParams: ['patientDiagnosisRoleMappings']
+        mandatoryParams: ['AppointmentDiagnosisRoleMappings']
       }
       utils.hasMandatoryParams(paramsCheck)
         .then(paramRes => {
@@ -39,26 +39,26 @@ module.exports = PatientDiagnosisRoleMapping => {
     });
   }
 
-  const createPatientDiagnosisRoleMappingFunction = data => {
+  const createAppointmentDiagnosisRoleMappingFunction = data => {
     return new Promise((resolve, reject) => {
-      let createArray = data.patientDiagnosisRoleMappings;
-      models['PatientDiagnosisRoleMapping']
+      let createArray = data.AppointmentDiagnosisRoleMappings;
+      models['AppointmentDiagnosisRoleMapping']
         .bulkCreate(createArray, {
           returning: true
         })
         .then(createRes => {
-          log.info('---PATIENT_Diagnosis_CREATION_SUCCESS---');
+          log.info('---appointment_diagnosis_CREATION_SUCCESS---');
           log.info(createRes);
           return resolve({
             success: true,
             message: 'Patient Diagnosis Role Mapping creation success',
             data: {
-              patient_diagnosis_role_mapping: createRes
+              appointment_diagnosis_role_mapping: createRes
             }
           });
         })
         .catch(createErr => {
-          log.error('---PATIENT_Diagnosis_CREATION_FAILURE---');
+          log.error('---appointment_diagnosis_CREATION_FAILURE---');
           log.error(createErr);
           return reject({
             success: false,

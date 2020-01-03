@@ -45,6 +45,14 @@ app.use(packageHelper.bodyParser.urlencoded({
   extended: true
 }));
 
+// Cookie parser
+app.use(packageHelper.cookieParser());
+app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNAME, '../public')));
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Passport session
 require('./passport')(passport);
 app.use(session({
@@ -57,14 +65,6 @@ app.use(session({
     maxAge: 3600000 // 3600000 for 1 hour
   }
 }));
-
-// Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Cookie parser
-app.use(packageHelper.cookieParser());
-app.use(packageHelper.express.static(packageHelper.path.join(packageHelper.DIRNAME, '../public')));
 
 app.use('/', indexRoutes);
 app.use('/users', cors(corsOptions), apiLogger, userRoutes);

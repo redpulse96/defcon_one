@@ -1,6 +1,8 @@
 const log = require('../../../config/log_config').logger('appointment_logs_controller');
 const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs'];
 
+require('./appointment_logs_helper')(AppointmentLogs);
+
 AppointmentLogs.fetchAppointmentLogs = data => {
   return new Promise((resolve, reject) => {
     let whereObj = {
