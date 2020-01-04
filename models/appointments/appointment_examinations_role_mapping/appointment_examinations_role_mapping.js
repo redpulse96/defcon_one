@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const AppointmentExaminationsRoleMapping = sequelize.define('appointment_examinations_role_mapping', {
-    patient_examination_role_mapping_id: {
+    appointment_examination_role_mapping_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
       autoIncrement: true,

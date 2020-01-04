@@ -1,15 +1,15 @@
 const log = require('../../config/log_config').logger('patients_controller');
 const utils = require('../utility/utils');
 const {
-  PATIENT_NOT_EXISTS,
-  INTERNAL_SERVER_ERROR
+  PATIENT_NOT_EXISTS
 } = require('../../config/response_config');
 
 module.exports = Patients => {
 
   Patients.patientDetails = (req, res) => {
-    let whereObj = {
-      where: req.params,
+    let filterObj = {
+      ...req.params,
+      methodName: 'findOne',
       include: [{
         model: models['Appointments'],
         as: 'appointments',
@@ -78,27 +78,17 @@ module.exports = Patients => {
         }]
       }]
     };
-    models['Patients'].findOne(whereObj)
+    Patients.fetchPatientsByFilter(filterObj)
       .then(fetchRes => {
-        fetchRes = fetchRes.toJSON();
-        log.info('---PATIENTS_FETCH_SUCCESS---');
-        log.info(fetchRes);
+        fetchRes.data = fetchRes.data.patient_details.toJSON();
         if (fetchRes) {
-          return res.send({
-            success: true,
-            message: 'Patients fetching success',
-            data: {
-              patient_details: fetchRes
-            }
-          });
+          return utils.generateResponse(fetchRes)(res);
         } else {
           return utils.generateResponse(PATIENT_NOT_EXISTS)(res);
         }
       })
       .catch(fetchErr => {
-        log.error('---PATIENTS_FETCH_FAILURE---');
-        log.error(fetchErr);
-        return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
+        return utils.generateResponse(fetchErr)(res);
       });
   }
 }

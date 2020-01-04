@@ -17,7 +17,6 @@ module.exports = AppointmentLogs => {
       data.appointment_id ? createObj.appointment_status = data.appointment_id : noCreate = true;
       data.appointment_status ? createObj.appointment_status = data.appointment_status : noCreate = true;
       data.doctor_remarks ? createObj.doctor_remarks = data.doctor_remarks : createObj.doctor_remarks = '';
-
       if (noCreate) {
         return reject({
           success: false,
@@ -26,21 +25,22 @@ module.exports = AppointmentLogs => {
           data: {}
         });
       }
+
       models['AppointmentLogs'].create(createObj)
-        .then(createRes => {
+        .then(createAppointmentLogsRes => {
           log.info('---APPOINTMENTS_LOGS_CREATION_SUCCESS---');
-          log.info(createRes);
+          log.info(createAppointmentLogsRes);
           return resolve({
             success: true,
             message: 'Appointment logs creation success',
             data: {
-              appointment: createRes
+              appointment: createAppointmentLogsRes
             }
           });
         })
-        .catch(createErr => {
+        .catch(createAppointmentLogsErr => {
           log.error('---APPOINTMENTS_LOGS_CREATION_FAILURE---');
-          log.error(createErr);
+          log.error(createAppointmentLogsErr);
           return reject({
             success: false,
             error_code: 500,
@@ -74,23 +74,33 @@ module.exports = AppointmentLogs => {
           } : null
         }
       };
-      !(data.filter_scope) ? data.filter_scope = 'defaultScope': null;
+      !(data.methodName) && (data.methodName = 'findOne');
+      !(data.filterScope) && (data.filterScope = 'defaultScope');
+      filter.include = objectFn.compact(filter.include);
       filter.where = objectFn.compact(filter.where);
-      models['AppointmentLogs'].scope(data.filter_scope).findAll(filter)
-        .then(createRes => {
+      if (!filter.where) {
+        return reject({
+          success: false,
+          message: 'Insuffiient parameters',
+          data: {}
+        });
+      }
+
+      models['AppointmentLogs'].scope(data.filterScope)[data.methodName](filter)
+        .then(fetchAppointmentLogRes => {
           log.info('---APPOINTMENTS_LOGS_FETCH_SUCCESS---');
-          log.info(createRes);
+          log.info(fetchAppointmentLogRes);
           return resolve({
             success: true,
             message: 'Appointment logs fetch success',
             data: {
-              appointment: createRes
+              appointment: fetchAppointmentLogRes
             }
           });
         })
-        .catch(createErr => {
+        .catch(fetchAppointmentLogErr => {
           log.error('---APPOINTMENTS_LOGS_FETCH_FAILURE---');
-          log.error(createErr);
+          log.error(fetchAppointmentLogErr);
           return reject({
             success: false,
             error_code: 500,

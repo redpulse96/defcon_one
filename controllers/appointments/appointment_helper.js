@@ -23,16 +23,17 @@ module.exports = Appointments => {
   Appointments.createAppointmentsInstance = data => {
     return new Promise((resolve, reject) => {
       let noCreate = false;
-      let createObj = {};
-      data.appointment_name ? createObj.appointment_name = data.appointment_name : noCreate = true;
-      data.appointment_date ? createObj.appointment_date = moment(data.appointment_date).format('YYYY-MM-DD') : noCreate = true;
-      data.patient_id ? createObj.patient_id = data.patient_id : noCreate = true;
-      data.appointment_status ? createObj.appointment_status = data.appointment_status : createObj.appointment_status = APPOINTMENT_STATUS.PENDING;
-      data.doctor_remarks ? createObj.doctor_remarks = data.doctor_remarks : createObj.doctor_remarks = '';
-      data.rescheduled_date ? createObj.rescheduled_date = moment(data.rescheduled_date).format('YYYY-MM-DD') : createObj.rescheduled_date = null;
-      data.from_time ? createObj.from_time = moment(data.from_time, 'HH:mm:ss').format('HH:mm:ss') : noCreate = true;
-      data.to_time ? createObj.to_time = moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss') : noCreate = true;
-
+      let createObj = {
+        appointment_name: data.appointment_name ? data.appointment_name : null && (noCreate = true),
+        appointment_date: data.appointment_date ? moment(data.appointment_date).format('YYYY-MM-DD') : null && (noCreate = true),
+        patient_id: data.patient_id ? data.patient_id : null && (noCreate = true),
+        appointment_status: data.appointment_status ? data.appointment_status : APPOINTMENT_STATUS.PENDING,
+        doctor_remarks: data.doctor_remarks ? data.doctor_remarks : null && (createObj.doctor_remarks = ''),
+        created_by: data.created_by ? data.created_by : null && (noCreate = true),
+        rescheduled_date: data.rescheduled_date ? moment(data.rescheduled_date).format('YYYY-MM-DD') : null && (noCreate = true),
+        from_time: data.from_time ? moment(data.from_time, 'HH:mm:ss').format('HH:mm:ss') : null && (noCreate = true),
+        to_time: data.to_time ? moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss') : null && (noCreate = true)
+      };
       if (noCreate) {
         return reject({
           success: false,
@@ -41,21 +42,22 @@ module.exports = Appointments => {
           data: {}
         });
       }
+      createObj = objectFn.compact(createObj);
       models['Appointments'].create(createObj)
-        .then(createRes => {
+        .then(createAppointmentRes => {
           log.info('---APPOINTMENTS_CREATION_SUCCESS---');
-          log.info(createRes);
+          log.info(createAppointmentRes);
           return resolve({
             success: true,
             message: 'Appointment creation success',
             data: {
-              appointment: createRes
+              appointment: createAppointmentRes
             }
           });
         })
-        .catch(createErr => {
+        .catch(createAppointmentErr => {
           log.error('---APPOINTMENTS_CREATION_FAILURE---');
-          log.error(createErr);
+          log.error(createAppointmentErr);
           return reject({
             success: false,
             error_code: 500,
@@ -80,6 +82,7 @@ module.exports = Appointments => {
   Appointments.fetchAppointmentsByFilter = data => {
     return new Promise((resolve, reject) => {
       let filter = {
+        include: data.include ? data.include : null,
         where: {
           patient_id: data.patient_ids ? {
             $in: [data.patient_ids]
@@ -96,23 +99,33 @@ module.exports = Appointments => {
           to_time: data.to_time ? moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss') : null
         }
       };
-      !(data.filter_scope) ? data.filter_scope = 'defaultScope': null;
+      !(data.methodName) && (data.methodName = 'findOne');
+      !(data.filterScope) && (data.filterScope = 'defaultScope');
+      filter.include = objectFn.compact(filter.include);
       filter.where = objectFn.compact(filter.where);
-      models['Appointments'].scope(data.filter_scope).findAll(filter)
-        .then(createRes => {
+      if (!filter.where) {
+        return reject({
+          success: false,
+          message: 'Insuffiient parameters',
+          data: {}
+        });
+      }
+
+      models['Appointments'].scope(data.filterScope)[data.methodName](filter)
+        .then(fetchAppointmentRes => {
           log.info('---APPOINTMENTS_FETCH_SUCCESS---');
-          log.info(createRes);
+          log.info(fetchAppointmentRes);
           return resolve({
             success: true,
             message: 'Appointment fetch success',
             data: {
-              appointment: createRes
+              appointment: fetchAppointmentRes
             }
           });
         })
-        .catch(createErr => {
+        .catch(fetchAppointmentErr => {
           log.error('---APPOINTMENTS_FETCH_FAILURE---');
-          log.error(createErr);
+          log.error(fetchAppointmentErr);
           return reject({
             success: false,
             error_code: 500,

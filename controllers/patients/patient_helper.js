@@ -21,18 +21,18 @@ module.exports = Patients => {
   Patients.createPatientsInstance = data => {
     return new Promise((resolve, reject) => {
       let noCreate = false;
-      let createObj = {};
-      data.mobile_no ? createObj.mobile_no = data.mobile_no : noCreate = true;
-      data.patient_name ? createObj.patient_name = data.patient_name : noCreate = true;
-      data.blood_type ? createObj.blood_type = data.blood_type : noCreate = true;
-      data.date_of_birth ? createObj.date_of_birth = data.date_of_birth : noCreate = true;
-      data.gender ? createObj.gender = data.gender : noCreate = true;
-      data.created_by ? createObj.created_by = data.created_by : noCreate = true;
-      data.age ? createObj.age = data.age : noCreate = true;
-      data.height ? createObj.height = data.height : null;
-      data.weight ? createObj.weight = data.weight : null;
-      data.email ? createObj.email = data.email : null;
-
+      let createObj = {
+        mobile_no: data.mobile_no ? data.mobile_no : null && (noCreate = true),
+        patient_name: data.patient_name ? data.patient_name : null && (noCreate = true),
+        blood_type: data.blood_type ? data.blood_type : null && (noCreate = true),
+        date_of_birth: data.date_of_birth ? data.date_of_birth : null && (noCreate = true),
+        gender: data.gender ? data.gender : null && (noCreate = true),
+        created_by: data.created_by ? data.created_by : null && (noCreate = true),
+        age: data.age ? data.age : null && (noCreate = true),
+        height: data.height ? data.height : null,
+        weight: data.weight ? data.weight : null,
+        email: data.email ? data.email : null
+      }
       if (noCreate) {
         return reject({
           success: false,
@@ -41,21 +41,22 @@ module.exports = Patients => {
           data: {}
         });
       }
+      createObj = objectFn.compact(createObj);
       models['Patients'].create(createObj)
-        .then(createRes => {
+        .then(createPatientRes => {
           log.info('---PATIENTS_CREATION_SUCCESS---');
-          log.info(createRes);
+          log.info(createPatientRes);
           return resolve({
             success: true,
             message: 'Patients creation success',
             data: {
-              patient_details: createRes
+              patient_details: createPatientRes
             }
           });
         })
-        .catch(createErr => {
+        .catch(createPatientErr => {
           log.error('---PATIENTS_CREATION_FAILURE---');
-          log.error(createErr);
+          log.error(createPatientErr);
           return reject({
             success: false,
             error_code: 500,
@@ -85,6 +86,7 @@ module.exports = Patients => {
   Patients.fetchPatientsByFilter = data => {
     return new Promise((resolve, reject) => {
       let filter = {
+        include: data.include ? data.include : null,
         where: {
           patient_id: data.patient_ids ? {
             $in: [data.patient_ids]
@@ -107,23 +109,33 @@ module.exports = Patients => {
           created_by: data.created_by ? data.created_by : null
         }
       };
-      !(data.filter_scope) ? data.filter_scope = 'defaultScope': null;
+      !(data.methodName) && (data.methodName = 'findOne');
+      !(data.filterScope) && (data.filterScope = 'defaultScope');
+      filter.include = objectFn.compact(filter.include);
       filter.where = objectFn.compact(filter.where);
-      models['Patients'].scope(data.filter_scope).findAll(filter)
-        .then(createRes => {
+      if (!filter.where) {
+        return reject({
+          success: false,
+          message: 'Insuffiient parameters',
+          data: {}
+        });
+      }
+
+      models['Patients'].scope(data.filterScope)[data.methodName](filter)
+        .then(fetchPatientRes => {
           log.info('---PATIENTS_FETCH_SUCCESS---');
-          log.info(createRes);
+          log.info(fetchPatientRes);
           return resolve({
             success: true,
             message: 'Patients fetch success',
             data: {
-              patient_details: createRes
+              patient_details: fetchPatientRes
             }
           });
         })
-        .catch(createErr => {
+        .catch(fetchPatientErr => {
           log.error('---PATIENTS_FETCH_FAILURE---');
-          log.error(createErr);
+          log.error(fetchPatientErr);
           return reject({
             success: false,
             error_code: 500,

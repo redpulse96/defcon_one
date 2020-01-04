@@ -39,7 +39,7 @@ module.exports = Appointments => {
 
     let createNewAppointmentLogObj = {
       ...validateDataResult.data,
-      ...createNewAppointmentResult.data.appointment
+      ...createNewAppointmentResult.data.appointment.dataValues
     };
     let [createAppointmentLogError] = await to(createAppointmentLogFunction(createNewAppointmentLogObj));
     if (createAppointmentLogError) {
@@ -68,20 +68,15 @@ module.exports = Appointments => {
   function checkPatientExistanceFunction(data) {
     return new Promise((resolve, reject) => {
       let filterPatientObj = {
-        filter_scope: 'activeScope',
-        where: {
-          patient_id: data.patient_id
-        }
+        filterScope: 'activeScope',
+        methodName: 'findOne',
+        patient_id: data.patient_id
       };
       Patients.fetchPatientsByFilter(filterPatientObj)
-      models['Patients']
-        .scope('activeScope')
-        .findOne(filterPatientObj)
         .then(patientRes => {
           log.info('---patientRes---');
           log.info(patientRes);
-          if (patientRes && patientRes.data && patientRes.data.patient_details && patientRes.data.patient_details.length) {
-            patientRes.data.patient_details = patientRes.data.patient_details[0];
+          if (patientRes && patientRes.data && patientRes.data.patient_details) {
             return resolve(patientRes);
           } else {
             return reject({
