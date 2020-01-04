@@ -1,4 +1,4 @@
-const log = require('../../config/log_config').logger('appointment_logs_helper');
+const log = require('../../../config/log_config').logger('appointment_logs_helper');
 const {
   objectFn
 } = require('../../utility/helper_function');
