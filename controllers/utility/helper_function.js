@@ -125,8 +125,6 @@ module.exports = {
      * @param {String} key - The attribute whose values are returned as an array
      */
     map: (arr, key) => {
-      log.info('---mapFunction---');
-      log.info(arr);
       let res_array = [];
       arr.forEach(v => {
         v[key] && res_array.push(v[key]);

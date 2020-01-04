@@ -132,4 +132,55 @@ module.exports = PatientPrescription => {
         });
     });
   }
+
+  /**
+   * @param {Object[]} data - Object of where filter and update object
+   * @param {Object[]} data.filterObj - Object of the list of filters used to fetch appointment
+   * @param {Number} data.filterObj.patient_prescription_id Patient id of the patient
+   * @param {Number} data.filterObj.reference_id Reference id of the patient
+   * @param {Number} data.filterObj.patient_id Patient id of the patient
+   * @param {Number} data.appointment_id appointment id of the appointment to be created against
+   * @param {Object[]} data.updateObj - Object consists of attributes to be updated
+   * @param {Number} data.updateObj.patient_id Patient id of the patient
+   * @param {Number} data.updateObj.appointment_id Appointment id of the patient
+   * @param {Number} data.updateObj.reference_id Reference id of the prescription
+   * @param {Number} data.updateObj.medicine_id Medicine id of the prescription
+   * @param {String} data.updateObj.created_by Email of the user that created the patient
+   * @param {String} data.updateObj.doctor_remarks Remarks added my the logged in doctor
+   */
+  PatientPrescription.updatePatientPrescriptionByFilter = data => {
+    return new Promise((resolve, reject) => {
+      if (!objectFn.has(data, 'filterObj') && !(objectFn.has(data, 'updateObj'))) {
+        return reject({
+          success: false,
+          error_code: 500,
+          message: 'Insufficient parameters',
+          data: {}
+        });
+      }
+      let [filterObj, updateObj] = [objectFn.compact(data.filterObj), objectFn.compact(data.updateObj)];
+      models['PatientPrescriptions'].update(updateObj, filterObj)
+        .then(updatedPatientPrescriptionRes => {
+          log.info('---updatedPatientPrescriptionRes---');
+          log.info(updatedPatientPrescriptionRes);
+          return resolve({
+            success: true,
+            message: 'PatientPrescription details updated',
+            data: {
+              patient_prescription_detail: updatedPatientPrescriptionRes
+            }
+          });
+        })
+        .catch(updatedPatientPrescriptionErr => {
+          log.error('---updatedPatientPrescriptionErr---');;
+          log.error(updatedPatientPrescriptionErr);
+          return reject({
+            success: false,
+            error_code: 500,
+            message: 'PatientPrescription details could not be updated',
+            data: {}
+          });
+        });
+    });
+  }
 }

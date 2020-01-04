@@ -145,4 +145,67 @@ module.exports = Patients => {
         });
     });
   }
+
+  /**
+   * @param {Object[]} data - Object of where filter and update object
+   * @param {Object[]} data.filterObj - Object of the list of filters used to fetch appointment
+   * @param {Number} data.filterObj.patient_id Patient id of the patient
+   * @param {Number} data.filterObj.reference_id Reference id of the patient
+   * @param {Number} data.filterObj.patient_id Patient id of the patient
+   * @param {Number} data.appointment_id appointment id of the appointment to be created against
+   * @param {Object[]} data.updateObj - Object consists of attributes to be updated
+   * @param {String} data.updateObj.patient_name Name of the patient to be created
+   * @param {Number} data.updateObj.age Age of the patient to be created
+   * @param {String} data.updateObj.gender Gender of the patient to be created
+   * @param {Number} data.updateObj.height Height of the patient to be created
+   * @param {Number} data.updateObj.weight weight of the patient to be created
+   * @param {String} data.updateObj.blood_type Blood type of the patient to be created
+   * @param {Date} data.updateObj.date_of_birth Date of birth of the patient
+   * @param {String} data.updateObj.email Email of the patient
+   * @param {String} data.updateObj.created_by Email of the user that created the patient
+   */
+  Patients.updatePatientsByFilter = data => {
+    return new Promise((resolve, reject) => {
+      if (!objectFn.has(data, 'filterObj') && !(objectFn.has(data, 'updateObj'))) {
+        return reject({
+          success: false,
+          error_code: 500,
+          message: 'Insufficient parameters',
+          data: {}
+        });
+      }
+      let [filterObj, updateObj] = [objectFn.compact(data.filterObj), objectFn.compact(data.updateObj)];
+      models['Patients'].update(updateObj, filterObj)
+        .then(updatedPatientsRes => {
+          log.info('---updatedPatientsRes---');
+          log.info(updatedPatientsRes);
+          if (updatedPatientsRes) {
+            return resolve({
+              success: true,
+              message: 'Patients details updated',
+              data: {
+                patient_detail: updatedPatientsRes
+              }
+            });
+          } else {
+            return reject({
+              success: false,
+              error_code: 500,
+              message: 'Patients details could not be updated',
+              data: {}
+            });
+          }
+        })
+        .catch(updatedPatientsErr => {
+          log.error('---updatedPatientsErr---');;
+          log.error(updatedPatientsErr);
+          return reject({
+            success: false,
+            error_code: 500,
+            message: 'Patients details could not be updated',
+            data: {}
+          });
+        });
+    });
+  }
 }

@@ -135,4 +135,54 @@ module.exports = Appointments => {
         });
     });
   }
+
+  /**
+   * @param {Object[]} data - Object of where filter and update object
+   * @param {Object[]} data.filterObj - Object of the list of filters used to fetch appointment
+   * @param {Number} data.filterObj.appointment_id appointment id of the appointment to be created against
+   * @param {Object[]} data.updateObj - Object consists of attributes to be updated
+   * @param {String} data.updateObj.appointment_name Name of the appointment to be created
+   * @param {Date} data.updateObj.appointment_date Scheduled date of the appointment to be created
+   * @param {Number} data.updateObj.patient_id Patient id of the appointment to be created against
+   * @param {String} data.updateObj.appointment_status Status of the appointment to be created `pending` if not mentioned
+   * @param {String} data.updateObj.doctor_remarks Remarks added my the logged in doctor
+   * @param {Date} data.updateObj.rescheduled_date Re-scheduled date of the appointment, is `NULL` while creating
+   * @param {Timestamp} data.updateObj.from_time From time of the scheduled appointment
+   * @param {Timestamp} data.updateObj.to_time To time of the scheduled appointment
+   */
+  Appointments.updateAppointmentByFilter = data => {
+    return new Promise((resolve, reject) => {
+      if (!objectFn.has(data, 'filterObj') && !(objectFn.has(data, 'updateObj'))) {
+        return reject({
+          success: false,
+          error_code: 500,
+          message: 'Insufficient parameters',
+          data: {}
+        });
+      }
+      let [filterObj, updateObj] = [objectFn.compact(data.filterObj), objectFn.compact(data.updateObj)];
+      models['Appointments'].update(updateObj, filterObj)
+        .then(updatedAppointmentRes => {
+          log.info('---updatedAppointmentRes---');
+          log.info(updatedAppointmentRes);
+          return resolve({
+            success: true,
+            message: 'Appointment details updated',
+            data: {
+              appointment_details: updatedAppointmentRes
+            }
+          });
+        })
+        .catch(updatedAppointmentErr => {
+          log.error('---updatedAppointmentErr---');;
+          log.error(updatedAppointmentErr);
+          return reject({
+            success: false,
+            error_code: 500,
+            message: 'Appointment details could not be updated',
+            data: {}
+          });
+        });
+    });
+  }
 }

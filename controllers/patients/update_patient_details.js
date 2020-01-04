@@ -118,37 +118,14 @@ module.exports = Patients => {
           is_archived: false
         }
       };
-      models['Patients']
-        .update(data.update_obj, filter)
+      Patients.updatePatientsByFilter(data.update_obj, filter)
+        // models['Patients']
+        //   .update(data.update_obj, filter)
         .then(updatedPatientRes => {
-          log.info('---updatedPatientRes---');
-          log.info(updatedPatientRes);
-          if (updatedPatientRes && updatedPatientRes > 0) {
-            return resolve({
-              success: true,
-              message: 'Patient details updated successfully',
-              data: {
-                patient_details: updatedPatientRes
-              }
-            });
-          } else {
-            return reject({
-              success: false,
-              error_code: 500,
-              message: 'Patient details updation failure',
-              data: {}
-            });
-          }
+          return resolve(updatedPatientRes);
         })
         .catch(updatedPatientErr => {
-          log.error('---updatedPatientErr---');
-          log.error(updatedPatientErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Internal server error',
-            data: {}
-          });
+          return reject(updatedPatientErr);
         });
     });
   }

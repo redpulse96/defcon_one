@@ -46,11 +46,9 @@ module.exports = Appointments => {
   function fetchAppointmentDetailsFunction(data) {
     return new Promise((resolve, reject) => {
       let filter = {
-        where: {
-          appointment_id: data.appointment_id,
-          is_active: true,
-          is_archived: false
-        },
+        appointment_id: data.appointment_id,
+        filterScope: 'activeScope',
+        methodName: 'findOne',
         include: [{
           model: models['AppointmentLogs'],
           as: 'appointment_logs'
@@ -74,7 +72,7 @@ module.exports = Appointments => {
           as: 'appointment_symptoms_role_mapping'
         }]
       };
-      models['Appointments'].findOne(filter)
+      Appointments.fetchAppointmentsByFilter(filter)
         .then(appointmentDetails => {
           log.info('---APPOINTMENT_DETAILS---');
           log.info(appointmentDetails);
