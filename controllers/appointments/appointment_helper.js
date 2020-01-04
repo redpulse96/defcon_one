@@ -15,6 +15,7 @@ module.exports = Appointments => {
    * @param {Date} data.appointment_date Scheduled date of the appointment to be created
    * @param {Number} data.patient_id Patient id of the appointment to be created against
    * @param {String} data.appointment_status Status of the appointment to be created `pending` if not mentioned
+   * @param {String} data.doctor_remarks Remarks added my the logged in doctor
    * @param {Date} data.rescheduled_date Re-scheduled date of the appointment, is `NULL` while creating
    * @param {Timestamp} data.from_time From time of the scheduled appointment
    * @param {Timestamp} data.to_time To time of the scheduled appointment
@@ -24,13 +25,13 @@ module.exports = Appointments => {
       let noCreate = false;
       let createObj = {};
       data.appointment_name ? createObj.appointment_name = data.appointment_name : noCreate = true;
-      data.appointment_date ? createObj.appointment_date = data.appointment_date : noCreate = true;
+      data.appointment_date ? createObj.appointment_date = moment(data.appointment_date).format('YYYY-MM-DD') : noCreate = true;
       data.patient_id ? createObj.patient_id = data.patient_id : noCreate = true;
       data.appointment_status ? createObj.appointment_status = data.appointment_status : createObj.appointment_status = APPOINTMENT_STATUS.PENDING;
-      data.rescheduled_date ? createObj.rescheduled_date = data.rescheduled_date : createObj.rescheduled_date = null;
-      data.from_time ? createObj.from_time = data.from_time : noCreate = true;
-      data.to_time ? createObj.to_time = data.to_time : noCreate = true;
       data.doctor_remarks ? createObj.doctor_remarks = data.doctor_remarks : createObj.doctor_remarks = '';
+      data.rescheduled_date ? createObj.rescheduled_date = moment(data.rescheduled_date).format('YYYY-MM-DD') : createObj.rescheduled_date = null;
+      data.from_time ? createObj.from_time = moment(data.from_time, 'HH:mm:ss').format('HH:mm:ss') : noCreate = true;
+      data.to_time ? createObj.to_time = moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss') : noCreate = true;
 
       if (noCreate) {
         return reject({

@@ -49,7 +49,7 @@ module.exports = Patients => {
             success: true,
             message: 'Patients creation success',
             data: {
-              appointment: createRes
+              patient_details: createRes
             }
           });
         })
@@ -117,7 +117,7 @@ module.exports = Patients => {
             success: true,
             message: 'Patients fetch success',
             data: {
-              appointment: createRes
+              patient_details: createRes
             }
           });
         })

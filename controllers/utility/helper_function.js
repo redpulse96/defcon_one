@@ -9,6 +9,7 @@ module.exports = {
    * @param {Object} objectFn - List of all the helper functions related to an object
    */
   objectFn: {
+    objectFnParent: this,
     /**
      * @param {Object} obj - Object to check the presence of the key
      * @param {String} key - Key to be checked if present in the object
@@ -40,12 +41,39 @@ module.exports = {
         !(res_obj[key]) ? (delete res_obj[key]) : res_obj[key] = obj[key];
       }
       return res_obj;
+    },
+    /**
+     * @param {Object} obj - Object of values
+     * @param {Array} filter_arr - Array of keys
+     */
+    omit: (obj, filter_arr) => {
+      let res_obj = {
+        ...obj
+      };
+      for (const x in obj) {
+        filter_arr.indexOf(x) > -1 ? delete res_obj[x] : null;
+      }
+      return res_obj;
+    },
+    /**
+     * @param {Object} obj - Object of values
+     * @param {Array} filter_arr - Array of keys
+     */
+    pick: (obj, filter_arr) => {
+      let res_obj = {
+        ...obj
+      };
+      for (const x in obj) {
+        filter_arr.indexOf(x) === -1 ? delete res_obj[x] : null;
+      }
+      return res_obj;
     }
   },
   /**
    * @param {Object} arrayFn - List of all the helper functions related to an array
    */
   arrayFn: {
+    arrayFnParent: this,
     /**
      * @param {Array} arr - Array of objects to map a key from
      * @param {String} key - The attribute whose values are returned as an array
@@ -78,6 +106,32 @@ module.exports = {
       let res_arr = [];
       chk_arr.forEach(x => {
         (main_arr.indexOf(x) < 0) && res_arr.push(x);
+      });
+      return res_arr;
+    },
+    /**
+     * @param {Array} fst_arr - First array
+     * @param {Array} scnd_arr - Second array
+     */
+    concat: (fst_arr, scnd_arr) => {
+      let res_arr = [...fst_arr];
+      for (let x = 0; x < scnd_arr.length; x++) {
+        res_arr.push(scnd_arr[x]);
+      }
+      return res_arr;
+    },
+    /**
+     * @param {Array} arr - Input array
+     * @param {Object} filter_obj - filter object
+     */
+    filter: (arr, filter_obj) => {
+      let res_arr = [];
+      arr.forEach(v => {
+        let is_pushable;
+        for (const k in filter_obj) {
+          v[k] ? v[k] === filter_obj[k] ? is_pushable = true : is_pushable = false : is_pushable = false;
+        }
+        is_pushable ? res_arr.push(v) : null;
       });
       return res_arr;
     }

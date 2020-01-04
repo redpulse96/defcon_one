@@ -67,24 +67,21 @@ module.exports = Appointments => {
   function checkPatientExistanceFunction(data) {
     return new Promise((resolve, reject) => {
       let filterPatientObj = {
+        filter_scope: 'activeScope',
         where: {
           patient_id: data.patient_id
         }
       };
+      Patients.fetchPatientsByFilter(filterPatientObj)
       models['Patients']
         .scope('activeScope')
         .findOne(filterPatientObj)
         .then(patientRes => {
           log.info('---patientRes---');
           log.info(patientRes);
-          if (patientRes) {
-            return resolve({
-              success: true,
-              message: 'Patient exists',
-              data: {
-                patient_details: patientRes
-              }
-            });
+          if (patientRes && patientRes.data && patientRes.data.patient_details && patientRes.data.patient_details.length) {
+            patientRes.data.patient_details = patientRes.data.patient_details[0];
+            return resolve(patientRes);
           } else {
             return reject({
               success: false,
@@ -99,7 +96,7 @@ module.exports = Appointments => {
           log.error(patientErr);
           return reject({
             success: false,
-            error_code: 500,
+            error_code: 400,
             message: 'Patient does not exist',
             data: {}
           })
@@ -116,7 +113,7 @@ module.exports = Appointments => {
         to_time: moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss'),
         created_by: data.user.username
       };
-      Appointments.createAppointments(createObj)
+      Appointments.createAppointmentsInstance(createObj)
         .then(createRes => {
           return resolve(createRes);
         })
