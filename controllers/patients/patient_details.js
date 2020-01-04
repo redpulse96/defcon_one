@@ -1,8 +1,5 @@
 const log = require('../../config/log_config').logger('patients_controller');
 const utils = require('../utility/utils');
-const {
-  PATIENT_NOT_EXISTS
-} = require('../../config/response_config');
 
 module.exports = Patients => {
 
@@ -80,14 +77,14 @@ module.exports = Patients => {
     };
     Patients.fetchPatientsByFilter(filterObj)
       .then(fetchRes => {
+        log.info('---fetchRes---');
+        log.info(fetchRes);
         fetchRes.data = fetchRes.data.patient_details.toJSON();
-        if (fetchRes) {
-          return utils.generateResponse(fetchRes)(res);
-        } else {
-          return utils.generateResponse(PATIENT_NOT_EXISTS)(res);
-        }
+        return utils.generateResponse(fetchRes)(res);
       })
       .catch(fetchErr => {
+        log.error('---fetchErr--');
+        log.error(fetchErr);
         return utils.generateResponse(fetchErr)(res);
       });
   }
