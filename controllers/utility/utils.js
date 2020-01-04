@@ -54,72 +54,72 @@ module.exports = {
       if (paramObj.checkValType && paramObj.checkValType.length) {
         paramObj.checkValType.forEach(val => {
           switch (val.checkValue.toUpperCase().trim()) {
-          case 'ARRAY':
-            if (!_.isArray(paramObj.data[val.key])) {
-              return reject({
-                success: false,
-                error_code: 400,
-                message: 'Value type does not match',
-                data: val
+            case 'ARRAY':
+              if (!_.isArray(paramObj.data[val.key])) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            case 'STRING':
+              if (!_.isString(paramObj.data[val.key])) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            case 'NUMBER':
+              if (!_.isNumber(paramObj.data[val.key])) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break
+            case 'BOOLEAN':
+              if (!_.isBoolean(paramObj.data[val.key])) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            case 'DATE':
+              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD')) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            case 'DATETIME':
+              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD hh:mm:ss')) {
+                return reject({
+                  success: false,
+                  error_code: 400,
+                  message: 'Value type does not match',
+                  data: val
+                });
+              }
+              break;
+            default:
+              return resolve({
+                success: true,
+                message: 'Value type matches successfully',
+                data: paramObj.data
               });
-            }
-            break;
-          case 'STRING':
-            if (!_.isString(paramObj.data[val.key])) {
-              return reject({
-                success: false,
-                error_code: 400,
-                message: 'Value type does not match',
-                data: val
-              });
-            }
-            break;
-          case 'NUMBER':
-            if (!_.isNumber(paramObj.data[val.key])) {
-              return reject({
-                success: false,
-                error_code: 400,
-                message: 'Value type does not match',
-                data: val
-              });
-            }
-            break
-          case 'BOOLEAN':
-            if (!_.isBoolean(paramObj.data[val.key])) {
-              return reject({
-                success: false,
-                error_code: 400,
-                message: 'Value type does not match',
-                data: val
-              });
-            }
-            break;
-          case 'DATE':
-            if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD')) {
-              return reject({
-                success: false,
-                error_code: 400,
-                message: 'Value type does not match',
-                data: val
-              });
-            }
-            break;
-          case 'DATETIME':
-            if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD hh:mm:ss')) {
-              return reject({
-                success: false,
-                error_code: 400,
-                message: 'Value type does not match',
-                data: val
-              });
-            }
-            break;
-          default:
-            return resolve({
-              success: true,
-              message: 'Value type matches successfully',
-              data: paramObj.data
-            });
           }
         });
         resolve({

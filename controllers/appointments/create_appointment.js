@@ -1,5 +1,6 @@
 const log = require('../../config/log_config').logger('appointments_controller');
 const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs'];
+const Patients = require(packageHelper.MODEL_CONFIG_DIR)['Patients'];
 const moment = packageHelper.moment;
 const utils = require('../utility/utils');
 const {
