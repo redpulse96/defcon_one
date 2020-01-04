@@ -5,10 +5,13 @@ const {
   INTERNAL_SERVER_ERROR
 } = require('../../../config/response_config');
 
+require('./patient_prescription_helper')(PatientPrescription);
+
 PatientPrescription.fetchPatientPrescription = (req, res) => {
 
   let whereObj = {
     ...req.params,
+    methodName: 'findOne',
     include: [{
       model: models['Appointments'],
       as: 'appointment',
@@ -27,7 +30,7 @@ PatientPrescription.fetchPatientPrescription = (req, res) => {
       }]
     }]
   };
-  models['PatientPrescription'].findOne(whereObj)
+  PatientPrescription.fetchPatientPrescriptionByFilter(whereObj)
     .then(fetchRes => {
       fetchRes = fetchRes.toJSON();
       log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
@@ -53,8 +56,7 @@ PatientPrescription.createPatientPrescription = (req, res) => {
     ...req.body,
     created_by: req.user.username
   };
-  createObj.reference_id = utils.GenerateUniqueID(10, 'A#vb');
-  models['PatientPrescription'].create(createObj)
+  PatientPrescription.createPatientPrescriptionInstance(createObj)
     .then(createRes => {
       log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
       log.info(createRes);

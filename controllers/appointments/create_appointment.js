@@ -1,5 +1,6 @@
 const log = require('../../config/log_config').logger('appointments_controller');
 const AppointmentLogs = require(packageHelper.MODEL_CONFIG_DIR)['AppointmentLogs'];
+const Patients = require(packageHelper.MODEL_CONFIG_DIR)['Patients'];
 const moment = packageHelper.moment;
 const utils = require('../utility/utils');
 const {
@@ -38,7 +39,7 @@ module.exports = Appointments => {
 
     let createNewAppointmentLogObj = {
       ...validateDataResult.data,
-      ...createNewAppointmentResult.data.appointment
+      ...createNewAppointmentResult.data.appointment.dataValues
     };
     let [createAppointmentLogError] = await to(createAppointmentLogFunction(createNewAppointmentLogObj));
     if (createAppointmentLogError) {
@@ -67,24 +68,16 @@ module.exports = Appointments => {
   function checkPatientExistanceFunction(data) {
     return new Promise((resolve, reject) => {
       let filterPatientObj = {
-        where: {
-          patient_id: data.patient_id
-        }
+        filterScope: 'activeScope',
+        methodName: 'findOne',
+        patient_id: data.patient_id
       };
-      models['Patients']
-        .scope('activeScope')
-        .findOne(filterPatientObj)
+      Patients.fetchPatientsByFilter(filterPatientObj)
         .then(patientRes => {
           log.info('---patientRes---');
           log.info(patientRes);
-          if (patientRes) {
-            return resolve({
-              success: true,
-              message: 'Patient exists',
-              data: {
-                patient_details: patientRes
-              }
-            });
+          if (patientRes && patientRes.data && patientRes.data.patient_details) {
+            return resolve(patientRes);
           } else {
             return reject({
               success: false,
@@ -99,7 +92,7 @@ module.exports = Appointments => {
           log.error(patientErr);
           return reject({
             success: false,
-            error_code: 500,
+            error_code: 400,
             message: 'Patient does not exist',
             data: {}
           })
@@ -116,7 +109,7 @@ module.exports = Appointments => {
         to_time: moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss'),
         created_by: data.user.username
       };
-      Appointments.createAppointments(createObj)
+      Appointments.createAppointmentsInstance(createObj)
         .then(createRes => {
           return resolve(createRes);
         })

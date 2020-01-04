@@ -88,14 +88,11 @@ module.exports = Appointments => {
   function fetchCurrentAppointmentFunction(data) {
     return new Promise((resolve, reject) => {
       let whereObj = {
-        where: {
-          appointment_id: data.appointment_id,
-          is_active: true,
-          is_archived: false
-        }
+        appointment_id: data.appointment_id,
+        filterScope: 'activeScope',
+        methodName: 'findOne'
       };
-      models['Appointments']
-        .findOne(whereObj)
+      Appointments.fetchAppointmentsByFilter(whereObj)
         .then(appointmentRes => {
           log.info('---APPOINTMENTS_FETCH_SUCCESS---');
           log.info(appointmentRes);
