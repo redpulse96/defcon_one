@@ -79,23 +79,13 @@ module.exports = Appointments => {
           if (patientRes && patientRes.data && patientRes.data.patient_details) {
             return resolve(patientRes);
           } else {
-            return reject({
-              success: false,
-              error_code: 400,
-              message: 'Patient does not exist',
-              data: {}
-            });
+            return reject(patientRes);
           }
         })
         .catch(patientErr => {
           log.error('---patientErr---');
           log.error(patientErr);
-          return reject({
-            success: false,
-            error_code: 400,
-            message: 'Patient does not exist',
-            data: {}
-          })
+          return reject(patientErr);
         });
     });
   }
