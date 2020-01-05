@@ -33,7 +33,7 @@ module.exports = Appointments => {
 
     let checkStatusMatrixObj = {
       ...validateDataResult.data,
-      appointment_detail: fetchCurrentAppointmentResult.data.appointment_detail
+      appointment_detail: fetchCurrentAppointmentResult.data.appointment
     };
     let [checkStatusMatrixError] = await to(checkStatusMatrixFunction(checkStatusMatrixObj));
     if (checkStatusMatrixError) {
@@ -51,7 +51,7 @@ module.exports = Appointments => {
     let updateAppointmentStatusObj = {
       ...validateDataResult.data,
       ...rescheduleAppointmentResult,
-      appointment_detail: fetchCurrentAppointmentResult.data.appointment_detail
+      appointment_detail: fetchCurrentAppointmentResult.data.appointment
     };
     let [updateAppointmentStatusError, updateAppointmentStatusResult] = await to(updateAppointmentStatusFunction(updateAppointmentStatusObj));
     if (updateAppointmentStatusError) {
@@ -66,7 +66,7 @@ module.exports = Appointments => {
     if (createAppointmentLogError) {
       return utils.generateResponse(createAppointmentLogError)(res);
     }
-    return utils.generateResponse(fetchCurrentAppointmentResult)(res);
+    return utils.generateResponse(updateAppointmentStatusResult)(res);
   }
 
   function validateDataFunction(data) {
@@ -97,13 +97,7 @@ module.exports = Appointments => {
           log.info('---APPOINTMENTS_FETCH_SUCCESS---');
           log.info(appointmentRes);
           if (appointmentRes) {
-            return resolve({
-              success: true,
-              message: 'Appointments fetching success',
-              data: {
-                appointment_detail: appointmentRes
-              }
-            });
+            return resolve(appointmentRes);
           } else {
             return reject({
               success: false,
