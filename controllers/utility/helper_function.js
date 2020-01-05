@@ -73,6 +73,16 @@ module.exports = {
    */
   arrayFn: {
     /**
+     * @param {Array} arr - Array of objects filtered where null || undefined values are omitted
+     */
+    compact: arr => {
+      let res_arr = [...arr];
+      for (const key in res_arr) {
+        !(res_arr[key]) ? (delete res_arr[key]) : res_arr[key] = arr[key];
+      }
+      return res_arr;
+    },
+    /**
      * @param {Array} fst_arr - First array
      * @param {Array} scnd_arr - Second array
      */

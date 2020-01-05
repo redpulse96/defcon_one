@@ -1,6 +1,7 @@
 const log = require('../../../config/log_config').logger('patient_prescription_prescription_helper');
 const utils = require('../../utility/utils');
 const {
+  arrayFn,
   objectFn
 } = require('../../utility/helper_function');
 
@@ -111,7 +112,7 @@ module.exports = PatientPrescription => {
       !(data.filterScope) && (data.filterScope = 'defaultScope');
       filter && (filter = objectFn.compact(filter));
       filter.where && (filter.where = objectFn.compact(filter.where));
-      filter.include && (filter.include = objectFn.compact(filter.include));
+      filter.include && (filter.include = arrayFn.compact(filter.include));
       if (!filter.where) {
         return reject({
           success: false,
