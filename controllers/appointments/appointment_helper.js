@@ -43,28 +43,39 @@ module.exports = Appointments => {
         });
       }
       createObj = objectFn.compact(createObj);
-      models['Appointments'].create(createObj)
-        .then(createAppointmentRes => {
-          log.info('---APPOINTMENTS_CREATION_SUCCESS---');
-          log.info(createAppointmentRes);
-          return resolve({
-            success: true,
-            message: 'Appointment creation success',
-            data: {
-              appointment: createAppointmentRes
-            }
-          });
-        })
-        .catch(createAppointmentErr => {
-          log.error('---APPOINTMENTS_CREATION_FAILURE---');
-          log.error(createAppointmentErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Appointment creation failure',
-            data: {}
+      try {
+        models['Appointments'].create(createObj)
+          .then(createAppointmentRes => {
+            log.info('---APPOINTMENTS_CREATION_SUCCESS---');
+            log.info(createAppointmentRes);
+            return resolve({
+              success: true,
+              message: 'Appointment creation success',
+              data: {
+                appointment: createAppointmentRes
+              }
+            });
           })
+          .catch(createAppointmentErr => {
+            log.error('---APPOINTMENTS_CREATION_FAILURE---');
+            log.error(createAppointmentErr);
+            return reject({
+              success: false,
+              error_code: 500,
+              message: 'Appointment creation failure',
+              data: {}
+            })
+          });
+      } catch (error) {
+        log.error('---ERROR_CAUGHT---');
+        log.error(error);
+        return reject({
+          success: false,
+          error_code: 500,
+          message: 'Internal server error',
+          data: {}
         });
+      }
     });
   }
 
@@ -101,8 +112,9 @@ module.exports = Appointments => {
       };
       !(data.methodName) && (data.methodName = 'findOne');
       !(data.filterScope) && (data.filterScope = 'defaultScope');
-      filter.include = objectFn.compact(filter.include);
-      filter.where = objectFn.compact(filter.where);
+      filter && (filter = objectFn.compact(filter));
+      filter.where && (filter.where = objectFn.compact(filter.where));
+      filter.include && (filter.include = objectFn.compact(filter.include));
       if (!filter.where) {
         return reject({
           success: false,
@@ -110,29 +122,39 @@ module.exports = Appointments => {
           data: {}
         });
       }
-
-      models['Appointments'].scope(data.filterScope)[data.methodName](filter)
-        .then(fetchAppointmentRes => {
-          log.info('---APPOINTMENTS_FETCH_SUCCESS---');
-          log.info(fetchAppointmentRes);
-          return resolve({
-            success: true,
-            message: 'Appointment fetch success',
-            data: {
-              appointment: fetchAppointmentRes
-            }
-          });
-        })
-        .catch(fetchAppointmentErr => {
-          log.error('---APPOINTMENTS_FETCH_FAILURE---');
-          log.error(fetchAppointmentErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Appointment fetch failure',
-            data: {}
+      try {
+        models['Appointments'].scope(data.filterScope)[data.methodName](filter)
+          .then(fetchAppointmentRes => {
+            log.info('---APPOINTMENTS_FETCH_SUCCESS---');
+            log.info(fetchAppointmentRes);
+            return resolve({
+              success: true,
+              message: 'Appointment fetch success',
+              data: {
+                appointment: fetchAppointmentRes
+              }
+            });
           })
+          .catch(fetchAppointmentErr => {
+            log.error('---APPOINTMENTS_FETCH_FAILURE---');
+            log.error(fetchAppointmentErr);
+            return reject({
+              success: false,
+              error_code: 500,
+              message: 'Appointment fetch failure',
+              data: {}
+            })
+          });
+      } catch (error) {
+        log.error('---ERROR_CAUGHT---');
+        log.error(error);
+        return reject({
+          success: false,
+          error_code: 500,
+          message: 'Internal server error',
+          data: {}
         });
+      }
     });
   }
 
@@ -161,28 +183,39 @@ module.exports = Appointments => {
         });
       }
       let [filterObj, updateObj] = [objectFn.compact(data.filterObj), objectFn.compact(data.updateObj)];
-      models['Appointments'].update(updateObj, filterObj)
-        .then(updatedAppointmentRes => {
-          log.info('---updatedAppointmentRes---');
-          log.info(updatedAppointmentRes);
-          return resolve({
-            success: true,
-            message: 'Appointment details updated',
-            data: {
-              appointment_details: updatedAppointmentRes
-            }
+      try {
+        models['Appointments'].update(updateObj, filterObj)
+          .then(updatedAppointmentRes => {
+            log.info('---updatedAppointmentRes---');
+            log.info(updatedAppointmentRes);
+            return resolve({
+              success: true,
+              message: 'Appointment details updated',
+              data: {
+                appointment_details: updatedAppointmentRes
+              }
+            });
+          })
+          .catch(updatedAppointmentErr => {
+            log.error('---updatedAppointmentErr---');;
+            log.error(updatedAppointmentErr);
+            return reject({
+              success: false,
+              error_code: 500,
+              message: 'Appointment details could not be updated',
+              data: {}
+            });
           });
-        })
-        .catch(updatedAppointmentErr => {
-          log.error('---updatedAppointmentErr---');;
-          log.error(updatedAppointmentErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Appointment details could not be updated',
-            data: {}
-          });
+      } catch (error) {
+        log.error('---ERROR_CAUGHT---');
+        log.error(error);
+        return reject({
+          success: false,
+          error_code: 500,
+          message: 'Internal server error',
+          data: {}
         });
+      }
     });
   }
 }

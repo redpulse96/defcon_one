@@ -34,28 +34,39 @@ module.exports = PatientPrescription => {
         });
       }
       createObj = objectFn.compact(createObj);
-      models['PatientPrescription'].create(createObj)
-        .then(createPatientPrescriptionRes => {
-          log.info('---PATIENTS_PRESCRIPTION_CREATION_SUCCESS---');
-          log.info(createPatientPrescriptionRes);
-          return resolve({
-            success: true,
-            message: 'Patient Prescription creation success',
-            data: {
-              patient_prescription_details: createPatientPrescriptionRes
-            }
-          });
-        })
-        .catch(createPatientPrescriptionErr => {
-          log.error('---PATIENTS_CREATION_FAILURE---');
-          log.error(createPatientPrescriptionErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Patient Prescription creation failure',
-            data: {}
+      try {
+        models['PatientPrescription'].create(createObj)
+          .then(createPatientPrescriptionRes => {
+            log.info('---PATIENTS_PRESCRIPTION_CREATION_SUCCESS---');
+            log.info(createPatientPrescriptionRes);
+            return resolve({
+              success: true,
+              message: 'Patient Prescription creation success',
+              data: {
+                patient_prescription_details: createPatientPrescriptionRes
+              }
+            });
           })
+          .catch(createPatientPrescriptionErr => {
+            log.error('---PATIENTS_CREATION_FAILURE---');
+            log.error(createPatientPrescriptionErr);
+            return reject({
+              success: false,
+              error_code: 500,
+              message: 'Patient Prescription creation failure',
+              data: {}
+            });
+          });
+      } catch (error) {
+        log.error('---ERROR_CAUGHT---');
+        log.error(error);
+        return reject({
+          success: false,
+          error_code: 500,
+          message: 'Internal server error',
+          data: {}
         });
+      }
     });
   }
 
@@ -98,8 +109,9 @@ module.exports = PatientPrescription => {
       };
       !(data.methodName) && (data.methodName = 'findOne');
       !(data.filterScope) && (data.filterScope = 'defaultScope');
-      filter.include = objectFn.compact(filter.include);
-      filter.where = objectFn.compact(filter.where);
+      filter && (filter = objectFn.compact(filter));
+      filter.where && (filter.where = objectFn.compact(filter.where));
+      filter.include && (filter.include = objectFn.compact(filter.include));
       if (!filter.where) {
         return reject({
           success: false,
@@ -107,29 +119,39 @@ module.exports = PatientPrescription => {
           data: {}
         });
       }
-
-      models['PatientPrescription'].scope(data.filterScope)[data.methodName](filter)
-        .then(fetchPatientPrescriptionRes => {
-          log.info('---PATIENTS_PRESCRIPTION_FETCH_SUCCESS---');
-          log.info(fetchPatientPrescriptionRes);
-          return resolve({
-            success: true,
-            message: 'Patient Prescription fetch success',
-            data: {
-              patient_prescription_details: fetchPatientPrescriptionRes
-            }
-          });
-        })
-        .catch(fetchPatientPrescriptionErr => {
-          log.error('---PATIENTS_PRESCRIPTION_FETCH_FAILURE---');
-          log.error(fetchPatientPrescriptionErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Patient Prescription fetch failure',
-            data: {}
+      try {
+        models['PatientPrescription'].scope(data.filterScope)[data.methodName](filter)
+          .then(fetchPatientPrescriptionRes => {
+            log.info('---PATIENTS_PRESCRIPTION_FETCH_SUCCESS---');
+            log.info(fetchPatientPrescriptionRes);
+            return resolve({
+              success: true,
+              message: 'Patient Prescription fetch success',
+              data: {
+                patient_prescription_details: fetchPatientPrescriptionRes
+              }
+            });
           })
+          .catch(fetchPatientPrescriptionErr => {
+            log.error('---PATIENTS_PRESCRIPTION_FETCH_FAILURE---');
+            log.error(fetchPatientPrescriptionErr);
+            return reject({
+              success: false,
+              error_code: 500,
+              message: 'Patient Prescription fetch failure',
+              data: {}
+            });
+          });
+      } catch (error) {
+        log.error('---ERROR_CAUGHT---');
+        log.error(error);
+        return reject({
+          success: false,
+          error_code: 500,
+          message: 'Internal server error',
+          data: {}
         });
+      }
     });
   }
 
@@ -159,28 +181,39 @@ module.exports = PatientPrescription => {
         });
       }
       let [filterObj, updateObj] = [objectFn.compact(data.filterObj), objectFn.compact(data.updateObj)];
-      models['PatientPrescriptions'].update(updateObj, filterObj)
-        .then(updatedPatientPrescriptionRes => {
-          log.info('---updatedPatientPrescriptionRes---');
-          log.info(updatedPatientPrescriptionRes);
-          return resolve({
-            success: true,
-            message: 'PatientPrescription details updated',
-            data: {
-              patient_prescription_detail: updatedPatientPrescriptionRes
-            }
+      try {
+        models['PatientPrescriptions'].update(updateObj, filterObj)
+          .then(updatedPatientPrescriptionRes => {
+            log.info('---updatedPatientPrescriptionRes---');
+            log.info(updatedPatientPrescriptionRes);
+            return resolve({
+              success: true,
+              message: 'PatientPrescription details updated',
+              data: {
+                patient_prescription_detail: updatedPatientPrescriptionRes
+              }
+            });
+          })
+          .catch(updatedPatientPrescriptionErr => {
+            log.error('---updatedPatientPrescriptionErr---');;
+            log.error(updatedPatientPrescriptionErr);
+            return reject({
+              success: false,
+              error_code: 500,
+              message: 'PatientPrescription details could not be updated',
+              data: {}
+            });
           });
-        })
-        .catch(updatedPatientPrescriptionErr => {
-          log.error('---updatedPatientPrescriptionErr---');;
-          log.error(updatedPatientPrescriptionErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'PatientPrescription details could not be updated',
-            data: {}
-          });
+      } catch (error) {
+        log.error('---ERROR_CAUGHT---');
+        log.error(error);
+        return reject({
+          success: false,
+          error_code: 500,
+          message: 'Internal server error',
+          data: {}
         });
+      }
     });
   }
 }

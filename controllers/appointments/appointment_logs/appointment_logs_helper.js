@@ -25,29 +25,39 @@ module.exports = AppointmentLogs => {
           data: {}
         });
       }
-
-      models['AppointmentLogs'].create(createObj)
-        .then(createAppointmentLogsRes => {
-          log.info('---APPOINTMENTS_LOGS_CREATION_SUCCESS---');
-          log.info(createAppointmentLogsRes);
-          return resolve({
-            success: true,
-            message: 'Appointment logs creation success',
-            data: {
-              appointment: createAppointmentLogsRes
-            }
-          });
-        })
-        .catch(createAppointmentLogsErr => {
-          log.error('---APPOINTMENTS_LOGS_CREATION_FAILURE---');
-          log.error(createAppointmentLogsErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Appointment logs creation failure',
-            data: {}
+      try {
+        models['AppointmentLogs'].create(createObj)
+          .then(createAppointmentLogsRes => {
+            log.info('---APPOINTMENTS_LOGS_CREATION_SUCCESS---');
+            log.info(createAppointmentLogsRes);
+            return resolve({
+              success: true,
+              message: 'Appointment logs creation success',
+              data: {
+                appointment: createAppointmentLogsRes
+              }
+            });
           })
+          .catch(createAppointmentLogsErr => {
+            log.error('---APPOINTMENTS_LOGS_CREATION_FAILURE---');
+            log.error(createAppointmentLogsErr);
+            return reject({
+              success: false,
+              error_code: 500,
+              message: 'Appointment logs creation failure',
+              data: {}
+            })
+          });
+      } catch (error) {
+        log.error('---ERROR_CAUGHT---');
+        log.error(error);
+        return reject({
+          success: false,
+          error_code: 500,
+          message: 'Internal server error',
+          data: {}
         });
+      }
     });
   }
 
@@ -76,8 +86,9 @@ module.exports = AppointmentLogs => {
       };
       !(data.methodName) && (data.methodName = 'findOne');
       !(data.filterScope) && (data.filterScope = 'defaultScope');
-      filter.include = objectFn.compact(filter.include);
-      filter.where = objectFn.compact(filter.where);
+      filter && (filter = objectFn.compact(filter));
+      filter.where && (filter.where = objectFn.compact(filter.where));
+      filter.include && (filter.include = objectFn.compact(filter.include));
       if (!filter.where) {
         return reject({
           success: false,
@@ -85,29 +96,39 @@ module.exports = AppointmentLogs => {
           data: {}
         });
       }
-
-      models['AppointmentLogs'].scope(data.filterScope)[data.methodName](filter)
-        .then(fetchAppointmentLogRes => {
-          log.info('---APPOINTMENTS_LOGS_FETCH_SUCCESS---');
-          log.info(fetchAppointmentLogRes);
-          return resolve({
-            success: true,
-            message: 'Appointment logs fetch success',
-            data: {
-              appointment: fetchAppointmentLogRes
-            }
-          });
-        })
-        .catch(fetchAppointmentLogErr => {
-          log.error('---APPOINTMENTS_LOGS_FETCH_FAILURE---');
-          log.error(fetchAppointmentLogErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Appointment logs fetch failure',
-            data: {}
+      try {
+        models['AppointmentLogs'].scope(data.filterScope)[data.methodName](filter)
+          .then(fetchAppointmentLogRes => {
+            log.info('---APPOINTMENTS_LOGS_FETCH_SUCCESS---');
+            log.info(fetchAppointmentLogRes);
+            return resolve({
+              success: true,
+              message: 'Appointment logs fetch success',
+              data: {
+                appointment: fetchAppointmentLogRes
+              }
+            });
           })
+          .catch(fetchAppointmentLogErr => {
+            log.error('---APPOINTMENTS_LOGS_FETCH_FAILURE---');
+            log.error(fetchAppointmentLogErr);
+            return reject({
+              success: false,
+              error_code: 500,
+              message: 'Appointment logs fetch failure',
+              data: {}
+            })
+          });
+      } catch (error) {
+        log.error('---ERROR_CAUGHT---');
+        log.error(error);
+        return reject({
+          success: false,
+          error_code: 500,
+          message: 'Internal server error',
+          data: {}
         });
+      }
     });
   }
 }
