@@ -158,26 +158,10 @@ module.exports = Appointments => {
             where: {
               $or: [{
                 appointment_date: data.rescheduled_date,
-                $and: [{
-                  from_time: {
-                    $gte: fromDate
-                  }
-                }, {
-                  to_time: {
-                    $lte: toDate
-                  }
-                }]
+                $between: [fromDate, toDate]
               }, {
                 rescheduled_date: data.rescheduled_date,
-                $and: [{
-                  from_time: {
-                    $gte: fromDate
-                  }
-                }, {
-                  to_time: {
-                    $lte: toDate
-                  }
-                }]
+                $between: [fromDate, toDate]
               }]
             }
           };

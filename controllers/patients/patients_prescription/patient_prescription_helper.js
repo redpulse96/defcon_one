@@ -105,7 +105,11 @@ module.exports = PatientPrescription => {
           medicine_id: data.medicine_ids ? {
             $in: [data.medicine_ids]
           } : data.medicine_id ? data.medicine_id : null,
-          created_by: data.created_by ? data.created_by : null
+          created_by: data.created_by ? data.created_by : null,
+          $and: data.$and ? data.$and : null,
+          $between: data.$between ? data.$between : null,
+          $like: data.$like ? data.$like : null,
+          $or: data.$or ? data.$or : null
         }
       };
       !(data.methodName) && (data.methodName = 'findOne');
@@ -191,12 +195,12 @@ module.exports = PatientPrescription => {
               success: true,
               message: 'PatientPrescription details updated',
               data: {
-                patient_prescription_detail: updatedPatientPrescriptionRes
+                patient_prescription_detail: updatedPatientPrescriptionRes[1]
               }
             });
           })
           .catch(updatedPatientPrescriptionErr => {
-            log.error('---updatedPatientPrescriptionErr---');;
+            log.error('---updatedPatientPrescriptionErr---');
             log.error(updatedPatientPrescriptionErr);
             return reject({
               success: false,

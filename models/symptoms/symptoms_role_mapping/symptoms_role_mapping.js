@@ -46,6 +46,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     }
   }, {
+    hooks: {
+      afterUpdate: () => {
+      }
+    },
     defaultScope: {
       order: [
         ['created_date', 'DESC'],
@@ -59,6 +63,12 @@ module.exports = (sequelize, DataTypes) => {
           is_archived: false
         },
         attributes: { exclude: ['is_active', 'is_archived', 'created_date', 'updated_date'] }
+      },
+      inActiveScope: {
+        where: {
+          is_active: false,
+          is_archived: true
+        }
       }
     },
     sequelize,
