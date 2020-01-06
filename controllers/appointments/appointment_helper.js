@@ -108,7 +108,11 @@ module.exports = Appointments => {
           appointment_date: data.appointment_date ? moment(data.appointment_date).format('YYYY-MM-DD') : null,
           rescheduled_date: data.rescheduled_date ? moment(data.rescheduled_date).format('YYYY-MM-DD') : null,
           from_time: data.from_time ? moment(data.from_time, 'HH:mm:ss').format('HH:mm:ss') : null,
-          to_time: data.to_time ? moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss') : null
+          to_time: data.to_time ? moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss') : null,
+          $and: data.$and ? data.$and : null,
+          $between: data.$between ? data.$between : null,
+          $like: data.$like ? data.$like : null,
+          $or: data.$or ? data.$or : null
         }
       };
       !(data.methodName) && (data.methodName = 'findOne');
@@ -198,7 +202,7 @@ module.exports = Appointments => {
             });
           })
           .catch(updatedAppointmentErr => {
-            log.error('---updatedAppointmentErr---');;
+            log.error('---updatedAppointmentErr---');
             log.error(updatedAppointmentErr);
             return reject({
               success: false,
@@ -253,12 +257,12 @@ module.exports = Appointments => {
             success: true,
             message: 'Appointment details updated',
             data: {
-              appointment_details: updatedAppointmentRes
+              appointment_details: updatedAppointmentRes[1]
             }
           });
         })
         .catch(updatedAppointmentErr => {
-          log.error('---updatedAppointmentErr---');;
+          log.error('---updatedAppointmentErr---');
           log.error(updatedAppointmentErr);
           return reject({
             success: false,

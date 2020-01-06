@@ -82,7 +82,11 @@ module.exports = AppointmentLogs => {
           } : data.appointment_id ? data.appointment_id : null,
           appointment_status: data.appointment_status ? {
             $like: '%' + data.appointment_status + '%'
-          } : null
+          } : null,
+          $and: data.$and ? data.$and : null,
+          $between: data.$between ? data.$between : null,
+          $like: data.$like ? data.$like : null,
+          $or: data.$or ? data.$or : null
         }
       };
       !(data.methodName) && (data.methodName = 'findOne');

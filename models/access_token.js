@@ -41,6 +41,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     }
   }, {
+    hooks: {
+      afterUpdate: () => {
+      }
+    },
     defaultScope: {
       attributes: ['access_token', 'username', 'ttl'],
       order: [
@@ -54,6 +58,12 @@ module.exports = (sequelize, DataTypes) => {
         where: {
           is_active: true,
           is_archived: false
+        }
+      },
+      inActiveScope: {
+        where: {
+          is_active: false,
+          is_archived: true
         }
       }
     },

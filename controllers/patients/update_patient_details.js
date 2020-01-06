@@ -30,19 +30,11 @@ module.exports = Patients => {
     let updatePatientObj = {
       ...validateDataResult.data
     };
-    let [updatePatientError] = await to(updatePatientFunction(updatePatientObj));
+    let [updatePatientError, updatePatientResult] = await to(updatePatientFunction(updatePatientObj));
     if (updatePatientError) {
       return utils.generateResponse(updatePatientError)(res);
     }
-
-    let returnPatientDetailsObj = {
-      ...validateDataResult.data
-    }
-    let [returnPatientDetailsError, returnPatientDetailsResult] = await to(returnPatientDetailsFunction(returnPatientDetailsObj));
-    if (returnPatientDetailsError) {
-      return utils.generateResponse(returnPatientDetailsError)(res);
-    }
-    return utils.generateResponse(returnPatientDetailsResult)(res);
+    return utils.generateResponse(updatePatientResult)(res);
   }
 
   function validateDataFunction(data) {
@@ -64,22 +56,18 @@ module.exports = Patients => {
   function checkUniqueMobileNoFunction(data) {
     return new Promise((resolve, reject) => {
       let filter = {
-        where: {
-          mobile_no: {
-            $in: [data.mobile_no]
-          }
-        }
+        methodName: 'findAll',
+        filterScope: 'activeScope',
+        mobile_nos: [data.mobile_no]
       };
       if (data.update_obj.mobile_no) {
-        filter.where.mobile_no.$in.push(data.update_obj.mobile_no);
+        filter.mobile_nos.push(data.update_obj.mobile_no);
       }
-      models['Patients']
-        .scope('activeScope')
-        .findAll(filter)
+      Patients.fetchPatientsByFilter(filter)
         .then(patientRes => {
           log.info('---patientRes---');
           log.info(patientRes);
-          if (patientRes && !(arrayFn.map(patientRes, 'mobile_no').indexOf(utils.validateKeys(() => data.update_obj.mobile_no, null, null)) > -1)) {
+          if (patientRes && !(arrayFn.map(patientRes.data.patient_details, 'mobile_no').indexOf(utils.validateKeys(() => data.update_obj.mobile_no, null, null)) > -1)) {
             return resolve({
               success: true,
               message: 'The mobile_no can be updated',
@@ -110,55 +98,26 @@ module.exports = Patients => {
   function updatePatientFunction(data) {
     return new Promise((resolve, reject) => {
       let filter = {
-        where: {
-          mobile_no: {
-            $in: [data.mobile_no]
-          },
-          is_active: true,
-          is_archived: false
+        updateObj: data.update_obj,
+        filterObj: {
+          where: {
+            mobile_no: {
+              $in: [data.mobile_no]
+            },
+            is_active: true,
+            is_archived: false
+          }
         }
       };
-      Patients.updatePatientsByFilter(data.update_obj, filter)
+      Patients.updatePatientsByFilter(filter)
         // models['Patients']
         //   .update(data.update_obj, filter)
         .then(updatedPatientRes => {
+          updatedPatientRes.data.patient_details = updatedPatientRes.data ? updatedPatientRes.data.patient_details ? updatedPatientRes.data.patient_details : null : null;
           return resolve(updatedPatientRes);
         })
         .catch(updatedPatientErr => {
           return reject(updatedPatientErr);
-        });
-    });
-  }
-
-  function returnPatientDetailsFunction(data) {
-    return new Promise((resolve, reject) => {
-      models['Patients']
-        .scope('activeScope')
-        .findOne({
-          where: {
-            mobile_no: data.mobile_no
-          }
-        })
-        .then(patientRes => {
-          log.info('---returnPatientRes---');
-          log.info(patientRes);
-          return resolve({
-            success: true,
-            message: 'Updated patient details',
-            data: {
-              patient_details: patientRes
-            }
-          });
-        })
-        .catch(patientErr => {
-          log.error('---returnPatientErr---');
-          log.error(patientErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Internal server error',
-            data: {}
-          });
         });
     });
   }
