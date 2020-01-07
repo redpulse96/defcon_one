@@ -115,7 +115,16 @@ module.exports = Appointments => {
       };
       Appointments.fetchAppointmentsByFilter(filterObj)
         .then(fetchAppointmentsByFilterResult => {
-          return resolve(fetchAppointmentsByFilterResult);
+          if (utils.validateKeys(() => fetchAppointmentsByFilterResult.data.appointment, false, null)) {
+            return resolve(fetchAppointmentsByFilterResult);
+          } else {
+            return reject({
+              success: false,
+              error_code: 400,
+              message: 'An appointment is already scheduled at this slot,\nkindly choose a different slot',
+              data: {}
+            });
+          }
         })
         .catch(fetchAppointmentsByFilterError => {
           return reject(fetchAppointmentsByFilterError);
