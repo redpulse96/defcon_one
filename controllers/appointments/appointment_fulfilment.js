@@ -95,27 +95,12 @@ module.exports = Appointments => {
       Appointments.fetchAppointmentsByFilter(whereObj)
         .then(appointmentRes => {
           log.info('---APPOINTMENTS_FETCH_SUCCESS---');
-          log.info(appointmentRes);
-          if (appointmentRes) {
-            return resolve(appointmentRes);
-          } else {
-            return reject({
-              success: false,
-              error_code: 500,
-              message: 'No appointment exists',
-              data: {}
-            });
-          }
+          return resolve(appointmentRes);
         })
         .catch(appointmentErr => {
           log.info('---APPOINTMENTS_FETCH_FAILURE---');
           log.info(appointmentErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Internal server error',
-            data: {}
-          });
+          return reject(appointmentErr);
         });
     });
   }

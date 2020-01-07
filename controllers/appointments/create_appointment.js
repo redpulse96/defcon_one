@@ -84,11 +84,7 @@ module.exports = Appointments => {
         .then(patientRes => {
           log.info('---patientRes---');
           log.info(patientRes);
-          if (patientRes && patientRes.data && patientRes.data.patient_details) {
-            return resolve(patientRes);
-          } else {
-            return reject(patientRes);
-          }
+          return resolve(patientRes);
         })
         .catch(patientErr => {
           log.error('---patientErr---');

@@ -76,32 +76,12 @@ module.exports = Appointments => {
         .then(appointmentDetails => {
           log.info('---APPOINTMENT_DETAILS---');
           log.info(appointmentDetails);
-          if (appointmentDetails) {
-            return resolve({
-              success: true,
-              message: 'Appointment details fetched',
-              data: {
-                appointmentDetails
-              }
-            });
-          } else {
-            return reject({
-              success: false,
-              error_code: 500,
-              message: 'Internal server error',
-              data: {}
-            });
-          }
+          return resolve(appointmentDetails);
         })
         .catch(appointmentDetailsErr => {
           log.error('---appointment_details_err---');
           log.error(JSON.stringify(appointmentDetailsErr));
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Internal server error',
-            data: {}
-          });
+          return reject(appointmentDetailsErr);
         });
     });
   }
