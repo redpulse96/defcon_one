@@ -110,7 +110,6 @@ module.exports = Appointments => {
           from_time: data.from_time ? moment(data.from_time, 'HH:mm:ss').format('HH:mm:ss') : null,
           to_time: data.to_time ? moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss') : null,
           $and: data.$and ? data.$and : null,
-          $between: data.$between ? data.$between : null,
           $like: data.$like ? data.$like : null,
           $or: data.$or ? data.$or : null
         }
@@ -132,13 +131,22 @@ module.exports = Appointments => {
           .then(fetchAppointmentRes => {
             log.info('---APPOINTMENTS_FETCH_SUCCESS---');
             log.info(fetchAppointmentRes);
-            return resolve({
-              success: true,
-              message: 'Appointment fetch success',
-              data: {
-                appointment: fetchAppointmentRes
-              }
-            });
+            if (fetchAppointmentRes) {
+              return resolve({
+                success: true,
+                message: 'Appointment fetch success',
+                data: {
+                  appointment: fetchAppointmentRes
+                }
+              });
+            } else {
+              return reject({
+                success: false,
+                error_code: 400,
+                message: 'Appointment does not exist',
+                data: {}
+              });
+            }
           })
           .catch(fetchAppointmentErr => {
             log.error('---APPOINTMENTS_FETCH_FAILURE---');

@@ -84,7 +84,6 @@ module.exports = AppointmentLogs => {
             $like: '%' + data.appointment_status + '%'
           } : null,
           $and: data.$and ? data.$and : null,
-          $between: data.$between ? data.$between : null,
           $like: data.$like ? data.$like : null,
           $or: data.$or ? data.$or : null
         }
@@ -106,13 +105,22 @@ module.exports = AppointmentLogs => {
           .then(fetchAppointmentLogRes => {
             log.info('---APPOINTMENTS_LOGS_FETCH_SUCCESS---');
             log.info(fetchAppointmentLogRes);
-            return resolve({
-              success: true,
-              message: 'Appointment logs fetch success',
-              data: {
-                appointment: fetchAppointmentLogRes
-              }
-            });
+            if (fetchAppointmentLogRes) {
+              return resolve({
+                success: true,
+                message: 'Appointment logs fetch success',
+                data: {
+                  appointment: fetchAppointmentLogRes
+                }
+              });
+            } else {
+              return reject({
+                success: false,
+                error_code: 400,
+                message: 'Appointment logs does not exist',
+                data: {}
+              });
+            }
           })
           .catch(fetchAppointmentLogErr => {
             log.error('---APPOINTMENTS_LOGS_FETCH_FAILURE---');

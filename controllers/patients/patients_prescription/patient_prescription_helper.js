@@ -107,7 +107,6 @@ module.exports = PatientPrescription => {
           } : data.medicine_id ? data.medicine_id : null,
           created_by: data.created_by ? data.created_by : null,
           $and: data.$and ? data.$and : null,
-          $between: data.$between ? data.$between : null,
           $like: data.$like ? data.$like : null,
           $or: data.$or ? data.$or : null
         }
@@ -129,13 +128,22 @@ module.exports = PatientPrescription => {
           .then(fetchPatientPrescriptionRes => {
             log.info('---PATIENTS_PRESCRIPTION_FETCH_SUCCESS---');
             log.info(fetchPatientPrescriptionRes);
-            return resolve({
-              success: true,
-              message: 'Patient Prescription fetch success',
-              data: {
-                patient_prescription_details: fetchPatientPrescriptionRes
-              }
-            });
+            if (fetchPatientPrescriptionRes) {
+              return resolve({
+                success: true,
+                message: 'Patient Prescription fetch success',
+                data: {
+                  patient_prescription_details: fetchPatientPrescriptionRes
+                }
+              });
+            } else {
+              return reject({
+                success: false,
+                error_code: 400,
+                message: 'Patient Prescription does not exist',
+                data: {}
+              });
+            }
           })
           .catch(fetchPatientPrescriptionErr => {
             log.error('---PATIENTS_PRESCRIPTION_FETCH_FAILURE---');

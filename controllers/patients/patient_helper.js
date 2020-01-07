@@ -120,7 +120,6 @@ module.exports = Patients => {
           } : null,
           created_by: data.created_by ? data.created_by : null,
           $and: data.$and ? data.$and : null,
-          $between: data.$between ? data.$between : null,
           $like: data.$like ? data.$like : null,
           $or: data.$or ? data.$or : null
         }
@@ -142,13 +141,22 @@ module.exports = Patients => {
           .then(fetchPatientRes => {
             log.info('---PATIENTS_FETCH_SUCCESS---');
             log.info(fetchPatientRes);
-            return resolve({
-              success: true,
-              message: 'Patients fetch success',
-              data: {
-                patient_details: fetchPatientRes
-              }
-            });
+            if (fetchPatientRes) {
+              return resolve({
+                success: true,
+                message: 'Patients fetch success',
+                data: {
+                  patient_details: fetchPatientRes
+                }
+              });
+            } else {
+              return reject({
+                success: false,
+                error_code: 400,
+                message: 'Patients does not exist',
+                data: {}
+              });
+            }
           })
           .catch(fetchPatientErr => {
             log.error('---PATIENTS_FETCH_FAILURE---');
