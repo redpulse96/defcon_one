@@ -29,6 +29,14 @@ module.exports = Appointments => {
       return utils.generateResponse(checkPatientExistanceError)(res);
     }
 
+    let checkExistingAppointmentObj = {
+      ...validateDataResult.data
+    };
+    let [checkExistingAppointmentError] = await to(checkExistingAppointment(checkExistingAppointmentObj));
+    if (checkExistingAppointmentError) {
+      return utils.generateResponse(checkExistingAppointmentError)(res);
+    }
+
     let createNewAppointmentObj = {
       ...validateDataResult.data
     };
@@ -86,6 +94,35 @@ module.exports = Appointments => {
           log.error('---patientErr---');
           log.error(patientErr);
           return reject(patientErr);
+        });
+    });
+  }
+
+  function checkExistingAppointment(data) {
+    return new Promise((resolve, reject) => {
+      let [fromDate, toDate] = [moment(data.from_time, 'HH:mm:ss').format('HH:mm:ss'), moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss')];
+      let filterObj = {
+        ...data,
+        filterScope: 'activeScope',
+        methodName: 'findAll',
+        assigned_to: data.user.username,
+        appointment_date: moment(data.appointment_date).format('YYYY-MM-DD'),
+        $or: [{
+          from_time: {
+            $between: [fromDate, toDate]
+          }
+        }, {
+          to_time: {
+            $between: [fromDate, toDate]
+          }
+        }]
+      };
+      Appointments.fetchAppointmentsByFilter(filterObj)
+        .then(fetchAppointmentsByFilterResult => {
+          return resolve(fetchAppointmentsByFilterResult);
+        })
+        .catch(fetchAppointmentsByFilterError => {
+          return reject(fetchAppointmentsByFilterError);
         });
     });
   }
