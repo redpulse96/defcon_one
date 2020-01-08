@@ -110,10 +110,8 @@ module.exports = Patients => {
         }
       };
       Patients.updatePatientsByFilter(filter)
-        // models['Patients']
-        //   .update(data.update_obj, filter)
         .then(updatedPatientRes => {
-          updatedPatientRes.data.patient_details = updatedPatientRes.data ? updatedPatientRes.data.patient_details ? updatedPatientRes.data.patient_details : null : null;
+          updatedPatientRes.data ? updatedPatientRes.data.patient_details ? updatedPatientRes.data.patient_details = updatedPatientRes.data.patient_details[0] : null : null;
           return resolve(updatedPatientRes);
         })
         .catch(updatedPatientErr => {

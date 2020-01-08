@@ -105,7 +105,7 @@ module.exports = AppointmentLogs => {
           .then(fetchAppointmentLogRes => {
             log.info('---APPOINTMENTS_LOGS_FETCH_SUCCESS---');
             log.info(fetchAppointmentLogRes);
-            if (fetchAppointmentLogRes) {
+            if (fetchAppointmentLogRes[0]) {
               return resolve({
                 success: true,
                 message: 'Appointment logs fetch success',
@@ -116,8 +116,8 @@ module.exports = AppointmentLogs => {
             } else {
               return reject({
                 success: false,
-                error_code: 400,
-                message: 'Appointment logs does not exist',
+                error_code: 500,
+                message: 'Appointment log details could not be updated',
                 data: {}
               });
             }

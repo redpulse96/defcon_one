@@ -199,9 +199,9 @@ module.exports = Appointments => {
   function updateAppointmentStatusFunction(data) {
     return new Promise((resolve, reject) => {
       let updateObj = {
-        ...data
+        ...data,
+        ...data.appointment_detail
       };
-      data.appointment_detail.appointment_status = data.appointment_status;
       if (data.isRescheduled) {
         updateObj = {
           updateObj,
@@ -211,36 +211,20 @@ module.exports = Appointments => {
           to_time: data.rescheduledData.to_time
         };
       }
-      data.appointment_detail.update(updateObj)
+      let updateAppointmentByInstanceObj = {
+        appointmentInstance: data.appointment_detail,
+        updateAppointmentInstanceObj: updateObj
+      }
+      Appointments.updateAppointmentByInstance(updateAppointmentByInstanceObj)
         .then(updateAppointmentRes => {
           log.info('---update_appointmentRes---');
           log.info(updateAppointmentRes);
-          if (updateAppointmentRes) {
-            return resolve({
-              success: true,
-              message: 'Appointment details updated',
-              data: {
-                appointment_details: updateAppointmentRes
-              }
-            });
-          } else {
-            return reject({
-              success: false,
-              error_code: 500,
-              message: 'Appointment details could not be updated',
-              data: {}
-            });
-          }
+          return resolve(updateAppointmentRes);
         })
         .catch(updateAppointmentErr => {
           log.error('---update_appointment_err---');
           log.error(updateAppointmentErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Could not update the appointment',
-            data: {}
-          });
+          return reject(updateAppointmentErr);
         });
     });
   }
