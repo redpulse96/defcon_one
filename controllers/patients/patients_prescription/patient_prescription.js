@@ -3,7 +3,7 @@ const PatientPrescription = require(packageHelper.MODEL_CONFIG_DIR)['PatientPres
 const utils = require('../../utility/utils');
 const {
   to
-} = require('../utility/helper_function');
+} = require('../../utility/helper_function');
 const {
   INTERNAL_SERVER_ERROR
 } = require('../../../config/response_config');
@@ -11,7 +11,7 @@ const {
   MANDATORY_PARAMS: {
     CREATE_PRESCRIPTION
   }
-} = require('../../public/javascripts/constants');
+} = require('../../../public/javascripts/constants');
 require('./patient_prescription_helper')(PatientPrescription);
 
 PatientPrescription.fetchPatientPrescription = (req, res) => {
