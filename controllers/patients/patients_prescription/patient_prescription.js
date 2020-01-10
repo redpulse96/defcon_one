@@ -94,7 +94,7 @@ function createPrescriptionFunction(data) {
   return new Promise((resolve, reject) => {
     let createObj = {
       ...data,
-      created_by: req.user.username
+      created_by: data.user.username
     };
     PatientPrescription.createPatientPrescriptionInstance(createObj)
       .then(createRes => {
