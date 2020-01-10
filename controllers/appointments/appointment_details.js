@@ -79,7 +79,7 @@ module.exports = Appointments => {
           return resolve(appointmentDetails);
         })
         .catch(appointmentDetailsErr => {
-          log.error('---appointment_details_err---');
+          log.error('---APPOINTMENT_DETAILS_ERR---');
           log.error(JSON.stringify(appointmentDetailsErr));
           return reject(appointmentDetailsErr);
         });

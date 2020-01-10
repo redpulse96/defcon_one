@@ -2,9 +2,16 @@ const log = require('../../../config/log_config').logger('patient_prescriptions_
 const PatientPrescription = require(packageHelper.MODEL_CONFIG_DIR)['PatientPrescription'];
 const utils = require('../../utility/utils');
 const {
+  to
+} = require('../utility/helper_function');
+const {
   INTERNAL_SERVER_ERROR
 } = require('../../../config/response_config');
-
+const {
+  MANDATORY_PARAMS: {
+    CREATE_PRESCRIPTION
+  }
+} = require('../../public/javascripts/constants');
 require('./patient_prescription_helper')(PatientPrescription);
 
 PatientPrescription.fetchPatientPrescription = (req, res) => {
@@ -50,29 +57,57 @@ PatientPrescription.fetchPatientPrescription = (req, res) => {
     });
 }
 
-PatientPrescription.createPatientPrescription = (req, res) => {
+PatientPrescription.createPatientPrescription = async (req, res) => {
 
-  let createObj = {
-    ...req.body,
-    created_by: req.user.username
+  let [validateDataError, validateDataResult] = await to(validateDataFunction(req.body));
+  if (validateDataError) {
+    return utils.generateResponse(validateDataError)(res);
+  }
+
+  let createPrescriptionObj = {
+    ...validateDataResult.data
   };
-  PatientPrescription.createPatientPrescriptionInstance(createObj)
-    .then(createRes => {
-      log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
-      log.info(createRes);
-      return res.send({
-        success: true,
-        message: 'PatientPrescription creation success',
-        data: {
-          patient_prescription: createRes.toJSON()
-        }
+  let [createPrescriptionError, createPrescriptionResult] = await to(createPrescriptionFunction(createPrescriptionObj));
+  if (createPrescriptionError) {
+    return utils.generateResponse(createPrescriptionError)(res);
+  }
+  return utils.generateResponse(createPrescriptionResult)(res);
+}
+
+function validateDataFunction(data) {
+  return new Promise((resolve, reject) => {
+    let paramsCheck = {
+      data: data,
+      mandatoryParams: CREATE_PRESCRIPTION
+    }
+    utils.hasMandatoryParams(paramsCheck)
+      .then(paramsRes => {
+        resolve(paramsRes);
+      })
+      .catch(paramsErr => {
+        reject(paramsErr);
       });
-    })
-    .catch(createErr => {
-      log.info('---PATIENT_PRESCRIPTION_CREATION_FAILURE---');
-      log.info(createErr);
-      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
-    });
+  });
+}
+
+function createPrescriptionFunction(data) {
+  return new Promise((resolve, reject) => {
+    let createObj = {
+      ...data,
+      created_by: req.user.username
+    };
+    PatientPrescription.createPatientPrescriptionInstance(createObj)
+      .then(createRes => {
+        log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
+        log.info(createRes);
+        return resolve(createRes);
+      })
+      .catch(createErr => {
+        log.info('---PATIENT_PRESCRIPTION_CREATION_FAILURE---');
+        log.info(createErr);
+        return reject(createErr);
+      });
+  });
 }
 
 module.exports = PatientPrescription;

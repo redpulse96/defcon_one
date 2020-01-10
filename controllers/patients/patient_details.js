@@ -79,7 +79,7 @@ module.exports = Patients => {
       .then(fetchRes => {
         log.info('---fetchRes---');
         log.info(fetchRes);
-        fetchRes.data = fetchRes.data.patient_details.toJSON();
+        fetchRes.data.patient_details = fetchRes.data.patient_details.toJSON();
         return utils.generateResponse(fetchRes)(res);
       })
       .catch(fetchErr => {

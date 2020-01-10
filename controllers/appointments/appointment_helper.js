@@ -47,7 +47,7 @@ module.exports = Appointments => {
       try {
         models['Appointments'].create(createObj)
           .then(createAppointmentRes => {
-            log.info('---APPOINTMENTS_CREATION_SUCCESS---');
+            log.info('---createAppointmentRes---');
             log.info(createAppointmentRes);
             return resolve({
               success: true,
@@ -58,7 +58,7 @@ module.exports = Appointments => {
             });
           })
           .catch(createAppointmentErr => {
-            log.error('---APPOINTMENTS_CREATION_FAILURE---');
+            log.error('---createAppointmentErr---');
             log.error(createAppointmentErr);
             return reject({
               success: false,
@@ -129,7 +129,7 @@ module.exports = Appointments => {
       try {
         models['Appointments'].scope(data.filterScope)[data.methodName](filter)
           .then(fetchAppointmentRes => {
-            log.info('---APPOINTMENTS_FETCH_SUCCESS---');
+            log.info('---fetchAppointmentRes---');
             log.info(fetchAppointmentRes);
             if (fetchAppointmentRes) {
               return resolve({
@@ -149,7 +149,7 @@ module.exports = Appointments => {
             }
           })
           .catch(fetchAppointmentErr => {
-            log.error('---APPOINTMENTS_FETCH_FAILURE---');
+            log.error('---fetchAppointmentErr---');
             log.error(fetchAppointmentErr);
             return reject({
               success: false,
