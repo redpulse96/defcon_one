@@ -199,13 +199,22 @@ module.exports = PatientPrescription => {
           .then(updatedPatientPrescriptionRes => {
             log.info('---updatedPatientPrescriptionRes---');
             log.info(updatedPatientPrescriptionRes);
-            return resolve({
-              success: true,
-              message: 'PatientPrescription details updated',
-              data: {
-                patient_prescription_detail: updatedPatientPrescriptionRes[1]
-              }
-            });
+            if (updatedPatientPrescriptionRes[0]) {
+              return resolve({
+                success: true,
+                message: 'PatientPrescription details updated',
+                data: {
+                  patient_prescription_detail: updatedPatientPrescriptionRes[1]
+                }
+              });
+            } else {
+              return reject({
+                success: false,
+                error_code: 500,
+                message: 'Patient Prescription details could not be updated',
+                data: {}
+              });
+            }
           })
           .catch(updatedPatientPrescriptionErr => {
             log.error('---updatedPatientPrescriptionErr---');
@@ -227,6 +236,59 @@ module.exports = PatientPrescription => {
           data: {}
         });
       }
+    });
+  }
+
+  /**
+   * @param {Object[]} data - Object of where filter and update object
+   * @param {Model[]} data.patientPrescriptionInstance - Model instance of the model whose attributes are to be updated
+   * @param {Object[]} data.patientPrescriptionInstanceObj - Object consists of attributes to be updated
+   * @param {Number} data.patientPrescriptionInstanceObj.patient_id Patient id of the patient
+   * @param {Number} data.patientPrescriptionInstanceObj.appointment_id Appointment id of the appointment of the patient
+   * @param {Number} data.patientPrescriptionInstanceObj.medicine_id Medicine id of the prescription
+   * @param {String} data.patientPrescriptionInstanceObj.reference_id Reference id of the prescription
+   */
+  PatientPrescription.updatePatientPrescriptionByInstance = data => {
+    return new Promise((resolve, reject) => {
+      if (!objectFn.has(data, 'patientPrescriptionInstance') || !(objectFn.has(data, 'patientPrescriptionInstanceObj'))) {
+        return reject({
+          success: false,
+          error_code: 400,
+          message: 'Insufficient parameters',
+          data: {}
+        });
+      }
+      data['patientPrescriptionInstance'].update(data['updatePatientPrescriptionInstanceObj'])
+        .then(updatePatientPrescriptionInstanceResult => {
+          log.info('---updatePatientPrescriptionInstanceResult---');
+          log.info(updatePatientPrescriptionInstanceResult);
+          if (updatePatientPrescriptionInstanceResult) {
+            return resolve({
+              success: true,
+              message: 'patient prescription details updated',
+              data: {
+                patient_prescription_details: updatePatientPrescriptionInstanceResult
+              }
+            });
+          } else {
+            return reject({
+              success: false,
+              error_code: 500,
+              message: 'patient prescription details could not be updated',
+              data: {}
+            });
+          }
+        })
+        .catch(updatePatientPrescriptionInstanceError => {
+          log.error('---updatePatientPrescriptionInstanceError---');
+          log.error(updatePatientPrescriptionInstanceError);
+          return reject({
+            success: false,
+            error_code: 500,
+            message: 'patient prescription details could not be updated',
+            data: {}
+          });
+        });
     });
   }
 }

@@ -1,44 +1,19 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const PatientPrescription = sequelize.define('patient_prescription', {
-    patient_prescription_id: {
+  const Medicines = sequelize.define('medicines', {
+    medicine_id: {
       type: DataTypes.BIGINT(11),
       primaryKey: true,
       autoIncrement: true,
       defaultValue: null
     },
-    patient_id: {
-      type: DataTypes.BIGINT(11),
-      allowNull: true,
-      onDelete: "CASCADE",
-      references: {
-        model: 'Patients',
-        key: 'patient_id'
-      }
-    },
-    appointment_id: {
-      type: DataTypes.BIGINT(11),
-      allowNull: true,
-      references: {
-        model: 'Appointments',
-        key: 'appointment_id'
-      }
-    },
-    reference_id: {
-      type: DataTypes.STRING(10),
+    medicine_name: {
+      type: DataTypes.STRING(20),
       allowNull: true
     },
-    medicine_id: {
-      type: DataTypes.BIGINT(11),
-      allowNull: true
-    },
-    created_by: {
+    medicine_description: {
       type: DataTypes.STRING(50),
-      defaultValue: null
-    },
-    doctor_remarks: {
-      type: DataTypes.STRING(100),
-      defaultValue: null
+      allowNull: true
     },
     is_active: {
       type: DataTypes.BOOLEAN,
@@ -62,8 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     hooks: {
-      afterUpdate: () => {
-      }
+      afterUpdate: () => {}
     },
     defaultScope: {
       order: [
@@ -87,25 +61,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     underscored: true,
     sequelize,
-    modelName: 'patient_prescription',
+    modelName: 'medicines',
     freezeTableName: true,
     timestamps: false
   });
-  PatientPrescription.associate = models => {
+  Medicines.associate = models => {
     // associations can be defined here
-    PatientPrescription.belongsTo(models['Appointments'], {
-      as: 'appointment',
-      foreignKey: 'appointment_id'
-    });
-    PatientPrescription.belongsTo(models['Patients'], {
-      as: 'patients',
-      foreignKey: 'patient_id'
-    });
-    PatientPrescription.hasMany(models['Medicines'], {
-      as: 'medicines',
+    Medicines.belongsTo(models['PatientPrescription'], {
+      as: 'patient_prescription',
+      onDelete: "CASCADE",
       foreignKey: 'medicine_id'
     });
   };
-
-  return PatientPrescription;
+  return Medicines;
 };

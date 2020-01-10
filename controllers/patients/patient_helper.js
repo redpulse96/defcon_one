@@ -216,7 +216,7 @@ module.exports = Patients => {
           .then(updatedPatientsRes => {
             log.info('---updatedPatientsRes---');
             log.info(updatedPatientsRes);
-            if (updatedPatientsRes) {
+            if (updatedPatientsRes[0]) {
               return resolve({
                 success: true,
                 message: 'Patients details updated',
@@ -228,7 +228,7 @@ module.exports = Patients => {
               return reject({
                 success: false,
                 error_code: 500,
-                message: 'Patients details could not be updated',
+                message: 'Patient details could not be updated',
                 data: {}
               });
             }

@@ -10,6 +10,7 @@ module.exports = AppointmentLogs => {
    * @param {Object[]} data - Object with the details to create appointment log
    * @param {Number} data.appointment_id appointment id of the appointment to be created against
    * @param {String} data.appointment_status Status of the appointment to be created `pending` if not mentioned
+   * @param {String} data.doctor_remarks Doctors remarks for the appointment updation
    */
   AppointmentLogs.createAppointmentLogInstance = data => {
     return new Promise((resolve, reject) => {
@@ -29,7 +30,7 @@ module.exports = AppointmentLogs => {
       try {
         models['AppointmentLogs'].create(createObj)
           .then(createAppointmentLogsRes => {
-            log.info('---APPOINTMENTS_LOGS_CREATION_SUCCESS---');
+            log.info('---createAppointmentLogsRes---');
             log.info(createAppointmentLogsRes);
             return resolve({
               success: true,
@@ -40,7 +41,7 @@ module.exports = AppointmentLogs => {
             });
           })
           .catch(createAppointmentLogsErr => {
-            log.error('---APPOINTMENTS_LOGS_CREATION_FAILURE---');
+            log.error('---createAppointmentLogsErr---');
             log.error(createAppointmentLogsErr);
             return reject({
               success: false,
@@ -103,9 +104,9 @@ module.exports = AppointmentLogs => {
       try {
         models['AppointmentLogs'].scope(data.filterScope)[data.methodName](filter)
           .then(fetchAppointmentLogRes => {
-            log.info('---APPOINTMENTS_LOGS_FETCH_SUCCESS---');
+            log.info('---fetchAppointmentLogRes---');
             log.info(fetchAppointmentLogRes);
-            if (fetchAppointmentLogRes) {
+            if (fetchAppointmentLogRes[0]) {
               return resolve({
                 success: true,
                 message: 'Appointment logs fetch success',
@@ -116,14 +117,14 @@ module.exports = AppointmentLogs => {
             } else {
               return reject({
                 success: false,
-                error_code: 400,
-                message: 'Appointment logs does not exist',
+                error_code: 500,
+                message: 'Appointment log details could not be updated',
                 data: {}
               });
             }
           })
           .catch(fetchAppointmentLogErr => {
-            log.error('---APPOINTMENTS_LOGS_FETCH_FAILURE---');
+            log.error('---fetchAppointmentLogErr---');
             log.error(fetchAppointmentLogErr);
             return reject({
               success: false,
@@ -142,6 +143,116 @@ module.exports = AppointmentLogs => {
           data: {}
         });
       }
+    });
+  }
+
+  /**
+   * @param {Object[]} data - Object of where filter and update object
+   * @param {Object[]} data.filterObj - Object of the list of filters used to fetch appointment
+   * @param {Number} data.filterObj.appointment_id appointment id of the appointment to be created against
+   * @param {Object[]} data.updateObj - Object consists of attributes to be updated
+   * @param {String} data.updateObj.appointment_status Status of the appointment to be created `pending` if not mentioned
+   * @param {String} data.doctor_remarks Doctors remarks for the appointment updation
+   */
+  AppointmentLogs.updateAppointmentLogsByFilter = data => {
+    return new Promise((resolve, reject) => {
+      if (!objectFn.has(data, 'filterObj') && !(objectFn.has(data, 'updateObj'))) {
+        return reject({
+          success: false,
+          error_code: 500,
+          message: 'Insufficient parameters',
+          data: {}
+        });
+      }
+      let [filterObj, updateObj] = [objectFn.compact(data.filterObj), objectFn.compact(data.updateObj)];
+      models['AppointmentLogs'].update(updateObj, filterObj)
+        .then(updatedAppointmentLogsRes => {
+          log.info('---updatedAppointmentLogsRes---');
+          log.info(updatedAppointmentLogsRes);
+          if (updatedAppointmentLogsRes[0]) {
+            return resolve({
+              success: true,
+              message: 'Appointment details updated',
+              data: {
+                appointment_details: updatedAppointmentLogsRes[1]
+              }
+            });
+          } else {
+            return reject({
+              success: false,
+              error_code: 500,
+              message: 'Appointment log details could not be updated',
+              data: {}
+            });
+          }
+        })
+        .catch(updatedAppointmentLogsErr => {
+          log.error('---updatedAppointmentLogsErr---');
+          log.error(updatedAppointmentLogsErr);
+          return reject({
+            success: false,
+            error_code: 500,
+            message: 'Appointment log details could not be updated',
+            data: {}
+          });
+        });
+    });
+  }
+
+  /**
+   * @param {Object[]} data - Object of where filter and update object
+   * @param {Model} data.appointmentInstance - Model instance of the model whose attributes are to be updated
+   * @param {Object[]} data.updateAppointmentInstanceObj - Object consists of attributes to be updated
+   * @param {String} data.updateAppointmentInstanceObj.appointment_name Name of the appointment to be created
+   * @param {Date} data.updateAppointmentInstanceObj.appointment_date Scheduled date of the appointment to be created
+   * @param {Number} data.updateAppointmentInstanceObj.patient_id Patient id of the appointment to be created against
+   * @param {String} data.updateAppointmentInstanceObj.appointment_status Status of the appointment to be created `pending` if not mentioned
+   * @param {String} data.updateAppointmentInstanceObj.doctor_remarks Remarks added my the logged in doctor
+   * @param {Date} data.updateAppointmentInstanceObj.rescheduled_date Re-scheduled date of the appointment, is `NULL` while creating
+   * @param {Timestamp} data.updateAppointmentInstanceObj.from_time From time of the scheduled appointment
+   * @param {Timestamp} data.updateAppointmentInstanceObj.to_time To time of the scheduled appointment
+   */
+  AppointmentLogs.updateAppointmentLogsByInstance = data => {
+    return new Promise((resolve, reject) => {
+      if (!objectFn.has(data, 'AppointmentLogInstance') || !(objectFn.has(data, 'updateAppointmentLogInstanceObj'))) {
+        return reject({
+          success: false,
+          error_code: 400,
+          message: 'Insufficient parameters',
+          data: {}
+        });
+      }
+      data['AppointmentLogInstance'].update(data['updateAppointmentLogInstanceObj'])
+        .then(updateAppointmentLogsInstanceResult => {
+          log.info('---updateAppointmentLogsInstanceResult---');
+          log.info(updateAppointmentLogsInstanceResult);
+          if (updateAppointmentLogsInstanceResult) {
+            return resolve({
+              success: true,
+              message: 'Appointment Log details updated',
+              data: {
+                appointment_logs_details: updateAppointmentLogsInstanceResult
+              }
+            });
+          } else {
+            return reject({
+              success: false,
+              error_code: 500,
+              message: 'AppointmentLogs details could not be updated',
+              data: {}
+            });
+          }
+        })
+        .catch(updateAppointmentLogsInstanceError => {
+          log.error('---updateAppointmentLogsInstanceError---');
+          log.error(updateAppointmentLogsInstanceError);
+          return reject({
+            success: false,
+            error_code: 500,
+            message: 'AppointmentLogs details could not be updated',
+            data: {}
+          });
+        });
     });
   }
 }
