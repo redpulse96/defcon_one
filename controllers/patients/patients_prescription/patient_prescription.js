@@ -1,4 +1,5 @@
 const log = require('../../../config/log_config').logger('patient_prescriptions_controller');
+const MedicinesPrescription = require('../../../models/medicines_prescription');
 const PatientPrescription = require(packageHelper.MODEL_CONFIG_DIR)['PatientPrescription'];
 const utils = require('../../utility/utils');
 const {
@@ -65,19 +66,33 @@ PatientPrescription.createPatientPrescription = async (req, res) => {
   }
 
   let createPrescriptionObj = {
+    user: req.user,
     ...validateDataResult.data
   };
   let [createPrescriptionError, createPrescriptionResult] = await to(createPrescriptionFunction(createPrescriptionObj));
   if (createPrescriptionError) {
     return utils.generateResponse(createPrescriptionError)(res);
   }
+
+  let createPrescriptionChargesObj = {
+    ...validateDataResult.data,
+    ...createPrescriptionResult.data.patient_prescription_details.dataValues
+  };
+  let [createPrescriptionChargesError, createPrescriptionChargesResult] = await to(createPrescriptionChargesFunction(createPrescriptionChargesObj));
+  if (createPrescriptionChargesError) {
+    return utils.generateResponse(createPrescriptionChargesError)(res);
+  }
+  createPrescriptionResult.data = {
+    ...createPrescriptionResult.data,
+    ...createPrescriptionChargesResult.data
+  };
   return utils.generateResponse(createPrescriptionResult)(res);
 }
 
 function validateDataFunction(data) {
   return new Promise((resolve, reject) => {
     let paramsCheck = {
-      data: data,
+      data,
       mandatoryParams: CREATE_PRESCRIPTION
     }
     utils.hasMandatoryParams(paramsCheck)
@@ -107,6 +122,68 @@ function createPrescriptionFunction(data) {
         log.info(createErr);
         return reject(createErr);
       });
+  });
+}
+
+function createPrescriptionChargesFunction(data) {
+  return new Promise((resolve, reject) => {
+    if (data.prescription_charges && data.prescription_charges.length) {
+      let createMedicinePrescriptionObj = new MedicinesPrescription({
+        appointment_id: data.appointment_id ? data.appointment_id : undefined,
+        patient_prescription_id: data.patient_prescription_id ? data.patient_prescription_id : undefined
+      });
+
+      data.charges && data.charges.length && data.charges.forEach(val => {
+        switch (val.entity.toUpperCase()) {
+          case 'MEDIC_FEE':
+            createMedicinePrescriptionObj.medicine_prescription.push({
+              medicine_id: val.medicine_id ? val.medicine_id : undefined,
+              morning_dosage: val.morning_dosage ? val.morning_dosage : undefined,
+              noon_dosage: val.noon_dosage ? val.noon_dosage : undefined,
+              evening_dosage: val.evening_dosage ? val.evening_dosage : undefined,
+              quantity: val.quantity ? val.quantity : undefined,
+              charge: val.charge ? val.charge : undefined,
+              doctor_remarks: val.doctor_remarks ? val.doctor_remarks : undefined
+            });
+            break;
+          case 'DOC_FEE':
+            createMedicinePrescriptionObj.medicine_prescription.push({
+              charge: val.charge ? val.charge : undefined,
+              doctor_remarks: val.doctor_remarks ? val.doctor_remarks : undefined
+            });
+            break;
+        }
+      });
+
+      createMedicinePrescriptionObj.save()
+        .then(createMedicinePrescriptionRes => {
+          log.info('---createMedicinePrescriptionRes---');
+          log.info(createMedicinePrescriptionRes);
+          return resolve({
+            success: true,
+            message: 'Medicines prescription charges saved',
+            data: {
+              prescription_charges: createMedicinePrescriptionRes
+            }
+          });
+        })
+        .catch(createMedicinePrescriptionErr => {
+          log.error('---createMedicinePrescriptionErr---');
+          log.error(createMedicinePrescriptionErr);
+          return reject({
+            success: false,
+            error_code: 500,
+            message: 'Internal server error',
+            data: {}
+          });
+        });
+    } else {
+      return resolve({
+        success: true,
+        message: 'No charges applied',
+        data: {}
+      });
+    }
   });
 }
 

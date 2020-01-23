@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `appointments` (
   `appointment_id` BIGINT(11) NOT NULL PRIMARY KEY,
   `appointment_name` VARCHAR(50) DEFAULT NULL,
   `appointment_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-  `appointment_status` ENUM('closed', 'pending', 'rescheduled', 'operating') DEFAULT `pending`,
+  `appointment_status` ENUM('closed', 'pending', 'rescheduled', 'engaged') DEFAULT `pending`,
   `rescheduled_date` DATE NULL DEFAULT NULL,
   `from_time` time DEFAULT NULL,
   `to_time` time DEFAULT NULL,

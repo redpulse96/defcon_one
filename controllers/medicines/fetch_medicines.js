@@ -2,7 +2,7 @@ const log = require('../../config/log_config').logger('medicines_controller');
 const utils = require('../utility/utils');
 const {
   INTERNAL_SERVER_ERROR
-} = require('../../../config/response_config');
+} = require('../../config/response_config');
 
 module.exports = Medicines => {
   Medicines.medicinesList = async (req, res) => {
@@ -10,7 +10,13 @@ module.exports = Medicines => {
       .then(medicinesListResult => {
         log.info('---medicinesListResult---');
         log.info(medicinesListResult);
-        return utils.generateResponse(medicinesListResult)(res);
+        return utils.generateResponse({
+          success: true,
+          message: 'Medicines fetched successfully',
+          data: {
+            medicines_list: medicinesListResult
+          }
+        })(res);
       })
       .catch(medicinesListError => {
         log.error('---medicinesListError---');

@@ -1,5 +1,3 @@
-const log = require('../../config/log_config').logger('helper_function');
-
 module.exports = {
   /**
    * @param {Promise} promise - Takes a promise to be fulfilled
@@ -129,6 +127,17 @@ module.exports = {
         !(res_obj[v[key]]) ? (res_obj[v[key]] = [v]) : res_obj[v[key]].push(v);
       });
       return res_obj;
+    },
+    /**
+     * @param {Array} fst_arr - First array
+     * @param {Array} scnd_arr - Second array
+     */
+    intersect: (fst_arr, scnd_arr) => {
+      let res_arr = [];
+      scnd_arr.forEach(v => {
+        (fst_arr.indexOf(v) > -1) ? res_arr.push(v): null;
+      });
+      return res_arr;
     },
     /**
      * @param {Array} arr - Array of objects to map a key from

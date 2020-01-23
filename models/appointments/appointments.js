@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     appointment_status: {
       type: DataTypes.ENUM,
-      values: ['closed', 'pending', 'rescheduled', 'operating'],
+      values: ['closed', 'pending', 'rescheduled', 'engaged'],
       allowNull: false
     },
     rescheduled_date: {
