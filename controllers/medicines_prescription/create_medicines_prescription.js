@@ -44,7 +44,7 @@ module.exports = MedicinesPrescription => {
   }
 
   function createMedicinesPrescription(data) {
-    log.info('---createMedicinesPrescription---data---');
+    log.info('---createMedicinesPrescription.data---');
     log.info(data);
     return new Promise((resolve, reject) => {
       let createArr = [];

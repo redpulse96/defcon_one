@@ -20,14 +20,14 @@ module.exports = Appointments => {
       where: {
         $or: [{
           assigned_to: req.user.username,
-          appointment_date: {
+          from_time: {
             $between: [fromDate, toDate]
           }
         }, {
           created_by: {
             $in: [req.user.username]
           },
-          appointment_date: {
+          to_time: {
             $between: [fromDate, toDate]
           }
         }]
