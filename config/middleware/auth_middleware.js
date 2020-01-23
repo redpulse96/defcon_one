@@ -15,14 +15,14 @@ const {
 } = require('../response_config');
 
 module.exports = {
-  // sessionCheckerFunction: (req, res) => {
+  // sessionCheckerFunction: async (req, res) => {
   //   if (req.session.user && req.cookies.defcon_one_sid) {
   //     next();
   //   } else {
   //     next();
   //   }
   // },
-  generateToken: (req, res) => {
+  generateToken: async (req, res) => {
     try {
       if (req.user) {
         jwt.sign({
@@ -58,11 +58,11 @@ module.exports = {
     } catch (error) {
       log.error('---ERROR_CAUGHT---');
       log.error(error);
-      return utils.generateResponse(INCORRECT_USERNAME)(res);
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
     }
   },
 
-  validateUser: (req, res, next) => {
+  validateUser: async (req, res, next) => {
     try {
       //find the user from users model
       let whereObj = {
@@ -99,11 +99,11 @@ module.exports = {
     } catch (error) {
       log.error('---ERROR_CAUGHT---');
       log.error(error);
-      return utils.generateResponse(INCORRECT_USERNAME)(res);
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
     }
   },
 
-  ensureAuth: (req, res, next) => {
+  ensureAuth: async (req, res, next) => {
     try {
       console.log(req.isAuthenticated());
       if (req.isAuthenticated()) {
@@ -114,11 +114,11 @@ module.exports = {
     } catch (error) {
       log.error('---ERROR_CAUGHT---');
       log.error(error);
-      return utils.generateResponse(INCORRECT_USERNAME)(res);
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
     }
   },
 
-  verifyToken: (req, res, next) => {
+  verifyToken: async (req, res, next) => {
     try {
       //GET AUTH HEADER VALUE
       const bearer_token = req.headers['authorization'];
@@ -154,11 +154,11 @@ module.exports = {
     } catch (error) {
       log.error('---ERROR_CAUGHT---');
       log.error(error);
-      return utils.generateResponse(INCORRECT_USERNAME)(res);
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
     }
   },
 
-  attachUserToRequest: (req, res, next) => {
+  attachUserToRequest: async (req, res, next) => {
     try {
       let filterUserObj = {
         username: req.username
@@ -200,11 +200,11 @@ module.exports = {
     } catch (error) {
       log.error('---ERROR_CAUGHT---');
       log.error(error);
-      return utils.generateResponse(INCORRECT_USERNAME)(res);
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
     }
   },
 
-  destroyToken: (req, res, next) => {
+  destroyToken: async (req, res, next) => {
     try {
       let tokenObj = {
         access_token: req.headers['authorization']
@@ -223,7 +223,7 @@ module.exports = {
     } catch (error) {
       log.error('---ERROR_CAUGHT---');
       log.error(error);
-      return utils.generateResponse(INCORRECT_USERNAME)(res);
+      return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
     }
   }
 }
