@@ -156,7 +156,7 @@ module.exports = AppointmentLogs => {
    */
   AppointmentLogs.updateAppointmentLogsByFilter = data => {
     return new Promise((resolve, reject) => {
-      if (!objectFn.has(data, 'filterObj') && !(objectFn.has(data, 'updateObj'))) {
+      if (!objectFn.has(data, 'filterObj') || !(objectFn.has(data, 'updateObj'))) {
         return reject({
           success: false,
           error_code: 500,

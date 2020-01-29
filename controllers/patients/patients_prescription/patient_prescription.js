@@ -135,6 +135,7 @@ function createPrescriptionChargesFunction(data) {
 
       data.charges && data.charges.length && data.charges.forEach(val => {
         switch (val.entity.toUpperCase()) {
+
           case 'MEDIC_FEE':
             createMedicinePrescriptionObj.medicine_prescription.push({
               medicine_id: val.medicine_id ? val.medicine_id : undefined,
@@ -146,6 +147,7 @@ function createPrescriptionChargesFunction(data) {
               doctor_remarks: val.doctor_remarks ? val.doctor_remarks : undefined
             });
             break;
+
           case 'DOC_FEE':
             createMedicinePrescriptionObj.medicine_prescription.push({
               charge: val.charge ? val.charge : undefined,
@@ -170,12 +172,7 @@ function createPrescriptionChargesFunction(data) {
         .catch(createMedicinePrescriptionErr => {
           log.error('---createMedicinePrescriptionErr---');
           log.error(createMedicinePrescriptionErr);
-          return reject({
-            success: false,
-            error_code: 500,
-            message: 'Internal server error',
-            data: {}
-          });
+          return reject(INTERNAL_SERVER_ERROR);
         });
     } else {
       return resolve({
