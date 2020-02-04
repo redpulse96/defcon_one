@@ -2,7 +2,7 @@ const log = require('../../../config/log_config').logger('diagnosis_role_mapping
 const DiagnosisRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['DiagnosisRoleMapping'];
 
 DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
-  let whereObj = {
+  let where_Obj = {
     where: {
       ...req.params,
       role_id: req.user.role_id
@@ -16,7 +16,7 @@ DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
     }]
   };
   models['DiagnosisRoleMapping']
-    .scope('activeScope').findAll(whereObj)
+    .scope('activeScope').findAll(where_Obj)
     .then(fetchRes => {
       log.info('---DiagnosisRoleMapping_FETCH_SUCCESS---');
       log.info(fetchRes);
@@ -40,10 +40,10 @@ DiagnosisRoleMapping.fetchDiagnosisRoleMapping = (req, res) => {
 }
 
 DiagnosisRoleMapping.createDiagnosisRoleMapping = (req, res) => {
-  let createObj = {
+  let create_Obj = {
     ...req.body
   };
-  models.DiagnosisRoleMapping.create(createObj)
+  models.DiagnosisRoleMapping.create(create_Obj)
     .then(createRes => {
       log.info('---DiagnosisRoleMapping_CREATION_SUCCESS---');
       log.info(createRes);

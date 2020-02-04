@@ -13,22 +13,22 @@ module.exports = passport => {
       Users.findOne({
         username
       })
-        .then(userResult => {
-          if (userResult.username) {
+        .then(user_Result => {
+          if (user_Result.username) {
             // Match password
-            bcrypt.compare(password, userResult.password, (matchErr, isMatched) => {
+            bcrypt.compare(password, user_Result.password, (matchErr, isMatched) => {
               if (matchErr) throw matchErr;
               if (isMatched) {
-                userResult = userResult.toJSON();
+                user_Result = user_Result.toJSON();
                 return done(null, {
-                  _id: userResult._id,
-                  name: userResult.name,
-                  username: userResult.username,
-                  mobile_no: userResult.mobile_no,
-                  feature_rights: userResult.feature_rights,
-                  role_type: userResult.role_type,
-                  is_active: userResult.is_active,
-                  is_archived: userResult.is_archived
+                  _id: user_Result._id,
+                  name: user_Result.name,
+                  username: user_Result.username,
+                  mobile_no: user_Result.mobile_no,
+                  feature_rights: user_Result.feature_rights,
+                  role_type: user_Result.role_type,
+                  is_active: user_Result.is_active,
+                  is_archived: user_Result.is_archived
                 });
               } else {
                 return done(null, false, 'Incorrect username or password');
@@ -38,8 +38,8 @@ module.exports = passport => {
             return done(null, false, 'Invalid username');
           }
         })
-        .catch(userErr => {
-          log.error(userErr);
+        .catch(user_Error => {
+          log.error(user_Error);
           return done(null, false, 'Invalid username');
         });
     })
@@ -50,8 +50,8 @@ module.exports = passport => {
   });
 
   passport.deserializeUser((user, done) => {
-    Users.findById(user._id, (err, userRes) => {
-      done(err, userRes);
+    Users.findById(user._id, (err, user_Result) => {
+      done(err, user_Result);
     });
   });
 }

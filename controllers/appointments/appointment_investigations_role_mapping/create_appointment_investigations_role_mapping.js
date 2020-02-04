@@ -8,15 +8,15 @@ module.exports = AppointmentInvestigationsRoleMapping => {
 
   AppointmentInvestigationsRoleMapping.createAppointmentInvestigationsRoleMapping = async (req, res) => {
 
-    let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
-    if (validateDataError) {
-      return utils.generateResponse(validateDataError)(res);
+    let [validateData_Error, validateData_Result] = await to(validateDataFunction(req));
+    if (validateData_Error) {
+      return utils.generateResponse(validateData_Error)(res);
     }
 
-    let createAppointmentInvestigationsRoleMappingObj = {
-      ...validateDataResult.data
+    let createAppointmentInvestigationsRoleMapping_Obj = {
+      ...validateData_Result.data
     };
-    let [createAppointmentInvestigationsRoleMappingError, createAppointmentInvestigationsRoleMappingResult] = await to(createAppointmentInvestigationsRoleMappingFunction(createAppointmentInvestigationsRoleMappingObj));
+    let [createAppointmentInvestigationsRoleMappingError, createAppointmentInvestigationsRoleMappingResult] = await to(createAppointmentInvestigationsRoleMappingFunction(createAppointmentInvestigationsRoleMapping_Obj));
     if (createAppointmentInvestigationsRoleMappingError) {
       return utils.generateResponse(createAppointmentInvestigationsRoleMappingError)(res);
     }
@@ -25,16 +25,16 @@ module.exports = AppointmentInvestigationsRoleMapping => {
 
   function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
-      let paramsCheck = {
+      let params_Check = {
         data: data.body,
         mandatoryParams: ['AppointmentInvestigationsRoleMappings']
       }
-      utils.hasMandatoryParams(paramsCheck)
-        .then(paramRes => {
-          return resolve(paramRes);
+      utils.hasMandatoryParams(params_Check)
+        .then(param_Result => {
+          return resolve(param_Result);
         })
-        .catch(paramErr => {
-          return reject(paramErr);
+        .catch(param_Error => {
+          return reject(param_Error);
         });
     });
   }

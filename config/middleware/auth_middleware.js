@@ -33,11 +33,11 @@ module.exports = {
             log.error(err);
             return utils.generateResponse(PERMISSION_DENIED)(res);
           } else {
-            let dataObj = {
+            let data_Obj = {
               access_token: token,
               username: req.body.username
             };
-            AccessToken.generateAccessToken(dataObj)
+            AccessToken.generateAccessToken(data_Obj)
               .then(accessTokenRes => {
                 log.info('---TOKEN_GENERATED---');
                 log.info(token);
@@ -65,10 +65,10 @@ module.exports = {
   validateUser: async (req, res, next) => {
     try {
       //find the user from users model
-      let whereObj = {
+      let where_Obj = {
         username: utils.validateKeys(() => req.body.username, req.body.mobile_no + DEFAULT_USERNAME, null),
       }
-      Users.findOne(whereObj)
+      Users.findOne(where_Obj)
         .then(user_details => {
           if (user_details) {
             //Match password
@@ -124,10 +124,10 @@ module.exports = {
       const bearer_token = req.headers['authorization'];
       if (bearer_token) {
         req.token = bearer_token;
-        let reqObj = {
+        let req_Obj = {
           authorization: req.token
         };
-        AccessToken.getAccessToken(reqObj)
+        AccessToken.getAccessToken(req_Obj)
           .then(tokenRes => {
             log.info('---tokenRes---');
             log.info(tokenRes);
@@ -160,21 +160,21 @@ module.exports = {
 
   attachUserToRequest: async (req, res, next) => {
     try {
-      let filterUserObj = {
+      let filterUser_Obj = {
         username: req.username
       };
-      Users.findOne(filterUserObj)
+      Users.findOne(filterUser_Obj)
         .then(userDetails => {
           log.info('---userDetails---');
           log.info(userDetails);
           if (userDetails) {
             req.user = userDetails;
-            let whereObj = {
+            let where_Obj = {
               where: {
                 role_type: userDetails.role_type
               }
             };
-            models['Roles'].findOne(whereObj)
+            models['Roles'].findOne(where_Obj)
               .then(roleDetails => {
                 if (roleDetails) {
                   req.user.role_id = roleDetails.role_id;
@@ -183,18 +183,18 @@ module.exports = {
                   return utils.generateResponse(PERMISSION_DENIED)(res);
                 }
               })
-              .catch(userError => {
-                log.error('---userError---');
-                log.error(userError);
+              .catch(user_Error => {
+                log.error('---user_Error---');
+                log.error(user_Error);
                 return utils.generateResponse(PERMISSION_DENIED)(res);
               });
           } else {
             return utils.generateResponse(PERMISSION_DENIED)(res);
           }
         })
-        .catch(userError => {
-          log.error('---userError---');
-          log.error(userError);
+        .catch(user_Error => {
+          log.error('---user_Error---');
+          log.error(user_Error);
           return utils.generateResponse(PERMISSION_DENIED)(res);
         });
     } catch (error) {
@@ -206,10 +206,10 @@ module.exports = {
 
   destroyToken: async (req, res, next) => {
     try {
-      let tokenObj = {
+      let token_Obj = {
         access_token: req.headers['authorization']
       };
-      AccessToken.clearToken(tokenObj)
+      AccessToken.clearToken(token_Obj)
         .then(tokenRes => {
           log.info('---tokenRes---');
           log.info(tokenRes);

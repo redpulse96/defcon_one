@@ -3,7 +3,7 @@ const log = require('../../../config/log_config').logger('appointment_diagnosis_
 module.exports = AppointmentDiagnosisRoleMapping => {
 
   AppointmentDiagnosisRoleMapping.fetchAppointmentDiagnosisRoleMapping = (req, res) => {
-    let whereObj = {
+    let where_Obj = {
       ...req.params,
       include: [{
         model: models.DiagnosisRoleMapping,
@@ -13,7 +13,7 @@ module.exports = AppointmentDiagnosisRoleMapping => {
         as: 'role'
       }]
     };
-    models.AppointmentDiagnosisRoleMapping.findOne(whereObj)
+    models.AppointmentDiagnosisRoleMapping.findOne(where_Obj)
       .then(fetchRes => {
         log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
         log.info(fetchRes);

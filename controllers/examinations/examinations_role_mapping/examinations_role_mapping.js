@@ -2,7 +2,7 @@ const log = require('../../../config/log_config').logger('examinations_role_mapp
 const ExaminationsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['ExaminationsRoleMapping'];
 
 ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
-  let whereObj = {
+  let where_Obj = {
     where: {
       ...req.params,
       role_id: req.user.role_id
@@ -16,7 +16,7 @@ ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
     }]
   };
   models['ExaminationsRoleMapping']
-    .scope('activeScope').findAll(whereObj)
+    .scope('activeScope').findAll(where_Obj)
     .then(fetchRes => {
       log.info('---ExaminationsRoleMapping_FETCH_SUCCESS---');
       log.info(fetchRes);
@@ -41,10 +41,10 @@ ExaminationsRoleMapping.fetchExaminationsRoleMapping = (req, res) => {
 }
 
 ExaminationsRoleMapping.createExaminationsRoleMapping = (req, res) => {
-  let createObj = {
+  let create_Obj = {
     ...req.body
   };
-  models.ExaminationsRoleMapping.create(createObj)
+  models.ExaminationsRoleMapping.create(create_Obj)
     .then(createRes => {
       log.info('---ExaminationsRoleMapping_CREATION_SUCCESS---');
       log.info(createRes);

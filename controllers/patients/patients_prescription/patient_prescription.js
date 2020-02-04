@@ -17,7 +17,7 @@ require('./patient_prescription_helper')(PatientPrescription);
 
 PatientPrescription.fetchPatientPrescription = (req, res) => {
 
-  let whereObj = {
+  let where_Obj = {
     ...req.params,
     methodName: 'findOne',
     include: [{
@@ -38,7 +38,7 @@ PatientPrescription.fetchPatientPrescription = (req, res) => {
       }]
     }]
   };
-  PatientPrescription.fetchPatientPrescriptionByFilter(whereObj)
+  PatientPrescription.fetchPatientPrescriptionByFilter(where_Obj)
     .then(fetchRes => {
       fetchRes = fetchRes.toJSON();
       log.info('---PATIENT_PRESCRIPTION_FETCH_SUCCESS---');
@@ -60,25 +60,25 @@ PatientPrescription.fetchPatientPrescription = (req, res) => {
 
 PatientPrescription.createPatientPrescription = async (req, res) => {
 
-  let [validateDataError, validateDataResult] = await to(validateDataFunction(req.body));
-  if (validateDataError) {
-    return utils.generateResponse(validateDataError)(res);
+  let [validateData_Error, validateData_Result] = await to(validateDataFunction(req.body));
+  if (validateData_Error) {
+    return utils.generateResponse(validateData_Error)(res);
   }
 
-  let createPrescriptionObj = {
+  let createPrescription_Obj = {
     user: req.user,
-    ...validateDataResult.data
+    ...validateData_Result.data
   };
-  let [createPrescriptionError, createPrescriptionResult] = await to(createPrescriptionFunction(createPrescriptionObj));
+  let [createPrescriptionError, createPrescriptionResult] = await to(createPrescriptionFunction(createPrescription_Obj));
   if (createPrescriptionError) {
     return utils.generateResponse(createPrescriptionError)(res);
   }
 
-  let createPrescriptionChargesObj = {
-    ...validateDataResult.data,
+  let createPrescriptionCharges_Obj = {
+    ...validateData_Result.data,
     ...createPrescriptionResult.data.patient_prescription_details.dataValues
   };
-  let [createPrescriptionChargesError, createPrescriptionChargesResult] = await to(createPrescriptionChargesFunction(createPrescriptionChargesObj));
+  let [createPrescriptionChargesError, createPrescriptionChargesResult] = await to(createPrescriptionChargesFunction(createPrescriptionCharges_Obj));
   if (createPrescriptionChargesError) {
     return utils.generateResponse(createPrescriptionChargesError)(res);
   }
@@ -91,27 +91,27 @@ PatientPrescription.createPatientPrescription = async (req, res) => {
 
 function validateDataFunction(data) {
   return new Promise((resolve, reject) => {
-    let paramsCheck = {
+    let params_Check = {
       data,
       mandatoryParams: CREATE_PRESCRIPTION
     }
-    utils.hasMandatoryParams(paramsCheck)
-      .then(paramsRes => {
-        resolve(paramsRes);
+    utils.hasMandatoryParams(params_Check)
+      .then(params_Result => {
+        resolve(params_Result);
       })
-      .catch(paramsErr => {
-        reject(paramsErr);
+      .catch(params_Error => {
+        reject(params_Error);
       });
   });
 }
 
 function createPrescriptionFunction(data) {
   return new Promise((resolve, reject) => {
-    let createObj = {
+    let create_Obj = {
       ...data,
       created_by: data.user.username
     };
-    PatientPrescription.createPatientPrescriptionInstance(createObj)
+    PatientPrescription.createPatientPrescriptionInstance(create_Obj)
       .then(createRes => {
         log.info('---PATIENT_PRESCRIPTION_CREATION_SUCCESS---');
         log.info(createRes);
@@ -128,7 +128,7 @@ function createPrescriptionFunction(data) {
 function createPrescriptionChargesFunction(data) {
   return new Promise((resolve, reject) => {
     if (data.prescription_charges && data.prescription_charges.length) {
-      let createMedicinePrescriptionObj = new MedicinesPrescription({
+      let createMedicinePrescription_Obj = new MedicinesPrescription({
         appointment_id: data.appointment_id ? data.appointment_id : undefined,
         patient_prescription_id: data.patient_prescription_id ? data.patient_prescription_id : undefined
       });
@@ -137,7 +137,7 @@ function createPrescriptionChargesFunction(data) {
         switch (val.entity.toUpperCase()) {
 
           case 'MEDIC_FEE':
-            createMedicinePrescriptionObj.medicine_prescription.push({
+            createMedicinePrescription_Obj.medicine_prescription.push({
               medicine_id: val.medicine_id ? val.medicine_id : undefined,
               morning_dosage: val.morning_dosage ? val.morning_dosage : undefined,
               noon_dosage: val.noon_dosage ? val.noon_dosage : undefined,
@@ -149,7 +149,7 @@ function createPrescriptionChargesFunction(data) {
             break;
 
           case 'DOC_FEE':
-            createMedicinePrescriptionObj.medicine_prescription.push({
+            createMedicinePrescription_Obj.medicine_prescription.push({
               charge: val.charge ? val.charge : undefined,
               doctor_remarks: val.doctor_remarks ? val.doctor_remarks : undefined
             });
@@ -157,7 +157,7 @@ function createPrescriptionChargesFunction(data) {
         }
       });
 
-      createMedicinePrescriptionObj.save()
+      createMedicinePrescription_Obj.save()
         .then(createMedicinePrescriptionRes => {
           log.info('---createMedicinePrescriptionRes---');
           log.info(createMedicinePrescriptionRes);

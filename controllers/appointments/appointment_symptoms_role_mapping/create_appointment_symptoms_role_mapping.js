@@ -8,15 +8,15 @@ module.exports = AppointmentSymptomsRoleMapping => {
 
   AppointmentSymptomsRoleMapping.createAppointmentSymptomsRoleMapping = async (req, res) => {
 
-    let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
-    if (validateDataError) {
-      return utils.generateResponse(validateDataError)(res);
+    let [validateData_Error, validateData_Result] = await to(validateDataFunction(req));
+    if (validateData_Error) {
+      return utils.generateResponse(validateData_Error)(res);
     }
 
-    let createAppointmentSymptomsRoleMappingObj = {
-      ...validateDataResult.data
+    let createAppointmentSymptomsRoleMapping_Obj = {
+      ...validateData_Result.data
     };
-    let [createAppointmentSymptomsRoleMappingError, createAppointmentSymptomsRoleMappingResult] = await to(createAppointmentSymptomsRoleMappingFunction(createAppointmentSymptomsRoleMappingObj));
+    let [createAppointmentSymptomsRoleMappingError, createAppointmentSymptomsRoleMappingResult] = await to(createAppointmentSymptomsRoleMappingFunction(createAppointmentSymptomsRoleMapping_Obj));
     if (createAppointmentSymptomsRoleMappingError) {
       return utils.generateResponse(createAppointmentSymptomsRoleMappingError)(res);
     }
@@ -25,16 +25,16 @@ module.exports = AppointmentSymptomsRoleMapping => {
 
   function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
-      let paramsCheck = {
+      let params_Check = {
         data: data.body,
         mandatoryParams: ['AppointmentSymptomsRoleMappings']
       }
-      utils.hasMandatoryParams(paramsCheck)
-        .then(paramRes => {
-          return resolve(paramRes);
+      utils.hasMandatoryParams(params_Check)
+        .then(param_Result => {
+          return resolve(param_Result);
         })
-        .catch(paramErr => {
-          return reject(paramErr);
+        .catch(param_Error => {
+          return reject(param_Error);
         });
     });
   }

@@ -7,11 +7,11 @@ const {
 
 const generateLogger = (serviceName, level) => {
   let levelName = level ? level : 'info';
-  let generateLogObj = {};
+  let generateLog_Obj = {};
 
   switch (levelName) {
     case 'info':
-      generateLogObj = {
+      generateLog_Obj = {
         defaultMeta: {
           level: 'info',
           service: serviceName || 'defcon_one'
@@ -34,7 +34,7 @@ const generateLogger = (serviceName, level) => {
       };
       break;
     case 'error':
-      generateLogObj = {
+      generateLog_Obj = {
         defaultMeta: {
           level: 'error',
           service: serviceName || 'defcon_one'
@@ -70,7 +70,7 @@ const generateLogger = (serviceName, level) => {
       };
       break;
     case 'debug':
-      generateLogObj = {
+      generateLog_Obj = {
         defaultMeta: {
           level: 'debug',
           service: serviceName || 'defcon_one'
@@ -103,7 +103,7 @@ const generateLogger = (serviceName, level) => {
       };
       break;
     case 'warning':
-      generateLogObj = {
+      generateLog_Obj = {
         defaultMeta: {
           level: 'warning',
           service: serviceName || 'defcon_one'
@@ -136,7 +136,7 @@ const generateLogger = (serviceName, level) => {
       };
       break;
     case 'trace':
-      generateLogObj = {
+      generateLog_Obj = {
         defaultMeta: {
           level: 'trace',
           service: serviceName || 'defcon_one'
@@ -169,7 +169,7 @@ const generateLogger = (serviceName, level) => {
       };
       break;
     case 'crit':
-      generateLogObj = {
+      generateLog_Obj = {
         defaultMeta: {
           level: 'crit',
           service: serviceName || 'defcon_one'
@@ -202,7 +202,7 @@ const generateLogger = (serviceName, level) => {
       };
       break;
     default:
-      generateLogObj = {
+      generateLog_Obj = {
         defaultMeta: {
           level: 'fatal',
           service: serviceName || 'defcon_one'
@@ -235,7 +235,7 @@ const generateLogger = (serviceName, level) => {
       };
       break;
   }
-  return createLogger(generateLogObj);
+  return createLogger(generateLog_Obj);
 }
 
 const logger = serviceName => {
@@ -265,14 +265,14 @@ const logger = serviceName => {
     }
   }
 
-  let logObj = {
+  let log_Obj = {
     info: constructLog('info'),
     error: constructLog('error'),
     trace: constructLog('trace'),
     debug: constructLog('debug'),
     warning: constructLog('warning')
   }
-  return logObj;
+  return log_Obj;
 }
 
 exports.logger = logger;

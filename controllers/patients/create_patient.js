@@ -14,23 +14,23 @@ module.exports = Patients => {
 
   Patients.createPatient = async (req, res) => {
 
-    let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
-    if (validateDataError) {
-      return utils.generateResponse(validateDataError)(res);
+    let [validateData_Error, validateData_Result] = await to(validateDataFunction(req));
+    if (validateData_Error) {
+      return utils.generateResponse(validateData_Error)(res);
     }
 
-    let isNewPatientObj = {
-      mobile_no: validateDataResult.data.mobile_no
+    let isNewPatient_Obj = {
+      mobile_no: validateData_Result.data.mobile_no
     };
-    let [isNewPatientError] = await to(isNewPatientFunction(isNewPatientObj));
+    let [isNewPatientError] = await to(isNewPatientFunction(isNewPatient_Obj));
     if (isNewPatientError) {
       return utils.generateResponse(isNewPatientError)(res);
     }
 
-    let createFunctionObj = {
-      ...validateDataResult.data
+    let createFunction_Obj = {
+      ...validateData_Result.data
     };
-    let [createPatientError, createPatientResult] = await to(createPatientFunction(createFunctionObj));
+    let [createPatientError, createPatientResult] = await to(createPatientFunction(createFunction_Obj));
     if (createPatientError) {
       return utils.generateResponse(createPatientError)(res);
     }
@@ -39,7 +39,7 @@ module.exports = Patients => {
 
   function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
-      let paramsCheck = {
+      let params_Check = {
         data: data.body,
         mandatoryParams: CREATE_PATIENT,
         checkValType: [{
@@ -53,13 +53,13 @@ module.exports = Patients => {
           checkValue: 'DATE'
         }]
       };
-      utils.hasMandatoryParams(paramsCheck)
-        .then(paramRes => {
-          paramRes.data.user = data.user;
-          return resolve(paramRes);
+      utils.hasMandatoryParams(params_Check)
+        .then(param_Result => {
+          param_Result.data.user = data.user;
+          return resolve(param_Result);
         })
-        .catch(paramErr => {
-          return reject(paramErr);
+        .catch(param_Error => {
+          return reject(param_Error);
         });
     });
   }
@@ -96,19 +96,19 @@ module.exports = Patients => {
 
   function createPatientFunction(data) {
     return new Promise((resolve, reject) => {
-      let createObj = {
+      let create_Obj = {
         ...data,
         created_by: utils.validateKeys(() => data.user.username, null, null),
         date_of_birth: moment(data.date_of_birth).format('YYYY-MM-DD')
       };
-      delete createObj['user'];
+      delete create_Obj['user'];
       models['Patients']
         .scope('activeScope')
         .findOrCreate({
           where: {
-            mobile_no: createObj.mobile_no
+            mobile_no: create_Obj.mobile_no
           },
-          defaults: createObj
+          defaults: create_Obj
         })
         .then(([createRes, is_new]) => {
           log.info('---PATIENTS_CREATION_SUCCESS---');

@@ -5,10 +5,10 @@ require('./appointment_logs_helper')(AppointmentLogs);
 
 AppointmentLogs.fetchAppointmentLogs = data => {
   return new Promise((resolve, reject) => {
-    let whereObj = {
+    let where_Obj = {
       ...data
     };
-    models['AppointmentLogs'].findAll(whereObj)
+    models['AppointmentLogs'].findAll(where_Obj)
       .then(fetchRes => {
         log.info('---appointment_logs_FETCH_SUCCESS---');
         log.info(fetchRes);
@@ -34,10 +34,10 @@ AppointmentLogs.fetchAppointmentLogs = data => {
 
 AppointmentLogs.createAppointmentLogs = data => {
   return new Promise((resolve, reject) => {
-    let createObj = {
+    let create_Obj = {
       ...data
     };
-    models['AppointmentLogs'].create(createObj)
+    models['AppointmentLogs'].create(create_Obj)
       .then(createRes => {
         log.info('---appointment_logs_CREATION_SUCCESS---');
         log.info(createRes);

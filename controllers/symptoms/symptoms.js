@@ -3,12 +3,12 @@ const Symptoms = require(packageHelper.MODEL_CONFIG_DIR)['Symptoms'];
 
 Symptoms.fetchSymptom = data => {
   return new Promise((resolve, reject) => {
-    let whereObj = {
+    let where_Obj = {
       where: {
         ...data
       }
     };
-    models.Symptoms.findOne(whereObj)
+    models.Symptoms.findOne(where_Obj)
       .then(fetchRes => {
         log.info('---SYMPTOM_FETCH_SUCCESS---');
         log.info(fetchRes);
@@ -34,10 +34,10 @@ Symptoms.fetchSymptom = data => {
 
 Symptoms.createSymptom = data => {
   return new Promise((resolve, reject) => {
-    let createObj = {
+    let create_Obj = {
       ...data
     };
-    models.Symptoms.create(createObj)
+    models.Symptoms.create(create_Obj)
       .then(createRes => {
         log.info('---SYMPTOM_CREATION_SUCCESS---');
         log.info(createRes);

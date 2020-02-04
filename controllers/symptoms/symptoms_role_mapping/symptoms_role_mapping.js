@@ -2,7 +2,7 @@ const log = require('../../../config/log_config').logger('symptoms_controller');
 const SymptomsRoleMapping = require(packageHelper.MODEL_CONFIG_DIR)['SymptomsRoleMapping'];
 
 SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
-  let whereObj = {
+  let where_Obj = {
     where: {
       ...req.params,
       role_id: req.user.role_id
@@ -16,7 +16,7 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
     }]
   };
   models['SymptomsRoleMapping']
-    .scope('activeScope').findAll(whereObj)
+    .scope('activeScope').findAll(where_Obj)
     .then(fetchRes => {
       log.info('---SRM_FETCH_SUCCESS---');
       log.info(fetchRes);
@@ -40,10 +40,10 @@ SymptomsRoleMapping.fetchSymptomsRoleMapping = (req, res) => {
 }
 
 SymptomsRoleMapping.createSymptomsRoleMapping = (req, res) => {
-  let createObj = {
+  let create_Obj = {
     ...req.body
   };
-  models.SymptomsRoleMapping.create(createObj)
+  models.SymptomsRoleMapping.create(create_Obj)
     .then(createRes => {
       log.info('---SRM_CREATION_SUCCESS---');
       log.info(createRes);

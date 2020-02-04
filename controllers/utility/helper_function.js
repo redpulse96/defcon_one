@@ -4,11 +4,11 @@ module.exports = {
    */
   to: promise => promise.then(data => ([null, data])).catch(err => ([err, null])),
   /**
-   * @param {Object} objectFn - List of all the helper functions related to an object
+   * @param {_Object} objectFn - List of all the helper functions related to an object
    */
   objectFn: {
     /**
-     * @param {Object} obj - Object filtered where null || undefined values are omitted
+     * @param {_Object} obj - _Object filtered where null || undefined values are omitted
      */
     compact: obj => {
       let res_obj = {
@@ -20,7 +20,7 @@ module.exports = {
       return res_obj;
     },
     /**
-     * @param {Object} obj - Object to check the presence of the key
+     * @param {_Object} obj - _Object to check the presence of the key
      * @param {String} key - Key to be checked if present in the object
      */
     has: (obj, key) => {
@@ -29,8 +29,8 @@ module.exports = {
       return is_exists;
     },
     /**
-     * @param {Object} parent_obj - Parent object to be merged
-     * @param {Object} child_obj - Child object to be merged
+     * @param {_Object} parent_obj - Parent object to be merged
+     * @param {_Object} child_obj - Child object to be merged
      */
     merge: (parent_obj, child_obj) => {
       let res_obj = {
@@ -40,7 +40,7 @@ module.exports = {
       return res_obj;
     },
     /**
-     * @param {Object} obj - Object of values
+     * @param {_Object} obj - _Object of values
      * @param {Array} filter_arr - Array of keys
      */
     omit: (obj, filter_arr) => {
@@ -53,7 +53,7 @@ module.exports = {
       return res_obj;
     },
     /**
-     * @param {Object} obj - Object of values
+     * @param {_Object} obj - _Object of values
      * @param {Array} filter_arr - Array of keys
      */
     pick: (obj, filter_arr) => {
@@ -67,7 +67,7 @@ module.exports = {
     }
   },
   /**
-   * @param {Object} arrayFn - List of all the helper functions related to an array
+   * @param {_Object} arrayFn - List of all the helper functions related to an array
    */
   arrayFn: {
     /**
@@ -104,7 +104,7 @@ module.exports = {
     },
     /**
      * @param {Array} arr - Input array
-     * @param {Object} filter_obj - filter object
+     * @param {_Object} filter_obj - filter object
      */
     filter: (arr, filter_obj) => {
       let res_arr = [];

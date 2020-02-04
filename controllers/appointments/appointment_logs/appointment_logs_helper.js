@@ -7,7 +7,7 @@ const {
 module.exports = AppointmentLogs => {
 
   /**
-   * @param {Object[]} data - Object with the details to create appointment log
+   * @param {_Object[]} data - _Object with the details to create appointment log
    * @param {Number} data.appointment_id appointment id of the appointment to be created against
    * @param {String} data.appointment_status Status of the appointment to be created `pending` if not mentioned
    * @param {String} data.doctor_remarks Doctors remarks for the appointment updation
@@ -15,10 +15,10 @@ module.exports = AppointmentLogs => {
   AppointmentLogs.createAppointmentLogInstance = data => {
     return new Promise((resolve, reject) => {
       let noCreate = false;
-      let createObj = {};
-      data.appointment_id ? createObj.appointment_status = data.appointment_id : noCreate = true;
-      data.appointment_status ? createObj.appointment_status = data.appointment_status : noCreate = true;
-      data.doctor_remarks ? createObj.doctor_remarks = data.doctor_remarks : createObj.doctor_remarks = '';
+      let create_Obj = {};
+      data.appointment_id ? create_Obj.appointment_status = data.appointment_id : noCreate = true;
+      data.appointment_status ? create_Obj.appointment_status = data.appointment_status : noCreate = true;
+      data.doctor_remarks ? create_Obj.doctor_remarks = data.doctor_remarks : create_Obj.doctor_remarks = '';
       if (noCreate) {
         return reject({
           success: false,
@@ -28,7 +28,7 @@ module.exports = AppointmentLogs => {
         });
       }
       try {
-        models['AppointmentLogs'].create(createObj)
+        models['AppointmentLogs'].create(create_Obj)
           .then(createAppointmentLogsRes => {
             log.info('---createAppointmentLogsRes---');
             log.info(createAppointmentLogsRes);
@@ -64,7 +64,7 @@ module.exports = AppointmentLogs => {
   }
 
   /**
-   * @param {Object[]} data - Array of objects with the details to create appointments
+   * @param {_Object[]} data - Array of objects with the details to create appointments
    * @param {Array} data.appointment_log_ids Array of appointment log ids of the appointment to be created against
    * @param {Array} data.appointment_ids Array of appointment ids of the appointment to be created against
    * @param {Number} data.appointment_log_id appointment log id of the appointment to be created against
@@ -103,15 +103,15 @@ module.exports = AppointmentLogs => {
       }
       try {
         models['AppointmentLogs'].scope(data.filterScope)[data.methodName](filter)
-          .then(fetchAppointmentLogRes => {
-            log.info('---fetchAppointmentLogRes---');
-            log.info(fetchAppointmentLogRes);
-            if (fetchAppointmentLogRes[0]) {
+          .then(fetchAppointmentLog_Result => {
+            log.info('---fetchAppointmentLog_Result---');
+            log.info(fetchAppointmentLog_Result);
+            if (fetchAppointmentLog_Result[0]) {
               return resolve({
                 success: true,
                 message: 'Appointment logs fetch success',
                 data: {
-                  appointment: fetchAppointmentLogRes
+                  appointment: fetchAppointmentLog_Result
                 }
               });
             } else {
@@ -123,9 +123,9 @@ module.exports = AppointmentLogs => {
               });
             }
           })
-          .catch(fetchAppointmentLogErr => {
-            log.error('---fetchAppointmentLogErr---');
-            log.error(fetchAppointmentLogErr);
+          .catch(fetchAppointmentLog_Error => {
+            log.error('---fetchAppointmentLog_Error---');
+            log.error(fetchAppointmentLog_Error);
             return reject({
               success: false,
               error_code: 500,
@@ -147,16 +147,16 @@ module.exports = AppointmentLogs => {
   }
 
   /**
-   * @param {Object[]} data - Object of where filter and update object
-   * @param {Object[]} data.filterObj - Object of the list of filters used to fetch appointment
-   * @param {Number} data.filterObj.appointment_id appointment id of the appointment to be created against
-   * @param {Object[]} data.updateObj - Object consists of attributes to be updated
-   * @param {String} data.updateObj.appointment_status Status of the appointment to be created `pending` if not mentioned
+   * @param {_Object[]} data - _Object of where filter and update object
+   * @param {_Object[]} data.filter_Obj - _Object of the list of filters used to fetch appointment
+   * @param {Number} data.filter_Obj.appointment_id appointment id of the appointment to be created against
+   * @param {_Object[]} data.update_Obj - _Object consists of attributes to be updated
+   * @param {String} data.update_Obj.appointment_status Status of the appointment to be created `pending` if not mentioned
    * @param {String} data.doctor_remarks Doctors remarks for the appointment updation
    */
   AppointmentLogs.updateAppointmentLogsByFilter = data => {
     return new Promise((resolve, reject) => {
-      if (!objectFn.has(data, 'filterObj') || !(objectFn.has(data, 'updateObj'))) {
+      if (!objectFn.has(data, 'filter_Obj') || !(objectFn.has(data, 'update_Obj'))) {
         return reject({
           success: false,
           error_code: 500,
@@ -164,8 +164,8 @@ module.exports = AppointmentLogs => {
           data: {}
         });
       }
-      let [filterObj, updateObj] = [objectFn.compact(data.filterObj), objectFn.compact(data.updateObj)];
-      models['AppointmentLogs'].update(updateObj, filterObj)
+      let [filter_Obj, update_Obj] = [objectFn.compact(data.filter_Obj), objectFn.compact(data.update_Obj)];
+      models['AppointmentLogs'].update(update_Obj, filter_Obj)
         .then(updatedAppointmentLogsRes => {
           log.info('---updatedAppointmentLogsRes---');
           log.info(updatedAppointmentLogsRes);
@@ -200,21 +200,21 @@ module.exports = AppointmentLogs => {
   }
 
   /**
-   * @param {Object[]} data - Object of where filter and update object
+   * @param {_Object[]} data - _Object of where filter and update object
    * @param {Model} data.appointmentInstance - Model instance of the model whose attributes are to be updated
-   * @param {Object[]} data.updateAppointmentInstanceObj - Object consists of attributes to be updated
-   * @param {String} data.updateAppointmentInstanceObj.appointment_name Name of the appointment to be created
-   * @param {Date} data.updateAppointmentInstanceObj.appointment_date Scheduled date of the appointment to be created
-   * @param {Number} data.updateAppointmentInstanceObj.patient_id Patient id of the appointment to be created against
-   * @param {String} data.updateAppointmentInstanceObj.appointment_status Status of the appointment to be created `pending` if not mentioned
-   * @param {String} data.updateAppointmentInstanceObj.doctor_remarks Remarks added my the logged in doctor
-   * @param {Date} data.updateAppointmentInstanceObj.rescheduled_date Re-scheduled date of the appointment, is `NULL` while creating
-   * @param {Timestamp} data.updateAppointmentInstanceObj.from_time From time of the scheduled appointment
-   * @param {Timestamp} data.updateAppointmentInstanceObj.to_time To time of the scheduled appointment
+   * @param {_Object[]} data.updateAppointmentInstance_Obj - _Object consists of attributes to be updated
+   * @param {String} data.updateAppointmentInstance_Obj.appointment_name Name of the appointment to be created
+   * @param {Date} data.updateAppointmentInstance_Obj.appointment_date Scheduled date of the appointment to be created
+   * @param {Number} data.updateAppointmentInstance_Obj.patient_id Patient id of the appointment to be created against
+   * @param {String} data.updateAppointmentInstance_Obj.appointment_status Status of the appointment to be created `pending` if not mentioned
+   * @param {String} data.updateAppointmentInstance_Obj.doctor_remarks Remarks added my the logged in doctor
+   * @param {Date} data.updateAppointmentInstance_Obj.rescheduled_date Re-scheduled date of the appointment, is `NULL` while creating
+   * @param {Timestamp} data.updateAppointmentInstance_Obj.from_time From time of the scheduled appointment
+   * @param {Timestamp} data.updateAppointmentInstance_Obj.to_time To time of the scheduled appointment
    */
   AppointmentLogs.updateAppointmentLogsByInstance = data => {
     return new Promise((resolve, reject) => {
-      if (!objectFn.has(data, 'AppointmentLogInstance') || !(objectFn.has(data, 'updateAppointmentLogInstanceObj'))) {
+      if (!objectFn.has(data, 'AppointmentLogInstance') || !(objectFn.has(data, 'updateAppointmentLogInstance_Obj'))) {
         return reject({
           success: false,
           error_code: 400,
@@ -222,16 +222,16 @@ module.exports = AppointmentLogs => {
           data: {}
         });
       }
-      data['AppointmentLogInstance'].update(data['updateAppointmentLogInstanceObj'])
-        .then(updateAppointmentLogsInstanceResult => {
-          log.info('---updateAppointmentLogsInstanceResult---');
-          log.info(updateAppointmentLogsInstanceResult);
-          if (updateAppointmentLogsInstanceResult) {
+      data['AppointmentLogInstance'].update(data['updateAppointmentLogInstance_Obj'])
+        .then(updateAppointmentLogsInstance_Result => {
+          log.info('---updateAppointmentLogsInstance_Result---');
+          log.info(updateAppointmentLogsInstance_Result);
+          if (updateAppointmentLogsInstance_Result) {
             return resolve({
               success: true,
               message: 'Appointment Log details updated',
               data: {
-                appointment_logs_details: updateAppointmentLogsInstanceResult
+                appointment_logs_details: updateAppointmentLogsInstance_Result
               }
             });
           } else {
@@ -243,9 +243,9 @@ module.exports = AppointmentLogs => {
             });
           }
         })
-        .catch(updateAppointmentLogsInstanceError => {
-          log.error('---updateAppointmentLogsInstanceError---');
-          log.error(updateAppointmentLogsInstanceError);
+        .catch(updateAppointmentLogsInstance_Error => {
+          log.error('---updateAppointmentLogsInstance_Error---');
+          log.error(updateAppointmentLogsInstance_Error);
           return reject({
             success: false,
             error_code: 500,

@@ -3,12 +3,12 @@ const Examinations = require(packageHelper.MODEL_CONFIG_DIR)['Examinations'];
 
 Examinations.fetchExamination = data => {
   return new Promise((resolve, reject) => {
-    let whereObj = {
+    let where_Obj = {
       where: {
         ...data
       }
     };
-    models.Examinations.findOne(whereObj)
+    models.Examinations.findOne(where_Obj)
       .then(fetchRes => {
         log.info('---EXAMINATIONS_FETCH_SUCCESS---');
         log.info(fetchRes);
@@ -36,10 +36,10 @@ Examinations.fetchExamination = data => {
 
 Examinations.createExamination = data => {
   return new Promise((resolve, reject) => {
-    let createObj = {
+    let create_Obj = {
       ...data
     };
-    models.Examinations.create(createObj)
+    models.Examinations.create(create_Obj)
       .then(createRes => {
         log.info('---EXAMINATIONS_CREATION_SUCCESS---');
         log.info(createRes);

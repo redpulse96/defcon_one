@@ -12,33 +12,33 @@ const {
 module.exports = Appointments => {
   Appointments.appointmentDetails = async (req, res) => {
 
-    let [validateDataError, validateDataResult] = await to(validateDataFunction(req.params));
-    if (validateDataError) {
-      return utils.generateResponse(validateDataError)(res);
+    let [validateData_Error, validateData_Result] = await to(validateDataFunction(req.params));
+    if (validateData_Error) {
+      return utils.generateResponse(validateData_Error)(res);
     }
 
-    let fetchAppointmentDetailsObj = {
-      ...validateDataResult.data
+    let fetchAppointmentDetails_Obj = {
+      ...validateData_Result.data
     };
-    let [fetchAppointmentDetailsError, fetchAppointmentDetailsResult] = await to(fetchAppointmentDetailsFunction(fetchAppointmentDetailsObj));
-    if (fetchAppointmentDetailsError) {
-      return utils.generateResponse(fetchAppointmentDetailsError)(res);
+    let [fetchAppointmentDetails_Error, fetchAppointmentDetails_Result] = await to(fetchAppointmentDetailsFunction(fetchAppointmentDetails_Obj));
+    if (fetchAppointmentDetails_Error) {
+      return utils.generateResponse(fetchAppointmentDetails_Error)(res);
     }
-    return utils.generateResponse(fetchAppointmentDetailsResult)(res);
+    return utils.generateResponse(fetchAppointmentDetails_Result)(res);
   }
 
   function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
-      let paramsCheck = {
+      let params_Check = {
         data: data,
         mandatoryParams: APPOINTMENT_DETAIL
       }
-      utils.hasMandatoryParams(paramsCheck)
-        .then(paramsRes => {
-          resolve(paramsRes);
+      utils.hasMandatoryParams(params_Check)
+        .then(params_Result => {
+          resolve(params_Result);
         })
-        .catch(paramsErr => {
-          reject(paramsErr);
+        .catch(params_Error => {
+          reject(params_Error);
         });
     });
   }
@@ -73,15 +73,15 @@ module.exports = Appointments => {
         }]
       };
       Appointments.fetchAppointmentsByFilter(filter)
-        .then(appointmentDetails => {
+        .then(appointmentDetails_Result => {
           log.info('---APPOINTMENT_DETAILS---');
-          log.info(appointmentDetails);
-          return resolve(appointmentDetails);
+          log.info(appointmentDetails_Result);
+          return resolve(appointmentDetails_Result);
         })
-        .catch(appointmentDetailsErr => {
+        .catch(appointmentDetails_Error => {
           log.error('---APPOINTMENT_DETAILS_ERR---');
-          log.error(JSON.stringify(appointmentDetailsErr));
-          return reject(appointmentDetailsErr);
+          log.error(JSON.stringify(appointmentDetails_Error));
+          return reject(appointmentDetails_Error);
         });
     });
   }

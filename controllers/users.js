@@ -79,11 +79,11 @@ Users.generateHash = (password, salt) => {
  */
 const registerUser = (req, res) => {
   let newUser;
-  let paramsObj = {
+  let params_Obj = {
     data: req.body,
     mandatoryParams: REGISTER_USER
   };
-  utils.hasMandatoryParams(paramsObj)
+  utils.hasMandatoryParams(params_Obj)
     .then(() => {
       req.body.username = req.body.username ? req.body.username : req.body.mobile_no + DEFAULT_USERNAME;
       return Users.findOne({
@@ -146,9 +146,9 @@ const registerUser = (req, res) => {
       log.error(catchErr);
       return utils.generateResponse(INTERNAL_SERVER_ERROR)(res);
     })
-    .catch(paramError => {
+    .catch(param_Error => {
       log.error('---INSUFFICIENT_PARAMETERS---');
-      log.error(paramError);
+      log.error(param_Error);
       return utils.generateResponse(INSUFFICIENT_PARAMS)(res);
     });
 }

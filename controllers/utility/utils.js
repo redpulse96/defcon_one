@@ -27,20 +27,20 @@ module.exports = {
    * @param {String} data - function to run within try/catch for safe exception handling
    * @param {Array} mandatoryParams - array of keys that are checked against the data
    */
-  hasMandatoryParams: paramObj => {
+  hasMandatoryParams: param_Obj => {
     return new Promise((resolve, reject) => {
-      if (paramObj.mandatoryParams && paramObj.mandatoryParams.length) {
-        let reqParams = Object.keys(paramObj.data);
-        if (!arrayFn.differ(paramObj.mandatoryParams, reqParams).length) {
+      if (param_Obj.mandatoryParams && param_Obj.mandatoryParams.length) {
+        let reqParams = _Object.keys(param_Obj.data);
+        if (!arrayFn.differ(param_Obj.mandatoryParams, reqParams).length) {
           log.info('All keys are present');
-          log.info(paramObj);
+          log.info(param_Obj);
           return resolve({
             success: true,
             message: 'All mandatory keys are present',
-            data: paramObj.data
+            data: param_Obj.data
           });
         } else {
-          let resData = arrayFn.differ(paramObj.mandatoryParams, reqParams);
+          let resData = arrayFn.differ(param_Obj.mandatoryParams, reqParams);
           log.error('---INSUFFICIENT_PARAMETERS---');
           log.error(resData);
           return reject({
@@ -51,11 +51,11 @@ module.exports = {
           });
         }
       }
-      if (paramObj.checkValType && paramObj.checkValType.length) {
-        paramObj.checkValType.forEach(val => {
+      if (param_Obj.checkValType && param_Obj.checkValType.length) {
+        param_Obj.checkValType.forEach(val => {
           switch (val.checkValue.toUpperCase().trim()) {
             case 'ARRAY':
-              if (!_.isArray(paramObj.data[val.key])) {
+              if (!_.isArray(param_Obj.data[val.key])) {
                 return reject({
                   success: false,
                   error_code: 400,
@@ -65,7 +65,7 @@ module.exports = {
               }
               break;
             case 'STRING':
-              if (!_.isString(paramObj.data[val.key])) {
+              if (!_.isString(param_Obj.data[val.key])) {
                 return reject({
                   success: false,
                   error_code: 400,
@@ -75,7 +75,7 @@ module.exports = {
               }
               break;
             case 'NUMBER':
-              if (!_.isNumber(paramObj.data[val.key])) {
+              if (!_.isNumber(param_Obj.data[val.key])) {
                 return reject({
                   success: false,
                   error_code: 400,
@@ -85,7 +85,7 @@ module.exports = {
               }
               break
             case 'BOOLEAN':
-              if (!_.isBoolean(paramObj.data[val.key])) {
+              if (!_.isBoolean(param_Obj.data[val.key])) {
                 return reject({
                   success: false,
                   error_code: 400,
@@ -95,7 +95,7 @@ module.exports = {
               }
               break;
             case 'DATE':
-              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD')) {
+              if (!moment(param_Obj.data[val.key]).format('YYYY-MM-DD')) {
                 return reject({
                   success: false,
                   error_code: 400,
@@ -105,7 +105,7 @@ module.exports = {
               }
               break;
             case 'DATETIME':
-              if (!moment(paramObj.data[val.key]).format('YYYY-MM-DD hh:mm:ss')) {
+              if (!moment(param_Obj.data[val.key]).format('YYYY-MM-DD hh:mm:ss')) {
                 return reject({
                   success: false,
                   error_code: 400,
@@ -118,20 +118,20 @@ module.exports = {
               return resolve({
                 success: true,
                 message: 'Value type matches successfully',
-                data: paramObj.data
+                data: param_Obj.data
               });
           }
         });
         resolve({
           success: true,
           message: 'Value type matches successfully',
-          data: paramObj.data
+          data: param_Obj.data
         });
       } else {
         return resolve({
           success: true,
           message: 'Value type matches successfully',
-          data: paramObj.data
+          data: param_Obj.data
         });
       }
     });
@@ -156,7 +156,7 @@ module.exports = {
     }
   },
   /**
-   * @param {Object} response - Object with the response details
+   * @param {_Object} response - _Object with the response details
    */
   generateResponse: response => {
     let statusCode;

@@ -4,7 +4,7 @@ const Roles = require(packageHelper.MODEL_CONFIG_DIR)['Roles'];
 Roles.getRoles = data => {
   return new Promise((resolve, reject) => {
     log.info('----Roles.getRoles---');
-    let whereObj = {
+    let where_Obj = {
       where: {
         ...data
       },
@@ -13,7 +13,7 @@ Roles.getRoles = data => {
         as: 'symptoms_role_mapping'
       }]
     }
-    models['Roles'].findAll(whereObj)
+    models['Roles'].findAll(where_Obj)
       .then(modelRes => {
         log.info('---ROLESRes---');
         log.info(modelRes);

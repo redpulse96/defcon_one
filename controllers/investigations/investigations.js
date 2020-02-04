@@ -3,12 +3,12 @@ const Investigations = require(packageHelper.MODEL_CONFIG_DIR)['Investigations']
 
 Investigations.fetchInvestigations = data => {
   return new Promise((resolve, reject) => {
-    let whereObj = {
+    let where_Obj = {
       where: {
         ...data
       }
     };
-    models.Investigations.findOne(whereObj)
+    models.Investigations.findOne(where_Obj)
       .then(fetchRes => {
         log.info('---INVESTIGATIONS_FETCH_SUCCESS---');
         log.info(fetchRes);
@@ -34,10 +34,10 @@ Investigations.fetchInvestigations = data => {
 
 Investigations.createInvestigations = data => {
   return new Promise((resolve, reject) => {
-    let createObj = {
+    let create_Obj = {
       ...data
     };
-    models.Investigations.create(createObj)
+    models.Investigations.create(create_Obj)
       .then(createRes => {
         log.info('---INVESTIGATIONS_CREATION_SUCCESS---');
         log.info(createRes);

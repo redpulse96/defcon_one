@@ -16,80 +16,80 @@ module.exports = Appointments => {
 
   Appointments.createAppointment = async (req, res) => {
 
-    let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
-    if (validateDataError) {
-      return utils.generateResponse(validateDataError)(res);
+    let [validateData_Error, validateData_Result] = await to(validateDataFunction(req));
+    if (validateData_Error) {
+      return utils.generateResponse(validateData_Error)(res);
     }
 
-    let checkPatientExistanceObj = {
-      ...validateDataResult.data
+    let checkPatientExistance_Obj = {
+      ...validateData_Result.data
     };
-    let [checkPatientExistanceError] = await to(checkPatientExistanceFunction(checkPatientExistanceObj));
+    let [checkPatientExistanceError] = await to(checkPatientExistanceFunction(checkPatientExistance_Obj));
     if (checkPatientExistanceError) {
       return utils.generateResponse(checkPatientExistanceError)(res);
     }
 
-    let checkExistingAppointmentObj = {
-      ...validateDataResult.data
+    let checkExistingAppointment_Obj = {
+      ...validateData_Result.data
     };
-    let [checkExistingAppointmentError] = await to(checkExistingAppointment(checkExistingAppointmentObj));
-    if (checkExistingAppointmentError) {
-      return utils.generateResponse(checkExistingAppointmentError)(res);
+    let [checkExistingAppointment_Error] = await to(checkExistingAppointment(checkExistingAppointment_Obj));
+    if (checkExistingAppointment_Error) {
+      return utils.generateResponse(checkExistingAppointment_Error)(res);
     }
 
-    let createNewAppointmentObj = {
-      ...validateDataResult.data
+    let createNewAppointment_Obj = {
+      ...validateData_Result.data
     };
-    let [createNewAppointmentError, createNewAppointmentResult] = await to(createNewAppointmentFunction(createNewAppointmentObj));
-    if (createNewAppointmentError) {
-      return utils.generateResponse(createNewAppointmentError)(res);
+    let [createNewAppointment_Error, createNewAppointment_Result] = await to(createNewAppointmentFunction(createNewAppointment_Obj));
+    if (createNewAppointment_Error) {
+      return utils.generateResponse(createNewAppointment_Error)(res);
     }
 
-    let createNewAppointmentLogObj = {
-      ...validateDataResult.data,
-      ...createNewAppointmentResult.data.appointment.dataValues
+    let createNewAppointmentLog_Obj = {
+      ...validateData_Result.data,
+      ...createNewAppointment_Result.data.appointment.dataValues
     };
-    let [createAppointmentLogError] = await to(createAppointmentLogFunction(createNewAppointmentLogObj));
-    if (createAppointmentLogError) {
-      return utils.generateResponse(createAppointmentLogError)(res);
+    let [createAppointmentLog_Error] = await to(createAppointmentLogFunction(createNewAppointmentLog_Obj));
+    if (createAppointmentLog_Error) {
+      return utils.generateResponse(createAppointmentLog_Error)(res);
     }
-    return utils.generateResponse(createNewAppointmentResult)(res);
+    return utils.generateResponse(createNewAppointment_Result)(res);
   }
 
   function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
-      let paramsCheck = {
+      let params_Check = {
         data: data.body,
         mandatoryParams: CREATE_APPOINTMENT
       }
-      utils.hasMandatoryParams(paramsCheck)
-        .then(paramRes => {
-          paramRes.data.user = data.user;
-          resolve(paramRes);
+      utils.hasMandatoryParams(params_Check)
+        .then(param_Result => {
+          param_Result.data.user = data.user;
+          resolve(param_Result);
         })
-        .catch(paramErr => {
-          reject(paramErr);
+        .catch(param_Error => {
+          reject(param_Error);
         });
     });
   }
 
   function checkPatientExistanceFunction(data) {
     return new Promise((resolve, reject) => {
-      let filterPatientObj = {
+      let filterPatient_Obj = {
         filterScope: 'activeScope',
         methodName: 'findOne',
         patient_id: data.patient_id
       };
-      Patients.fetchPatientsByFilter(filterPatientObj)
-        .then(patientRes => {
-          log.info('---patientRes---');
-          log.info(patientRes);
-          return resolve(patientRes);
+      Patients.fetchPatientsByFilter(filterPatient_Obj)
+        .then(patient_Result => {
+          log.info('---patient_Result---');
+          log.info(patient_Result);
+          return resolve(patient_Result);
         })
-        .catch(patientErr => {
-          log.error('---patientErr---');
-          log.error(patientErr);
-          return reject(patientErr);
+        .catch(patient_Error => {
+          log.error('---patient_Error---');
+          log.error(patient_Error);
+          return reject(patient_Error);
         });
     });
   }
@@ -97,7 +97,7 @@ module.exports = Appointments => {
   function checkExistingAppointment(data) {
     return new Promise((resolve, reject) => {
       let [fromDate, toDate] = [moment(data.from_time, 'HH:mm:ss').format('HH:mm:ss'), moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss')];
-      let filterObj = {
+      let filter_Obj = {
         ...data,
         filterScope: 'activeScope',
         methodName: 'findAll',
@@ -113,10 +113,10 @@ module.exports = Appointments => {
           }
         }]
       };
-      Appointments.fetchAppointmentsByFilter(filterObj)
-        .then(fetchAppointmentsByFilterResult => {
-          if (utils.validateKeys(() => fetchAppointmentsByFilterResult.data.appointment, false, null)) {
-            return resolve(fetchAppointmentsByFilterResult);
+      Appointments.fetchAppointmentsByFilter(filter_Obj)
+        .then(fetchAppointmentsByFilter_Result => {
+          if (utils.validateKeys(() => fetchAppointmentsByFilter_Result.data.appointment, false, null)) {
+            return resolve(fetchAppointmentsByFilter_Result);
           } else {
             return reject({
               success: false,
@@ -126,22 +126,22 @@ module.exports = Appointments => {
             });
           }
         })
-        .catch(fetchAppointmentsByFilterError => {
-          return reject(fetchAppointmentsByFilterError);
+        .catch(fetchAppointmentsByFilter_Error => {
+          return reject(fetchAppointmentsByFilter_Error);
         });
     });
   }
 
   function createNewAppointmentFunction(data) {
     return new Promise((resolve, reject) => {
-      let createObj = {
+      let create_Obj = {
         ...data,
         appointment_date: moment(data.appointment_date).format('YYYY-MM-DD'),
         from_time: moment(data.from_time, 'HH:mm:ss').format('HH:mm:ss'),
         to_time: moment(data.to_time, 'HH:mm:ss').format('HH:mm:ss'),
         created_by: data.user.username
       };
-      Appointments.createAppointmentsInstance(createObj)
+      Appointments.createAppointmentsInstance(create_Obj)
         .then(createRes => {
           return resolve(createRes);
         })
@@ -153,10 +153,10 @@ module.exports = Appointments => {
 
   function createAppointmentLogFunction(data) {
     return new Promise((resolve, reject) => {
-      let logObj = {
+      let log_Obj = {
         ...data
       };
-      AppointmentLogs.createAppointmentLogs(logObj)
+      AppointmentLogs.createAppointmentLogs(log_Obj)
         .then(logRes => {
           return resolve(logRes);
         })

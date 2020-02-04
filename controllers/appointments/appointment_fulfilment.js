@@ -18,81 +18,81 @@ module.exports = Appointments => {
 
   Appointments.appointmentFulfilment = async (req, res) => {
 
-    let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
-    if (validateDataError) {
-      return utils.generateResponse(validateDataError)(res);
+    let [validateData_Error, validateData_Result] = await to(validateDataFunction(req));
+    if (validateData_Error) {
+      return utils.generateResponse(validateData_Error)(res);
     }
 
-    let fetchCurrentAppointmentObj = {
-      appointment_id: validateDataResult.data.appointment_id
+    let fetchCurrentAppointment_Obj = {
+      appointment_id: validateData_Result.data.appointment_id
     };
-    let [fetchCurrentAppointmentError, fetchCurrentAppointmentResult] = await to(fetchCurrentAppointmentFunction(fetchCurrentAppointmentObj));
-    if (fetchCurrentAppointmentError) {
-      return utils.generateResponse(fetchCurrentAppointmentError)(res);
+    let [fetchCurrentAppointment_Error, fetchCurrentAppointment_Result] = await to(fetchCurrentAppointmentFunction(fetchCurrentAppointment_Obj));
+    if (fetchCurrentAppointment_Error) {
+      return utils.generateResponse(fetchCurrentAppointment_Error)(res);
     }
 
-    let checkStatusMatrixObj = {
-      ...validateDataResult.data,
-      appointment_detail: fetchCurrentAppointmentResult.data.appointment
+    let checkStatusMatrix_Obj = {
+      ...validateData_Result.data,
+      appointment_detail: fetchCurrentAppointment_Result.data.appointment
     };
-    let [checkStatusMatrixError] = await to(checkStatusMatrixFunction(checkStatusMatrixObj));
+    let [checkStatusMatrixError] = await to(checkStatusMatrixFunction(checkStatusMatrix_Obj));
     if (checkStatusMatrixError) {
       return utils.generateResponse(checkStatusMatrixError)(res);
     }
 
-    let rescheduleAppointmentObj = {
-      ...validateDataResult.data
+    let rescheduleAppointment_Obj = {
+      ...validateData_Result.data
     };
-    let [rescheduleAppointmentError, rescheduleAppointmentResult] = await to(rescheduleAppointmentFunction(rescheduleAppointmentObj));
-    if (rescheduleAppointmentError) {
-      return utils.generateResponse(rescheduleAppointmentError)(res);
+    let [rescheduleAppointment_Error, rescheduleAppointment_Result] = await to(rescheduleAppointmentFunction(rescheduleAppointment_Obj));
+    if (rescheduleAppointment_Error) {
+      return utils.generateResponse(rescheduleAppointment_Error)(res);
     }
 
-    let updateAppointmentStatusObj = {
-      ...validateDataResult.data,
-      ...rescheduleAppointmentResult,
-      appointment_detail: fetchCurrentAppointmentResult.data.appointment
+    let updateAppointmentStatus_Obj = {
+      ...validateData_Result.data,
+      ...rescheduleAppointment_Result,
+      appointment_detail: fetchCurrentAppointment_Result.data.appointment
     };
-    let [updateAppointmentStatusError, updateAppointmentStatusResult] = await to(updateAppointmentStatusFunction(updateAppointmentStatusObj));
-    if (updateAppointmentStatusError) {
-      return utils.generateResponse(updateAppointmentStatusError)(res);
+    let [updateAppointmentStatus_Error, updateAppointmentStatus_Result] = await to(updateAppointmentStatusFunction(updateAppointmentStatus_Obj));
+    if (updateAppointmentStatus_Error) {
+      return utils.generateResponse(updateAppointmentStatus_Error)(res);
     }
 
-    let createAppointmentLogObj = {
-      ...validateDataResult.data,
-      ...updateAppointmentStatusResult.data
+    let createAppointmentLog_Obj = {
+      ...validateData_Result.data,
+      ...updateAppointmentStatus_Result.data
     };
-    let [createAppointmentLogError] = await to(createAppointmentLogFunction(createAppointmentLogObj));
-    if (createAppointmentLogError) {
-      return utils.generateResponse(createAppointmentLogError)(res);
+    let [createAppointmentLog_Error] = await to(createAppointmentLogFunction(createAppointmentLog_Obj));
+    if (createAppointmentLog_Error) {
+      return utils.generateResponse(createAppointmentLog_Error)(res);
     }
-    return utils.generateResponse(updateAppointmentStatusResult)(res);
+    return utils.generateResponse(updateAppointmentStatus_Result)(res);
   }
 
   function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
-      let paramsCheck = {
+      let params_Check = {
         data: data.body,
         mandatoryParams: APPOINTMENT_FULFILMENT
       }
-      utils.hasMandatoryParams(paramsCheck)
-        .then(paramRes => {
-          return resolve(paramRes);
+      utils.hasMandatoryParams(params_Check)
+        .then(param_Result => {
+          return resolve(param_Result);
         })
-        .catch(paramErr => {
-          return reject(paramErr);
+        .catch(param_Error => {
+          return reject(param_Error);
         });
     });
   }
 
   function fetchCurrentAppointmentFunction(data) {
     return new Promise((resolve, reject) => {
-      let whereObj = {
+      let where_Obj = {
         appointment_id: data.appointment_id,
         filterScope: 'activeScope',
         methodName: 'findOne'
       };
-      Appointments.fetchAppointmentsByFilter(whereObj)
+      Appointments.fetchAppointmentsByFilter(where_Obj)
         .then(appointmentRes => {
           log.info('---APPOINTMENTS_FETCH_SUCCESS---');
           return resolve(appointmentRes);
@@ -198,48 +198,48 @@ module.exports = Appointments => {
 
   function updateAppointmentStatusFunction(data) {
     return new Promise((resolve, reject) => {
-      let updateObj = {
+      let update_Obj = {
         ...data,
         ...data.appointment_detail
       };
       if (data.isRescheduled) {
-        updateObj = {
-          updateObj,
+        update_Obj = {
+          update_Obj,
           appointment_date: data.rescheduledData.rescheduled_date,
           rescheduled_date: data.rescheduledData.rescheduled_date,
           from_time: data.rescheduledData.from_time,
           to_time: data.rescheduledData.to_time
         };
       }
-      let updateAppointmentByInstanceObj = {
+      let updateAppointmentByInstance_Obj = {
         appointmentInstance: data.appointment_detail,
-        updateAppointmentInstanceObj: updateObj
+        updateAppointmentInstance_Obj: update_Obj
       }
-      Appointments.updateAppointmentByInstance(updateAppointmentByInstanceObj)
-        .then(updateAppointmentRes => {
+      Appointments.updateAppointmentByInstance(updateAppointmentByInstance_Obj)
+        .then(updateAppointment_Result => {
           log.info('---update_appointmentRes---');
-          log.info(updateAppointmentRes);
-          return resolve(updateAppointmentRes);
+          log.info(updateAppointment_Result);
+          return resolve(updateAppointment_Result);
         })
-        .catch(updateAppointmentErr => {
+        .catch(updateAppointment_Error => {
           log.error('---update_appointment_err---');
-          log.error(updateAppointmentErr);
-          return reject(updateAppointmentErr);
+          log.error(updateAppointment_Error);
+          return reject(updateAppointment_Error);
         });
     });
   }
 
   function createAppointmentLogFunction(data) {
     return new Promise((resolve, reject) => {
-      let createLogObj = {
+      let createLog_Obj = {
         ...data
       };
-      AppointmentLogs.createAppointmentLogs(createLogObj)
-        .then(createLogRes => {
-          return resolve(createLogRes);
+      AppointmentLogs.createAppointmentLogs(createLog_Obj)
+        .then(createLog_Result => {
+          return resolve(createLog_Result);
         })
-        .catch(createLogErr => {
-          return reject(createLogErr);
+        .catch(createLog_Error => {
+          return reject(createLog_Error);
         });
     });
   }

@@ -8,15 +8,15 @@ module.exports = AppointmentDiagnosisRoleMapping => {
 
   AppointmentDiagnosisRoleMapping.createAppointmentDiagnosisRoleMapping = async (req, res) => {
 
-    let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
-    if (validateDataError) {
-      return utils.generateResponse(validateDataError)(res);
+    let [validateData_Error, validateData_Result] = await to(validateDataFunction(req));
+    if (validateData_Error) {
+      return utils.generateResponse(validateData_Error)(res);
     }
 
-    let createAppointmentDiagnosisRoleMappingObj = {
-      ...validateDataResult.data
+    let createAppointmentDiagnosisRoleMapping_Obj = {
+      ...validateData_Result.data
     };
-    let [createAppointmentDiagnosisRoleMappingError, createAppointmentDiagnosisRoleMappingResult] = await to(createAppointmentDiagnosisRoleMappingFunction(createAppointmentDiagnosisRoleMappingObj));
+    let [createAppointmentDiagnosisRoleMappingError, createAppointmentDiagnosisRoleMappingResult] = await to(createAppointmentDiagnosisRoleMappingFunction(createAppointmentDiagnosisRoleMapping_Obj));
     if (createAppointmentDiagnosisRoleMappingError) {
       return utils.generateResponse(createAppointmentDiagnosisRoleMappingError)(res);
     }
@@ -25,16 +25,16 @@ module.exports = AppointmentDiagnosisRoleMapping => {
 
   function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
-      let paramsCheck = {
+      let params_Check = {
         data: data.body,
         mandatoryParams: ['AppointmentDiagnosisRoleMappings']
       }
-      utils.hasMandatoryParams(paramsCheck)
-        .then(paramRes => {
-          return resolve(paramRes);
+      utils.hasMandatoryParams(params_Check)
+        .then(param_Result => {
+          return resolve(param_Result);
         })
-        .catch(paramErr => {
-          return reject(paramErr);
+        .catch(param_Error => {
+          return reject(param_Error);
         });
     });
   }

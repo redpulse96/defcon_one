@@ -18,17 +18,14 @@ module.exports = Appointments => {
     let [fromDate, toDate] = [utils.validateKeys(() => moment(req.params.custom_from_date).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null), utils.validateKeys(() => moment(req.params.custom_to_date).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), null)];
     let filter = {
       where: {
+        appointment_date: {
+          $in: [fromDate, toDate]
+        },
         $or: [{
-          assigned_to: req.user.username,
-          appointment_date: {
-            in: [fromDate, toDate]
-          }
+          assigned_to: req.user.username
         }, {
           created_by: {
             $in: [req.user.username]
-          },
-          appointment_date: {
-            $in: [fromDate, toDate]
           }
         }]
       },

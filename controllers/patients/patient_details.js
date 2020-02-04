@@ -4,7 +4,7 @@ const utils = require('../utility/utils');
 module.exports = Patients => {
 
   Patients.patientDetails = (req, res) => {
-    let filterObj = {
+    let filter_Obj = {
       ...req.params,
       methodName: 'findOne',
       include: [{
@@ -75,7 +75,7 @@ module.exports = Patients => {
         }]
       }]
     };
-    Patients.fetchPatientsByFilter(filterObj)
+    Patients.fetchPatientsByFilter(filter_Obj)
       .then(fetchRes => {
         log.info('---fetchRes---');
         log.info(fetchRes);

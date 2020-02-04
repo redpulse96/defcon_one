@@ -14,23 +14,23 @@ module.exports = Patients => {
 
   Patients.updatePatientDetails = async (req, res) => {
 
-    let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
-    if (validateDataError) {
-      return utils.generateResponse(validateDataError)(res);
+    let [validateData_Error, validateData_Result] = await to(validateDataFunction(req));
+    if (validateData_Error) {
+      return utils.generateResponse(validateData_Error)(res);
     }
 
-    let checkUniqueMobileNoObj = {
-      ...validateDataResult.data
+    let checkUniqueMobileNo_Obj = {
+      ...validateData_Result.data
     };
-    let [checkUniqueMobileNoError] = await to(checkUniqueMobileNoFunction(checkUniqueMobileNoObj));
+    let [checkUniqueMobileNoError] = await to(checkUniqueMobileNoFunction(checkUniqueMobileNo_Obj));
     if (checkUniqueMobileNoError) {
       return utils.generateResponse(checkUniqueMobileNoError)(res);
     }
 
-    let updatePatientObj = {
-      ...validateDataResult.data
+    let updatePatient_Obj = {
+      ...validateData_Result.data
     };
-    let [updatePatientError, updatePatientResult] = await to(updatePatientFunction(updatePatientObj));
+    let [updatePatientError, updatePatientResult] = await to(updatePatientFunction(updatePatient_Obj));
     if (updatePatientError) {
       return utils.generateResponse(updatePatientError)(res);
     }
@@ -39,16 +39,16 @@ module.exports = Patients => {
 
   function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
-      let paramsCheck = {
+      let params_Check = {
         data: data.body,
         mandatoryParams: UPDATE_PATIENT
       }
-      utils.hasMandatoryParams(paramsCheck)
-        .then(paramRes => {
-          return resolve(paramRes);
+      utils.hasMandatoryParams(params_Check)
+        .then(param_Result => {
+          return resolve(param_Result);
         })
-        .catch(paramErr => {
-          return reject(paramErr);
+        .catch(param_Error => {
+          return reject(param_Error);
         });
     });
   }
@@ -64,14 +64,14 @@ module.exports = Patients => {
         filter.mobile_nos.push(data.update_obj.mobile_no);
       }
       Patients.fetchPatientsByFilter(filter)
-        .then(patientRes => {
-          log.info('---patientRes---');
-          log.info(patientRes);
-          if (patientRes && !(arrayFn.map(patientRes.data.patient_details, 'mobile_no').indexOf(utils.validateKeys(() => data.update_obj.mobile_no, null, null)) > -1)) {
+        .then(patient_Result => {
+          log.info('---patient_Result---');
+          log.info(patient_Result);
+          if (patient_Result && !(arrayFn.map(patient_Result.data.patient_details, 'mobile_no').indexOf(utils.validateKeys(() => data.update_obj.mobile_no, null, null)) > -1)) {
             return resolve({
               success: true,
               message: 'The mobile_no can be updated',
-              data: patientRes
+              data: patient_Result
             });
           } else {
             return reject({
@@ -82,9 +82,9 @@ module.exports = Patients => {
             });
           }
         })
-        .catch(patientErr => {
-          log.error('---patientErr---');
-          log.error(patientErr);
+        .catch(patient_Error => {
+          log.error('---patient_Error---');
+          log.error(patient_Error);
           return reject({
             success: false,
             error_code: 500,
@@ -98,8 +98,8 @@ module.exports = Patients => {
   function updatePatientFunction(data) {
     return new Promise((resolve, reject) => {
       let filter = {
-        updateObj: data.update_obj,
-        filterObj: {
+        update_Obj: data.update_obj,
+        filter_Obj: {
           where: {
             mobile_no: {
               $in: [data.mobile_no]

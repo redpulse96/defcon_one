@@ -7,7 +7,7 @@ const {
 
 module.exports = PatientPrescription => {
   /**
-   * @param {Object[]} data - Object with the details to create patient
+   * @param {_Object[]} data - _Object with the details to create patient
    * @param {Number} data.patient_id Patient id of the patient
    * @param {Number} data.appointment_id Appointment id of the patient
    * @param {Number} data.reference_id Reference id of the prescription
@@ -18,7 +18,7 @@ module.exports = PatientPrescription => {
   PatientPrescription.createPatientPrescriptionInstance = data => {
     return new Promise((resolve, reject) => {
       let noCreate = false;
-      let createObj = {
+      let create_Obj = {
         patient_id: data.patient_id ? data.patient_id : null && (noCreate = true),
         appointment_id: data.appointment_id ? data.appointment_id : null && (noCreate = true),
         reference_id: data.reference_id ? data.reference_id : utils.GenerateUniqueID(10, 'A#vb'),
@@ -34,9 +34,9 @@ module.exports = PatientPrescription => {
           data: {}
         });
       }
-      createObj = objectFn.compact(createObj);
+      create_Obj = objectFn.compact(create_Obj);
       try {
-        models['PatientPrescription'].create(createObj)
+        models['PatientPrescription'].create(create_Obj)
           .then(createPatientPrescriptionRes => {
             log.info('---PATIENTS_PRESCRIPTION_CREATION_SUCCESS---');
             log.info(createPatientPrescriptionRes);
@@ -72,7 +72,7 @@ module.exports = PatientPrescription => {
   }
 
   /**
-   * @param {Object[]} data - Objects with the details to fetch patients and their details
+   * @param {_Object[]} data - _Objects with the details to fetch patients and their details
    * @param {Array} data.patient_prescription_ids Array of patient prescription ids
    * @param {Number} data.patient_prescription_id Patient id of the patient
    * @param {Array} data.patient_ids Array of patient ids
@@ -169,23 +169,23 @@ module.exports = PatientPrescription => {
   }
 
   /**
-   * @param {Object[]} data - Object of where filter and update object
-   * @param {Object[]} data.filterObj - Object of the list of filters used to fetch appointment
-   * @param {Number} data.filterObj.patient_prescription_id Patient id of the patient
-   * @param {Number} data.filterObj.reference_id Reference id of the patient
-   * @param {Number} data.filterObj.patient_id Patient id of the patient
+   * @param {_Object[]} data - _Object of where filter and update object
+   * @param {_Object[]} data.filter_Obj - _Object of the list of filters used to fetch appointment
+   * @param {Number} data.filter_Obj.patient_prescription_id Patient id of the patient
+   * @param {Number} data.filter_Obj.reference_id Reference id of the patient
+   * @param {Number} data.filter_Obj.patient_id Patient id of the patient
    * @param {Number} data.appointment_id appointment id of the appointment to be created against
-   * @param {Object[]} data.updateObj - Object consists of attributes to be updated
-   * @param {Number} data.updateObj.patient_id Patient id of the patient
-   * @param {Number} data.updateObj.appointment_id Appointment id of the patient
-   * @param {Number} data.updateObj.reference_id Reference id of the prescription
-   * @param {Number} data.updateObj.medicine_id Medicine id of the prescription
-   * @param {String} data.updateObj.created_by Email of the user that created the patient
-   * @param {String} data.updateObj.doctor_remarks Remarks added my the logged in doctor
+   * @param {_Object[]} data.update_Obj - _Object consists of attributes to be updated
+   * @param {Number} data.update_Obj.patient_id Patient id of the patient
+   * @param {Number} data.update_Obj.appointment_id Appointment id of the patient
+   * @param {Number} data.update_Obj.reference_id Reference id of the prescription
+   * @param {Number} data.update_Obj.medicine_id Medicine id of the prescription
+   * @param {String} data.update_Obj.created_by Email of the user that created the patient
+   * @param {String} data.update_Obj.doctor_remarks Remarks added my the logged in doctor
    */
   PatientPrescription.updatePatientPrescriptionByFilter = data => {
     return new Promise((resolve, reject) => {
-      if (!objectFn.has(data, 'filterObj') || !(objectFn.has(data, 'updateObj'))) {
+      if (!objectFn.has(data, 'filter_Obj') || !(objectFn.has(data, 'update_Obj'))) {
         return reject({
           success: false,
           error_code: 500,
@@ -193,9 +193,9 @@ module.exports = PatientPrescription => {
           data: {}
         });
       }
-      let [filterObj, updateObj] = [objectFn.compact(data.filterObj), objectFn.compact(data.updateObj)];
+      let [filter_Obj, update_Obj] = [objectFn.compact(data.filter_Obj), objectFn.compact(data.update_Obj)];
       try {
-        models['PatientPrescriptions'].update(updateObj, filterObj)
+        models['PatientPrescriptions'].update(update_Obj, filter_Obj)
           .then(updatedPatientPrescriptionRes => {
             log.info('---updatedPatientPrescriptionRes---');
             log.info(updatedPatientPrescriptionRes);
@@ -240,17 +240,17 @@ module.exports = PatientPrescription => {
   }
 
   /**
-   * @param {Object[]} data - Object of where filter and update object
+   * @param {_Object[]} data - _Object of where filter and update object
    * @param {Model[]} data.patientPrescriptionInstance - Model instance of the model whose attributes are to be updated
-   * @param {Object[]} data.patientPrescriptionInstanceObj - Object consists of attributes to be updated
-   * @param {Number} data.patientPrescriptionInstanceObj.patient_id Patient id of the patient
-   * @param {Number} data.patientPrescriptionInstanceObj.appointment_id Appointment id of the appointment of the patient
-   * @param {Number} data.patientPrescriptionInstanceObj.medicine_id Medicine id of the prescription
-   * @param {String} data.patientPrescriptionInstanceObj.reference_id Reference id of the prescription
+   * @param {_Object[]} data.patientPrescriptionInstance_Obj - _Object consists of attributes to be updated
+   * @param {Number} data.patientPrescriptionInstance_Obj.patient_id Patient id of the patient
+   * @param {Number} data.patientPrescriptionInstance_Obj.appointment_id Appointment id of the appointment of the patient
+   * @param {Number} data.patientPrescriptionInstance_Obj.medicine_id Medicine id of the prescription
+   * @param {String} data.patientPrescriptionInstance_Obj.reference_id Reference id of the prescription
    */
   PatientPrescription.updatePatientPrescriptionByInstance = data => {
     return new Promise((resolve, reject) => {
-      if (!objectFn.has(data, 'patientPrescriptionInstance') || !(objectFn.has(data, 'patientPrescriptionInstanceObj'))) {
+      if (!objectFn.has(data, 'patientPrescriptionInstance') || !(objectFn.has(data, 'patientPrescriptionInstance_Obj'))) {
         return reject({
           success: false,
           error_code: 400,
@@ -258,16 +258,16 @@ module.exports = PatientPrescription => {
           data: {}
         });
       }
-      data['patientPrescriptionInstance'].update(data['updatePatientPrescriptionInstanceObj'])
-        .then(updatePatientPrescriptionInstanceResult => {
-          log.info('---updatePatientPrescriptionInstanceResult---');
-          log.info(updatePatientPrescriptionInstanceResult);
-          if (updatePatientPrescriptionInstanceResult) {
+      data['patientPrescriptionInstance'].update(data['updatePatientPrescriptionInstance_Obj'])
+        .then(updatePatientPrescriptionInstance_Result => {
+          log.info('---updatePatientPrescriptionInstance_Result---');
+          log.info(updatePatientPrescriptionInstance_Result);
+          if (updatePatientPrescriptionInstance_Result) {
             return resolve({
               success: true,
               message: 'patient prescription details updated',
               data: {
-                patient_prescription_details: updatePatientPrescriptionInstanceResult
+                patient_prescription_details: updatePatientPrescriptionInstance_Result
               }
             });
           } else {
@@ -279,9 +279,9 @@ module.exports = PatientPrescription => {
             });
           }
         })
-        .catch(updatePatientPrescriptionInstanceError => {
-          log.error('---updatePatientPrescriptionInstanceError---');
-          log.error(updatePatientPrescriptionInstanceError);
+        .catch(updatePatientPrescriptionInstance_Error => {
+          log.error('---updatePatientPrescriptionInstance_Error---');
+          log.error(updatePatientPrescriptionInstance_Error);
           return reject({
             success: false,
             error_code: 500,

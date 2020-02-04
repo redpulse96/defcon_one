@@ -3,11 +3,11 @@ const AccessToken = require(packageHelper.MODEL_CONFIG_DIR)['AccessToken'];
 
 AccessToken.generateAccessToken = data => {
   return new Promise((resolve, reject) => {
-    let createObj = {
+    let create_Obj = {
       access_token: data.access_token,
       username: data.username
     };
-    models['AccessToken'].create(createObj)
+    models['AccessToken'].create(create_Obj)
       .then(res => {
         log.info('---ACCESS_TOKEN_CREATION_SUCCESS---');
         log.info(res);
@@ -34,12 +34,12 @@ AccessToken.generateAccessToken = data => {
 AccessToken.getAccessToken = data => {
   return new Promise((resolve, reject) => {
     log.info('----AccessToken.getAccessToken---');
-    let whereObj = {
+    let where_Obj = {
       where: {
         access_token: data.authorization
       }
     };
-    models['AccessToken'].scope('activeScope').findOne(whereObj)
+    models['AccessToken'].scope('activeScope').findOne(where_Obj)
       .then(modelRes => {
         log.info('---GET_ACCESS_TOKENRes---');
         log.info(modelRes);
@@ -75,18 +75,18 @@ AccessToken.getAccessToken = data => {
 
 AccessToken.clearToken = data => {
   return new Promise((resolve, reject) => {
-    let updateObj = {
+    let update_Obj = {
       is_active: false,
       is_archived: true
     };
-    let whereObj = {
+    let where_Obj = {
       where: {
         access_token: data.access_token,
         is_active: true,
         is_archived: false
       }
     };
-    models['AccessToken'].update(updateObj, whereObj)
+    models['AccessToken'].update(update_Obj, where_Obj)
       .then(res => {
         log.info('---ACCESS_TOKEN_DESTROYED_SUCCESS---');
         log.info(res);

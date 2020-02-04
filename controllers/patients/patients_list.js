@@ -7,7 +7,7 @@ const {
 module.exports = Patients => {
 
   Patients.patientsList = (req, res) => {
-    let filterObj = {
+    let filter_Obj = {
       where: {
         created_by: {
           $in: utils.validateKeys(() => [req.user.username], [], null)
@@ -15,9 +15,9 @@ module.exports = Patients => {
       }
     };
     if (req.user.parent) {
-      filterObj.where.created_by.$in.push(req.user.parent);
+      filter_Obj.where.created_by.$in.push(req.user.parent);
     }
-    models['Patients'].scope('activeScope').findAll(filterObj)
+    models['Patients'].scope('activeScope').findAll(filter_Obj)
       .then(patientsRes => {
         log.info('---LIST_OF_PATIENTS_OF_THE_USER---');
         log.info(patientsRes);

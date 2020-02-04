@@ -3,12 +3,12 @@ const Diagnosis = require(packageHelper.MODEL_CONFIG_DIR)['Diagnosis'];
 
 Diagnosis.fetchDiagnosis = data => {
   return new Promise((resolve, reject) => {
-    let whereObj = {
+    let where_Obj = {
       where: {
         ...data
       }
     };
-    models.Diagnosis.findOne(whereObj)
+    models.Diagnosis.findOne(where_Obj)
       .then(fetchRes => {
         log.info('---DIAGNOSIS_FETCH_SUCCESS---');
         log.info(fetchRes);
@@ -34,10 +34,10 @@ Diagnosis.fetchDiagnosis = data => {
 
 Diagnosis.createDiagnosis = data => {
   return new Promise((resolve, reject) => {
-    let createObj = {
+    let create_Obj = {
       ...data
     };
-    models.Diagnosis.create(createObj)
+    models.Diagnosis.create(create_Obj)
       .then(createRes => {
         log.info('---DIAGNOSIS_CREATION_SUCCESS---');
         log.info(createRes);

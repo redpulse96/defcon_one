@@ -12,15 +12,15 @@ const {
 
 module.exports = MedicinesPrescription => {
   MedicinesPrescription.createMedicinesPrescription = async (req, res) => {
-    let [validateDataError, validateDataResult] = await to(validateDataFunction(req));
-    if (validateDataError) {
-      return utils.generateResponse(validateDataError)(res);
+    let [validateData_Error, validateData_Result] = await to(validateDataFunction(req));
+    if (validateData_Error) {
+      return utils.generateResponse(validateData_Error)(res);
     }
 
-    let createMedicinesPrescriptionObj = {
-      ...validateDataResult.data
+    let createMedicinesPrescription_Obj = {
+      ...validateData_Result.data
     };
-    let [createMedicinesPrescriptionError, createMedicinesPrescriptionResult] = await to(createMedicinesPrescription(createMedicinesPrescriptionObj));
+    let [createMedicinesPrescriptionError, createMedicinesPrescriptionResult] = await to(createMedicinesPrescription(createMedicinesPrescription_Obj));
     if (createMedicinesPrescriptionError) {
       return utils.generateResponse(createMedicinesPrescriptionError)(res);
     }
@@ -29,16 +29,16 @@ module.exports = MedicinesPrescription => {
 
   function validateDataFunction(data) {
     return new Promise((resolve, reject) => {
-      let paramsCheck = {
+      let params_Check = {
         data: data.body,
         mandatoryParams: CREATE_MEDICINE_PRESCRIPTION
       }
-      utils.hasMandatoryParams(paramsCheck)
-        .then(paramRes => {
-          return resolve(paramRes);
+      utils.hasMandatoryParams(params_Check)
+        .then(param_Result => {
+          return resolve(param_Result);
         })
-        .catch(paramErr => {
-          return reject(paramErr);
+        .catch(param_Error => {
+          return reject(param_Error);
         });
     });
   }
