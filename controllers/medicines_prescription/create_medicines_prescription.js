@@ -1,20 +1,24 @@
 const log = require('../../config/log_config').logger('medicines_prescription');
-const utils = require('../utility/utils');
-const async = packageHleper.async;
+import {
+  generateResponse,
+  hasMandatoryParams
+} from '../utility/utils';
+const async = packageHelper.async;
+import constants from '../../public/javascripts/constants';
 const {
   MANDATORY_PARAMS: {
     CREATE_MEDICINE_PRESCRIPTION
   }
-} = require('../../public/javascripts/constants');
-const {
+} = constants;
+import {
   to
-} = require('../utility/helper_function');
+} from '../utility/helper_function';
 
-module.exports = MedicinesPrescription => {
+export default MedicinesPrescription => {
   MedicinesPrescription.createMedicinesPrescription = async (req, res) => {
     let [validateData_Error, validateData_Result] = await to(validateDataFunction(req));
     if (validateData_Error) {
-      return utils.generateResponse(validateData_Error)(res);
+      return generateResponse(validateData_Error)(res);
     }
 
     let createMedicinesPrescription_Obj = {
@@ -22,9 +26,9 @@ module.exports = MedicinesPrescription => {
     };
     let [createMedicinesPrescriptionError, createMedicinesPrescriptionResult] = await to(createMedicinesPrescription(createMedicinesPrescription_Obj));
     if (createMedicinesPrescriptionError) {
-      return utils.generateResponse(createMedicinesPrescriptionError)(res);
+      return generateResponse(createMedicinesPrescriptionError)(res);
     }
-    return utils.generateResponse(createMedicinesPrescriptionResult)(res);
+    return generateResponse(createMedicinesPrescriptionResult)(res);
   }
 
   function validateDataFunction(data) {
@@ -33,7 +37,7 @@ module.exports = MedicinesPrescription => {
         data: data.body,
         mandatoryParams: CREATE_MEDICINE_PRESCRIPTION
       }
-      utils.hasMandatoryParams(params_Check)
+      hasMandatoryParams(params_Check)
         .then(param_Result => {
           return resolve(param_Result);
         })
@@ -48,13 +52,13 @@ module.exports = MedicinesPrescription => {
     log.info(data);
     return new Promise((resolve, reject) => {
       let createArr = [];
-      async.map(data, async elem => {
+      async.map(data, elem => {
         let obj = {
           ...elem
         };
         createArr.push(obj);
       });
-      let [createMedicinesPrescriptionError, createMedicinesPrescriptionResult] = await to(MedicinesPrescription.create(createArr));
+      let [createMedicinesPrescriptionError, createMedicinesPrescriptionResult] = to(MedicinesPrescription.create(createArr));
       log.error('---MedicinesPrescription.createMedicinesPrescriptionError---');
       log.error(createMedicinesPrescriptionError);
       log.info('---MedicinesPrescription.createMedicinesPrescriptionResult---');

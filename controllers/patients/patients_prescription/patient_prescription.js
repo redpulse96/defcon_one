@@ -136,24 +136,24 @@ function createPrescriptionChargesFunction(data) {
       data.charges && data.charges.length && data.charges.forEach(val => {
         switch (val.entity.toUpperCase()) {
 
-          case 'MEDIC_FEE':
-            createMedicinePrescription_Obj.medicine_prescription.push({
-              medicine_id: val.medicine_id ? val.medicine_id : undefined,
-              morning_dosage: val.morning_dosage ? val.morning_dosage : undefined,
-              noon_dosage: val.noon_dosage ? val.noon_dosage : undefined,
-              evening_dosage: val.evening_dosage ? val.evening_dosage : undefined,
-              quantity: val.quantity ? val.quantity : undefined,
-              charge: val.charge ? val.charge : undefined,
-              doctor_remarks: val.doctor_remarks ? val.doctor_remarks : undefined
-            });
-            break;
+        case 'MEDIC_FEE':
+          createMedicinePrescription_Obj.medicine_prescription.push({
+            medicine_id: val.medicine_id ? val.medicine_id : undefined,
+            morning_dosage: val.morning_dosage ? val.morning_dosage : undefined,
+            noon_dosage: val.noon_dosage ? val.noon_dosage : undefined,
+            evening_dosage: val.evening_dosage ? val.evening_dosage : undefined,
+            quantity: val.quantity ? val.quantity : undefined,
+            charge: val.charge ? val.charge : undefined,
+            doctor_remarks: val.doctor_remarks ? val.doctor_remarks : undefined
+          });
+          break;
 
-          case 'DOC_FEE':
-            createMedicinePrescription_Obj.medicine_prescription.push({
-              charge: val.charge ? val.charge : undefined,
-              doctor_remarks: val.doctor_remarks ? val.doctor_remarks : undefined
-            });
-            break;
+        case 'DOC_FEE':
+          createMedicinePrescription_Obj.medicine_prescription.push({
+            charge: val.charge ? val.charge : undefined,
+            doctor_remarks: val.doctor_remarks ? val.doctor_remarks : undefined
+          });
+          break;
         }
       });
 
